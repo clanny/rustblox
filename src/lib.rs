@@ -103,6 +103,11 @@ mod tests {
     async fn validate_display_name_for_user() {
         let mut jar = authenticated_jar().await;
         let user_id = crate::users::users::whoami(&mut jar).await.unwrap().id;
+
+        if user_id != 4205503041 {
+            return; // This account gets used for CI, we only want to run this test on that account bc ratelimits
+        }
+
         let display_name = crate::users::display_names::validate_display_name_for_user(
             &mut jar,
             "test".to_string(),
