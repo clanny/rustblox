@@ -142,4 +142,11 @@ mod tests {
     //    assert_eq!(whoami2.display_name, "test".to_string());
     //}
     // This test cant work as the display name can only be changed once every 7 days!
+
+    #[tokio::test]
+    async fn get_age_bracket() {
+        let mut jar = authenticated_jar().await;
+        let age_bracket = crate::users::users::age_bracket(&mut jar).await.unwrap();
+        assert_eq!(age_bracket.age_bracket, 0);
+    }
 }

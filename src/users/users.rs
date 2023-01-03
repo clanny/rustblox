@@ -38,3 +38,16 @@ pub async fn whoami(jar: &mut RequestJar) -> Result<MinimalAuthenticatedUser, Bo
     let response = jar.get_json::<MinimalAuthenticatedUser>(&url).await?;
     Ok(response)
 }
+
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct AgeBracketResponse {
+    pub age_bracket: usize,
+}
+
+/// Gets the age bracket of the currently authenticated user
+pub async fn age_bracket(jar: &mut RequestJar) -> Result<AgeBracketResponse, Box<Error>> {
+    let url = format!("https://users.roblox.com/v1/users/authenticated/age-bracket");
+    let response = jar.get_json::<AgeBracketResponse>(&url).await?;
+    Ok(response)
+}
