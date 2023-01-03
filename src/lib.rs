@@ -17,11 +17,28 @@ mod tests {
         let roblosecurity = contents.trim().to_string();
         let mut jar = util::jar::RequestJar::new().await;
         jar.set_roblosecurity(roblosecurity).await;
+
+        // If the file proxy.txt exists, use it as a proxy
+        if fs::metadata("proxy.txt").is_ok() {
+            let contents = fs::read_to_string("proxy.txt").unwrap();
+            let proxy = contents.trim().to_string();
+            jar.set_proxy(proxy);
+        }
+
         jar
     }
 
     async fn unauthenticated_jar() -> util::jar::RequestJar {
-        util::jar::RequestJar::new().await
+        let mut jar = util::jar::RequestJar::new().await;
+
+        // If the file proxy.txt exists, use it as a proxy
+        if fs::metadata("proxy.txt").is_ok() {
+            let contents = fs::read_to_string("proxy.txt").unwrap();
+            let proxy = contents.trim().to_string();
+            jar.set_proxy(proxy);
+        }
+
+        jar
     }
 
     #[test]

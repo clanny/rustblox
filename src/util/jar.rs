@@ -5,6 +5,8 @@ use crate::util::Error;
 pub struct RequestJar {
     pub roblosecurity: Option<String>,
     pub xsrf_token: Option<String>,
+
+    pub proxy: Option<String>,
 }
 
 impl RequestJar {
@@ -12,6 +14,8 @@ impl RequestJar {
         RequestJar {
             roblosecurity: None,
             xsrf_token: None,
+
+            proxy: None,
         }
     }
 
@@ -21,12 +25,29 @@ impl RequestJar {
         Ok(())
     }
 
+    pub fn set_proxy(&mut self, proxy: String) {
+        self.proxy = Some(proxy);
+    }
+
+    pub fn get_reqwest_client(&self) -> reqwest::Client {
+        let mut client = reqwest::Client::new();
+
+        if self.proxy.is_some() {
+            client = reqwest::Client::builder()
+                .proxy(reqwest::Proxy::all(self.proxy.as_ref().unwrap()).unwrap())
+                .build()
+                .unwrap();
+        }
+
+        client
+    }
+
     pub async fn get(
         &mut self,
         url: &str,
         soft_fail: bool, // Determines if it should error or not if the status code is not 200.
     ) -> Result<reqwest::Response, Box<Error>> {
-        let client = reqwest::Client::new();
+        let client = self.get_reqwest_client();
 
         let response = client
             .get(url)
