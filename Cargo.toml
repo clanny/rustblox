@@ -1,5 +1,5 @@
 [package]
-name = "rustblox"
+name = "rustyroblox"
 version = "0.1.0"
 edition = "2021"
 description = "A Rust API wrapper for the Roblox API"
