@@ -119,4 +119,22 @@ mod tests {
             _ => {}
         }
     }
+
+    //#[tokio::test]
+    //async fn set_display_name() {
+    //    let mut jar = authenticated_jar().await;
+    //    crate::users::display_names::set_display_name(&mut jar, "notest".to_string())
+    //        .await
+    //        .unwrap();
+    //    let whoami1 = crate::users::users::whoami(&mut jar).await.unwrap();
+    //    crate::users::display_names::set_display_name(&mut jar, "test".to_string())
+    //        .await
+    //        .unwrap();
+    //
+    //    let whoami2 = crate::users::users::whoami(&mut jar).await.unwrap();
+    //
+    //    assert_ne!(whoami1.display_name, whoami2.display_name);
+    //    assert_eq!(whoami2.display_name, "test".to_string());
+    //}
+    // This test cant work as the display name can only be changed once every 7 days!
 }

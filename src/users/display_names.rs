@@ -2,19 +2,22 @@ use reqwest::StatusCode;
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    users::{PartialUser, User},
-    util::jar::RequestJar,
+    users::users::{MinimalAuthenticatedUser, User},
+    util::{jar::RequestJar, responses::RobloxResponse},
     util::{status_codes::status_code_to_error, Error},
 };
+
+use super::users::whoami;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ValidateDisplayNameResponse {} // Yes, this is an empty struct. Roblox's api really wants to return an empty object.
 
 #[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct ValidateDisplayNameFailedResponseError {
     code: usize,
     message: String,
-    userFacingMessage: String,
+    user_facing_message: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -49,7 +52,7 @@ pub async fn validate_display_name(
     );
     let response = jar.get(&url, true).await?;
     let status = response.status();
-    println!("Status: {:?}", status);
+
     match status {
         StatusCode::OK => Ok(ValidateDisplayNameResponseEnum::Success(
             response
@@ -89,7 +92,7 @@ pub async fn validate_display_name_for_user(
     );
     let response = jar.get(&url, true).await?;
     let status = response.status();
-    println!("Status: {:?}", status);
+
     match status {
         StatusCode::OK => Ok(ValidateDisplayNameResponseEnum::Success(
             response
@@ -107,4 +110,36 @@ pub async fn validate_display_name_for_user(
             status_code_to_error(status).unwrap_or(Error::Network),
         )),
     }
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+struct SetDisplayNameRequest {
+    new_display_name: String,
+}
+
+/// Sets the user's display name
+///
+/// # Error codes
+/// 1: Display name is too short
+/// 2: Display name is too long
+/// 3: Display name contains invalid characters
+/// 4: Display name has been moderated
+/// 5: Display name updates for this user have been throttled
+pub async fn set_display_name(
+    jar: &mut RequestJar,
+    new_display_name: String,
+) -> Result<RobloxResponse<()>, Box<Error>> {
+    let this_user = whoami(jar).await?;
+
+    let url = format!(
+        "https://users.roblox.com/v1/users/{}/display-names",
+        this_user.id.to_string()
+    );
+
+    let request = SetDisplayNameRequest { new_display_name };
+
+    let response = jar.patch_json(&url, request).await?;
+
+    Ok(response)
 }
