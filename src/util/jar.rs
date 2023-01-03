@@ -89,6 +89,55 @@ impl RequestJar {
         }
     }
 
+    pub async fn post<PD>(
+        &mut self,
+        url: &str,
+        soft_fail: bool, // Determines if it should error or not if the status code is not 200.
+        data: PD,
+    ) -> Result<reqwest::Response, Box<Error>> {
+        let client = self.get_reqwest_client();
+
+        let response = client
+            .get(url)
+            .header(
+                "Cookie",
+                if self.roblosecurity.is_some() {
+                    format!(".ROBLOSECURITY={};", self.roblosecurity.as_ref().unwrap())
+                } else {
+                    "".to_string()
+                },
+            )
+            .send()
+            .await;
+
+        match response {
+            Ok(res) => {
+                if res.status() != 200 && !soft_fail {
+                    let error = status_code_to_error(res.status());
+                    if error.is_some() {
+                        return Err(Box::new(error.unwrap_or(Error::Network)));
+                    };
+                }
+                Ok(res)
+            }
+            Err(_) => Err(Box::new(Error::Network)),
+        }
+    }
+
+    pub async fn post_json<T: for<'de> serde::Deserialize<'de>, PD: serde::Serialize>(
+        &mut self,
+        url: &str,
+        data: PD,
+    ) -> Result<T, Box<Error>> {
+        let response = self.post(url, false, data).await?;
+        let json = response.json::<T>().await;
+
+        match json {
+            Ok(json) => Ok(json),
+            Err(_) => Err(Box::new(Error::JSON)),
+        }
+    }
+
     pub async fn get_xsrf_token(&mut self) -> Result<(), Box<Error>> {
         return Ok(()); // TODO: Implement this? Might not be needed, its in noblox.js but from my very limited research it doesnt appear to be used anymore
         if self.roblosecurity.is_none() {
