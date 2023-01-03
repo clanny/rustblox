@@ -15,14 +15,6 @@ pub struct User {
     pub display_name: String,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
-#[serde(rename_all = "camelCase")]
-pub struct MinimalAuthenticatedUser {
-    pub id: usize,
-    pub name: String,
-    pub display_name: String,
-}
-
 /// Gets a user by their user ID
 ///
 /// # Error codes
@@ -31,6 +23,14 @@ pub async fn user_by_id(jar: &mut RequestJar, user_id: usize) -> Result<User, Bo
     let url = format!("https://users.roblox.com/v1/users/{}", user_id);
     let response = jar.get_json::<User>(&url).await?;
     Ok(response)
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct MinimalAuthenticatedUser {
+    pub id: usize,
+    pub name: String,
+    pub display_name: String,
 }
 
 pub async fn whoami(jar: &mut RequestJar) -> Result<MinimalAuthenticatedUser, Box<Error>> {
