@@ -64,3 +64,18 @@ pub async fn country_code(jar: &mut RequestJar) -> Result<CountryCodeResponse, B
     let response = jar.get_json::<CountryCodeResponse>(&url).await?;
     Ok(response)
 }
+
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct RolesResponse {
+    pub roles: Vec<String>,
+}
+
+/// Gets the roles of the currently authenticated user
+/// I have never seen this return anything other than an empty array
+/// Might be useless, don't know
+pub async fn roles(jar: &mut RequestJar) -> Result<RolesResponse, Box<Error>> {
+    let url = format!("https://users.roblox.com/v1/users/authenticated/roles");
+    let response = jar.get_json::<RolesResponse>(&url).await?;
+    Ok(response)
+}

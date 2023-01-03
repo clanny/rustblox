@@ -153,7 +153,15 @@ mod tests {
     #[tokio::test]
     async fn get_country_code() {
         let mut jar = authenticated_jar().await;
-        let age_bracket = crate::users::users::country_code(&mut jar).await.unwrap();
-        assert_eq!(age_bracket.country_code, "NL");
+        let country_code = crate::users::users::country_code(&mut jar).await.unwrap();
+        assert_eq!(country_code.country_code, "NL");
+    }
+
+    #[tokio::test]
+    async fn get_roles() {
+        let mut jar = authenticated_jar().await;
+        let roles = crate::users::users::roles(&mut jar).await.unwrap();
+        let empty_vec: Vec<String> = Vec::new();
+        assert_eq!(roles.roles, empty_vec);
     }
 }
