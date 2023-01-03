@@ -1,10 +1,11 @@
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct RobloxError {
     code: usize,
     message: String,
-    userFacingMessage: String,
+    user_facing_message: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
