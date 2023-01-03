@@ -89,16 +89,17 @@ impl RequestJar {
         }
     }
 
-    pub async fn post<PD>(
+    pub async fn post(
         &mut self,
         url: &str,
         soft_fail: bool, // Determines if it should error or not if the status code is not 200.
-        data: PD,
+        data: String,
     ) -> Result<reqwest::Response, Box<Error>> {
         let client = self.get_reqwest_client();
 
         let response = client
-            .get(url)
+            .post(url)
+            .body(data)
             .header(
                 "Cookie",
                 if self.roblosecurity.is_some() {
@@ -129,7 +130,59 @@ impl RequestJar {
         url: &str,
         data: PD,
     ) -> Result<T, Box<Error>> {
+        let data = serde_json::to_string(&data).unwrap();
         let response = self.post(url, false, data).await?;
+        let json = response.json::<T>().await;
+
+        match json {
+            Ok(json) => Ok(json),
+            Err(_) => Err(Box::new(Error::JSON)),
+        }
+    }
+
+    pub async fn patch(
+        &mut self,
+        url: &str,
+        soft_fail: bool, // Determines if it should error or not if the status code is not 200.
+        data: String,
+    ) -> Result<reqwest::Response, Box<Error>> {
+        let client = self.get_reqwest_client();
+
+        let response = client
+            .patch(url)
+            .body(data)
+            .header(
+                "Cookie",
+                if self.roblosecurity.is_some() {
+                    format!(".ROBLOSECURITY={};", self.roblosecurity.as_ref().unwrap())
+                } else {
+                    "".to_string()
+                },
+            )
+            .send()
+            .await;
+
+        match response {
+            Ok(res) => {
+                if res.status() != 200 && !soft_fail {
+                    let error = status_code_to_error(res.status());
+                    if error.is_some() {
+                        return Err(Box::new(error.unwrap_or(Error::Network)));
+                    };
+                }
+                Ok(res)
+            }
+            Err(_) => Err(Box::new(Error::Network)),
+        }
+    }
+
+    pub async fn patch_json<T: for<'de> serde::Deserialize<'de>, PD: serde::Serialize>(
+        &mut self,
+        url: &str,
+        data: PD,
+    ) -> Result<T, Box<Error>> {
+        let data = serde_json::to_string(&data).unwrap();
+        let response = self.patch(url, false, data).await?;
         let json = response.json::<T>().await;
 
         match json {
