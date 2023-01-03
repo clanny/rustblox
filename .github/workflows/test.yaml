@@ -17,7 +17,7 @@ jobs:
           override: true
       # Write the secret TEST_ROBLOSECURITY to roblosecurity.txt
       - name: Write roblosecurity.txt
-        run: echo ${{ secrets.TEST_ROBLOSECURITY }} > roblosecurity.txt
+        run: echo "${{ secrets.TEST_ROBLOSECURITY }}" > roblosecurity.txt
       # Run tests
       - name: Run tests
         uses: actions-rs/cargo@v1
