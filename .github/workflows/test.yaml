@@ -25,7 +25,7 @@ jobs:
           cache-name: cache-build-deps
         with:
           path: target
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('Cargo.lock') }}
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/Cargo.lock') }}
 
       # Write the secret TEST_ROBLOSECURITY to roblosecurity.txt
       - name: Write roblosecurity.txt
