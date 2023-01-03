@@ -51,3 +51,16 @@ pub async fn age_bracket(jar: &mut RequestJar) -> Result<AgeBracketResponse, Box
     let response = jar.get_json::<AgeBracketResponse>(&url).await?;
     Ok(response)
 }
+
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct CountryCodeResponse {
+    pub country_code: String,
+}
+
+/// Gets the country code of the currently authenticated user
+pub async fn country_code(jar: &mut RequestJar) -> Result<CountryCodeResponse, Box<Error>> {
+    let url = format!("https://users.roblox.com/v1/users/authenticated/country-code");
+    let response = jar.get_json::<CountryCodeResponse>(&url).await?;
+    Ok(response)
+}

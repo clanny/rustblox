@@ -149,4 +149,11 @@ mod tests {
         let age_bracket = crate::users::users::age_bracket(&mut jar).await.unwrap();
         assert_eq!(age_bracket.age_bracket, 0);
     }
+
+    #[tokio::test]
+    async fn get_country_code() {
+        let mut jar = authenticated_jar().await;
+        let age_bracket = crate::users::users::country_code(&mut jar).await.unwrap();
+        assert_eq!(age_bracket.country_code, "NL");
+    }
 }
