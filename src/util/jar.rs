@@ -1,3 +1,5 @@
+use serde_json::Value;
+
 //use std::error::Error;
 use crate::util::status_codes::status_code_to_error;
 use crate::util::Error;
@@ -59,6 +61,7 @@ impl RequestJar {
                     "".to_string()
                 },
             )
+            .header("Accept", "application/json")
             .send()
             .await;
 
@@ -99,7 +102,7 @@ impl RequestJar {
 
         let response = client
             .post(url)
-            .body(data)
+            .body(data.clone())
             .header(
                 "Cookie",
                 if self.roblosecurity.is_some() {
@@ -108,6 +111,8 @@ impl RequestJar {
                     "".to_string()
                 },
             )
+            .header("Accept", "application/json")
+            .header("Content-Type", "application/json")
             .send()
             .await;
 
@@ -159,6 +164,8 @@ impl RequestJar {
                     "".to_string()
                 },
             )
+            .header("Accept", "application/json")
+            .header("Content-Type", "application/json")
             .send()
             .await;
 
