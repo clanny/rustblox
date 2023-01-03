@@ -1,4 +1,5 @@
 pub mod jar;
+pub mod responses;
 pub mod status_codes;
 
 // Create Error type
