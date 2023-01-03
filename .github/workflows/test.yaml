@@ -1,0 +1,25 @@
+# A Github actions workflow to run tests on a push or pull request
+name: Test
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone the repository
+        uses: actions/checkout@v2
+      # Setup Rust
+      - name: Setup Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+      # Write the secret TEST_ROBLOSECURITY to roblosecurity.txt
+      - name: Write roblosecurity.txt
+        run: echo ${{ secrets.TEST_ROBLOSECURITY }} > roblosecurity.txt
+      # Run tests
+      - name: Run tests
+        uses: actions-rs/cargo@v1
+        with:
+          command: test
