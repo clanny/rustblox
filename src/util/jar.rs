@@ -1,3 +1,4 @@
+use async_recursion::async_recursion;
 use serde_json::Value;
 
 //use std::error::Error;
@@ -125,8 +126,32 @@ impl RequestJar {
             )
             .header("Accept", "application/json")
             .header("Content-Type", "application/json")
+            .header(
+                "X-CSRF-TOKEN",
+                self.xsrf_token.as_ref().unwrap_or(&"".to_string()),
+            )
             .send()
             .await;
+
+        // If the response returned a X-Csrf-Token header, update the client's xsrf token.
+        if response
+            .as_ref()
+            .unwrap()
+            .headers()
+            .contains_key("X-CSRF-TOKEN")
+        {
+            self.xsrf_token = Some(
+                response
+                    .as_ref()
+                    .unwrap()
+                    .headers()
+                    .get("X-CSRF-TOKEN")
+                    .unwrap()
+                    .to_str()
+                    .unwrap()
+                    .to_string(),
+            );
+        }
 
         match response {
             Ok(res) => {
@@ -142,12 +167,16 @@ impl RequestJar {
         }
     }
 
-    pub async fn post_json<T: for<'de> serde::Deserialize<'de>, PD: serde::Serialize>(
+    #[async_recursion]
+    pub async fn post_json<
+        T: for<'de> serde::Deserialize<'de>,
+        PD: serde::Serialize + std::marker::Send,
+    >(
         &mut self,
         url: &str,
-        data: PD,
+        json_data: PD,
     ) -> Result<T, Box<Error>> {
-        let data = serde_json::to_string(&data).unwrap();
+        let data = serde_json::to_string(&json_data).unwrap();
         let response = self.post(url, false, data).await?;
 
         if response.status() != 200 {
@@ -156,6 +185,13 @@ impl RequestJar {
             }
 
             let json = response.json::<FailedRobloxResponse>().await.unwrap();
+
+            if json.errors[0].clone().message == "Token Validation Failed" {
+                self.get_xsrf_token().await?;
+                //panic!("E");
+                return self.post_json(url, json_data).await;
+            }
+
             return Err(Box::new(Error::RobloxError(json.errors[0].clone())));
         }
 
@@ -188,8 +224,32 @@ impl RequestJar {
             )
             .header("Accept", "application/json")
             .header("Content-Type", "application/json")
+            .header(
+                "X-CSRF-TOKEN",
+                self.xsrf_token.as_ref().unwrap_or(&"".to_string()),
+            )
             .send()
             .await;
+
+        // If the response returned a X-Csrf-Token header, update the client's xsrf token.
+        if response
+            .as_ref()
+            .unwrap()
+            .headers()
+            .contains_key("X-CSRF-TOKEN")
+        {
+            self.xsrf_token = Some(
+                response
+                    .as_ref()
+                    .unwrap()
+                    .headers()
+                    .get("X-CSRF-TOKEN")
+                    .unwrap()
+                    .to_str()
+                    .unwrap()
+                    .to_string(),
+            );
+        }
 
         match response {
             Ok(res) => {
@@ -205,12 +265,16 @@ impl RequestJar {
         }
     }
 
-    pub async fn patch_json<T: for<'de> serde::Deserialize<'de>, PD: serde::Serialize>(
+    #[async_recursion]
+    pub async fn patch_json<
+        T: for<'de> serde::Deserialize<'de>,
+        PD: serde::Serialize + std::marker::Send,
+    >(
         &mut self,
         url: &str,
-        data: PD,
+        json_data: PD,
     ) -> Result<T, Box<Error>> {
-        let data = serde_json::to_string(&data).unwrap();
+        let data = serde_json::to_string(&json_data).unwrap();
         let response = self.patch(url, false, data).await?;
 
         if response.status() != 200 {
@@ -219,6 +283,13 @@ impl RequestJar {
             }
 
             let json = response.json::<FailedRobloxResponse>().await.unwrap();
+
+            if json.errors[0].clone().message == "Token Validation Failed" {
+                self.get_xsrf_token().await?;
+                //panic!("E");
+                return self.post_json(url, json_data).await;
+            }
+
             return Err(Box::new(Error::RobloxError(json.errors[0].clone())));
         }
 
@@ -231,12 +302,14 @@ impl RequestJar {
     }
 
     pub async fn get_xsrf_token(&mut self) -> Result<(), Box<Error>> {
-        return Ok(()); // TODO: Implement this? Might not be needed, its in noblox.js but from my very limited research it doesnt appear to be used anymore
+        //panic!("Not implemented yet");
+        //return Ok(()); // TODO: Implement this? Might not be needed, its in noblox.js but from my very limited research it doesnt appear to be used anymore
+        // After more resarch it is very needed on not get requests
         if self.roblosecurity.is_none() {
             return Err(Box::new(Error::Authentication));
         }
 
-        let client = reqwest::Client::new();
+        let client = self.get_reqwest_client();
         let response = client
             .post("https://auth.roblox.com/v2/logout")
             .header(
@@ -251,12 +324,14 @@ impl RequestJar {
             .await
             .unwrap(); // TODO: Handle error
 
-        println!(
-            " {}, {}",
-            //response.headers(),
-            response.status(),
-            response.text().await.unwrap()
-        );
+        // Get the X-Csrf-Token header
+        let token = response
+            .headers()
+            .get("X-CSRF-TOKEN")
+            .unwrap()
+            .to_str()
+            .unwrap();
+        self.xsrf_token = Some(token.to_string());
 
         //let text = res.text().await?;
         //let doc = Html::parse_document(&text);
