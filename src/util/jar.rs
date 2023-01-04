@@ -88,6 +88,10 @@ impl RequestJar {
         let response = self.get(url, false).await?;
 
         if response.status() != 200 {
+            if response.status() == 429 {
+                return Err(Box::new(Error::RateLimited));
+            }
+
             let json = response.json::<FailedRobloxResponse>().await.unwrap();
             return Err(Box::new(Error::RobloxError(json.errors[0].clone())));
         }
@@ -147,6 +151,10 @@ impl RequestJar {
         let response = self.post(url, false, data).await?;
 
         if response.status() != 200 {
+            if response.status() == 429 {
+                return Err(Box::new(Error::RateLimited));
+            }
+
             let json = response.json::<FailedRobloxResponse>().await.unwrap();
             return Err(Box::new(Error::RobloxError(json.errors[0].clone())));
         }
@@ -206,6 +214,10 @@ impl RequestJar {
         let response = self.patch(url, false, data).await?;
 
         if response.status() != 200 {
+            if response.status() == 429 {
+                return Err(Box::new(Error::RateLimited));
+            }
+
             let json = response.json::<FailedRobloxResponse>().await.unwrap();
             return Err(Box::new(Error::RobloxError(json.errors[0].clone())));
         }

@@ -12,6 +12,7 @@ pub enum Error {
     JSON,
     Authentication,
     Throttled,
+    RateLimited,
     InvalidPageLimit,
     RobloxError(RobloxError),
 }
@@ -22,6 +23,7 @@ pub fn error_to_user_message(err: Error) -> String {
         Error::JSON => "JSON error".to_string(),
         Error::Authentication => "Authentication error".to_string(),
         Error::Throttled => "Throttled, too many requests".to_string(),
+        Error::RateLimited => "Throttled, too many requests".to_string(),
         Error::InvalidPageLimit => "Invalid page limit".to_string(),
         Error::RobloxError(e) => "Roblox error: ".to_string() + &e.message,
     }
