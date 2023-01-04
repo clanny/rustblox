@@ -311,4 +311,18 @@ mod tests {
     // We will not be having a test for updating group name cus that requires robux
 
     // TODO: Create tests for join requests, but that requires a group (which requires robux)
+
+    #[tokio::test]
+    async fn group_membership() {
+        let mut jar = authenticated_jar().await;
+        let group_membership = crate::groups::groups::membership(&mut jar, 7370273)
+            .await
+            .unwrap();
+
+        println!("{:#?}", group_membership);
+
+        assert_eq!(group_membership.group_id, 7370273);
+        assert_eq!(group_membership.are_group_funds_visible, false);
+        assert_eq!(group_membership.can_configure, false);
+    }
 }

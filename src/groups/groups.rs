@@ -10,6 +10,8 @@ use crate::{
     },
 };
 
+use super::{permissions::GroupPermissions, roles::GroupRole};
+
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Group {
@@ -326,3 +328,40 @@ pub async fn update_name(
 // FIXME: There is an endpoint PATCH /v1/groups/{groupId}/status, is it needed? what does it do? pls research
 
 // TODO: Implement /v1/groups/icon, i have no idea how to upload files
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct GroupMembership {
+    pub group_id: usize,
+    pub is_primary: bool,
+    pub is_pending_join: bool,
+    pub group_role: Option<GroupMembershipUserRole>,
+    pub permissions: GroupPermissions,
+    pub are_group_games_visible: bool,
+    pub are_group_funds_visible: bool,
+    pub are_enemies_allowed: bool,
+    pub can_configure: bool,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct GroupMembershipUserRole {
+    pub user: MinimalGroupUser,
+    pub role: GroupRole,
+}
+
+/// Gets a user's group membership
+///
+/// # Error codes
+/// - 1: Group is invalid or does not exist.
+pub async fn membership(
+    jar: &mut RequestJar,
+    group_id: usize,
+) -> Result<GroupMembership, Box<Error>> {
+    let url = format!(
+        "https://groups.roblox.com/v1/groups/{}/membership",
+        group_id
+    );
+    let response = jar.get_json::<GroupMembership>(&url).await?;
+    Ok(response)
+}
