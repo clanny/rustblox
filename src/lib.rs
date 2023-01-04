@@ -309,4 +309,6 @@ mod tests {
 
     // TODO: Create test for updating group description, but that requires a group (which requires robux)
     // We will not be having a test for updating group name cus that requires robux
+
+    // TODO: Create tests for join requests, but that requires a group (which requires robux)
 }

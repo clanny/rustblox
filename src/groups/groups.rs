@@ -322,3 +322,7 @@ pub async fn update_name(
         .await?;
     Ok(response)
 }
+
+// FIXME: There is an endpoint PATCH /v1/groups/{groupId}/status, is it needed? what does it do? pls research
+
+// TODO: Implement /v1/groups/icon, i have no idea how to upload files
