@@ -102,11 +102,18 @@ where
         return get_all_pages(jar, url, limit).await;
     }
 
-    let url = if let Some(cursor) = cursor {
+    let mut url = if let Some(cursor) = cursor {
         format!("{}?cursor={}", url, cursor)
     } else {
         url.to_string()
     };
+
+    url = format!(
+        "{}{}limit={}",
+        url,
+        if url.contains("?") { "&" } else { "?" },
+        limit.get_limit()
+    );
 
     let response = jar.get_json::<PagedResponse<T>>(&url).await?;
     Ok(response.data)
