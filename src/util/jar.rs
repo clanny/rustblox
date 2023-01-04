@@ -101,7 +101,10 @@ impl RequestJar {
 
         match json {
             Ok(json) => Ok(json),
-            Err(_) => Err(Box::new(Error::JSON)),
+            Err(error) => {
+                println!("Error: {:#?}", error);
+                Err(Box::new(Error::JSON))
+            }
         }
     }
 
@@ -199,7 +202,10 @@ impl RequestJar {
 
         match json {
             Ok(json) => Ok(json),
-            Err(_) => Err(Box::new(Error::JSON)),
+            Err(error) => {
+                println!("Error: {:#?}", error);
+                Err(Box::new(Error::JSON))
+            }
         }
     }
 
@@ -297,7 +303,10 @@ impl RequestJar {
 
         match json {
             Ok(json) => Ok(json),
-            Err(_) => Err(Box::new(Error::JSON)),
+            Err(error) => {
+                println!("Error: {:#?}", error);
+                Err(Box::new(Error::JSON))
+            }
         }
     }
 
@@ -395,7 +404,10 @@ impl RequestJar {
 
         match json {
             Ok(json) => Ok(json),
-            Err(_) => Err(Box::new(Error::JSON)),
+            Err(error) => {
+                println!("Error: {:#?}", error);
+                Err(Box::new(Error::JSON))
+            }
         }
     }
 
