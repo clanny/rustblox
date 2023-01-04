@@ -1,5 +1,6 @@
 use reqwest::StatusCode;
 use serde::{Deserialize, Serialize};
+use strum_macros::Display;
 
 use crate::{
     users::users::{MinimalAuthenticatedUser, User},
@@ -14,7 +15,7 @@ pub struct PagedResponse<T> {
     pub data: Vec<T>,
 }
 
-#[derive(PartialEq)]
+#[derive(PartialEq, Display)]
 pub enum PageLimit {
     /// Retrieves all pages
     All,
@@ -41,7 +42,7 @@ impl PageLimit {
     }
 }
 
-#[derive(PartialEq)]
+#[derive(PartialEq, Display)]
 pub enum SortOrder {
     /// Sort in ascending order
     Asc,
