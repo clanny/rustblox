@@ -214,3 +214,40 @@ pub async fn update_settings(
         .await?;
     Ok(response)
 }
+
+// TODO: Figure out how to send the files to /v1/groups/create and implement it
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct GroupComplianceItem {
+    pub can_view_group: bool,
+    pub group_id: usize,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct GroupComplianceResponse {
+    pub groups: Vec<GroupComplianceItem>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct GroupComplianceRequest {
+    pub group_ids: Vec<usize>,
+}
+
+/// Gets group policy info used for compliance
+/// # Error codes
+/// - 1: Too many ids in request.
+/// - 2: Ids could not be parsed from request.
+pub async fn compliance(
+    jar: &mut RequestJar,
+    group_ids: Vec<usize>,
+) -> Result<GroupComplianceResponse, Box<Error>> {
+    let url = format!("https://groups.roblox.com/v1/groups/policies");
+    let request = GroupComplianceRequest { group_ids };
+    let response = jar
+        .post_json::<GroupComplianceResponse, GroupComplianceRequest>(&url, request)
+        .await?;
+    Ok(response)
+}

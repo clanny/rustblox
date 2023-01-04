@@ -270,4 +270,40 @@ mod tests {
     //}
 
     // TODO: Create test for updating group settings, but that requires a group (which requires robux)
+
+    #[tokio::test]
+    async fn group_configuration_metadata() {
+        let mut jar = unauthenticated_jar().await;
+        let group_configuration_metadata = crate::groups::metadata::config_metadata(&mut jar)
+            .await
+            .unwrap();
+
+        println!("{:#?}", group_configuration_metadata);
+
+        assert_eq!(group_configuration_metadata.role_configuration.min_rank, 0);
+    }
+
+    #[tokio::test]
+    async fn group_metadata() {
+        let mut jar = unauthenticated_jar().await;
+        let group_metadata = crate::groups::metadata::metadata(&mut jar).await.unwrap();
+
+        println!("{:#?}", group_metadata);
+
+        assert_eq!(group_metadata.show_previous_group_names, true);
+    }
+
+    #[tokio::test]
+    async fn group_compliance() {
+        let mut jar = authenticated_jar().await;
+        let group_compliance = crate::groups::groups::compliance(&mut jar, vec![7370273])
+            .await
+            .unwrap();
+
+        println!("{:#?}", group_compliance);
+
+        assert_eq!(group_compliance.groups.len(), 1);
+        assert_eq!(group_compliance.groups[0].can_view_group, true);
+        assert_eq!(group_compliance.groups[0].group_id, 7370273);
+    }
 }
