@@ -182,4 +182,16 @@ mod tests {
         assert_eq!(users.data.len(), 2);
         assert_eq!(users.data[0].name, "piano1029".to_string());
     }
+
+    #[tokio::test]
+    async fn username_history() {
+        let mut jar = unauthenticated_jar().await;
+        let users = crate::users::usernames::username_history(&mut jar, 375760054)
+            .await
+            .unwrap();
+
+        println!("{:#?}", users);
+
+        assert_eq!(users.len(), 0);
+    }
 }
