@@ -15,6 +15,14 @@ pub struct User {
     pub display_name: String,
 }
 
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct MinimalGroupOwnerUser {
+    pub id: usize,
+    pub name: String,
+    pub display_name: String,
+}
+
 /// Gets a user by their user ID
 ///
 /// # Error codes
