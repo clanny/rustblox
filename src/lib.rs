@@ -194,4 +194,21 @@ mod tests {
 
         assert_eq!(users.len(), 0);
     }
+
+    #[tokio::test]
+    async fn username_search() {
+        let mut jar = unauthenticated_jar().await;
+        let users = crate::users::username_search::username_search(
+            &mut jar,
+            "miemper".to_string(),
+            util::paging::PageLimit::Limit10,
+        )
+        .await
+        .unwrap();
+
+        println!("{:#?}", users);
+
+        assert_eq!(users.len(), 10);
+        assert_eq!(users[0].name, "miemper".to_string());
+    }
 }
