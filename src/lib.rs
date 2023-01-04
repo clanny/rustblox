@@ -306,4 +306,6 @@ mod tests {
         assert_eq!(group_compliance.groups[0].can_view_group, true);
         assert_eq!(group_compliance.groups[0].group_id, 7370273);
     }
+
+    // TODO: Create test for updating group description, but that requires a group (which requires robux)
 }
