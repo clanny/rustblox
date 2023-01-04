@@ -132,3 +132,32 @@ pub async fn audit_log(
     let response = get_page(jar, url.as_str(), limit, None).await?; // TODO: cursor
     Ok(response)
 }
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct GroupNameHistoryEntry {
+    pub name: String,
+    pub created: String,
+}
+
+/// Gets the name history for a group
+///
+/// # Error codes
+/// - 1: Group is invalid or does not exist.
+/// - 23: Insufficient permissions to complete the request.
+pub async fn name_history(
+    jar: &mut RequestJar,
+    group_id: usize,
+    limit: PageLimit,
+    sort_order: Option<SortOrder>,
+    //cursor: Option<String>,
+) -> Result<Vec<GroupNameHistoryEntry>, Box<Error>> {
+    let mut url = format!(
+        "https://groups.roblox.com/v1/groups/{}/name-history",
+        group_id
+    );
+    url = format!("{}?sortOrder={}", url, sort_order.unwrap_or(SortOrder::Asc));
+
+    let response = get_page(jar, url.as_str(), limit, None).await?; // TODO: cursor
+    Ok(response)
+}

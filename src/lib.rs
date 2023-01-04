@@ -228,4 +228,21 @@ mod tests {
     }
 
     // TODO: Create test for audit log, but that requires a group (which requires robux)
+
+    #[tokio::test]
+    async fn get_group_name_history() {
+        let mut jar = unauthenticated_jar().await;
+        let group_name_history = crate::groups::groups::name_history(
+            &mut jar,
+            7370273,
+            util::paging::PageLimit::All,
+            Some(util::paging::SortOrder::Asc),
+        )
+        .await
+        .unwrap();
+
+        println!("{:#?}", group_name_history);
+
+        assert_eq!(group_name_history.len(), 0);
+    }
 }
