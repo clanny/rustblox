@@ -3,10 +3,6 @@ use std::fs;
 pub mod users;
 pub mod util;
 
-pub fn add(left: usize, right: usize) -> usize {
-    left + right
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -39,12 +35,6 @@ mod tests {
         }
 
         jar
-    }
-
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
     }
 
     #[tokio::test]
@@ -163,5 +153,33 @@ mod tests {
         let roles = crate::users::users::roles(&mut jar).await.unwrap();
         let empty_vec: Vec<String> = Vec::new();
         assert_eq!(roles.roles, empty_vec);
+    }
+
+    #[tokio::test]
+    async fn bulk_users_by_username() {
+        let mut jar = authenticated_jar().await;
+        let users = crate::users::users::bulk_users_by_username(
+            &mut jar,
+            vec!["piano1029".to_string(), "ClannyBot".to_string()],
+        )
+        .await
+        .unwrap();
+
+        assert_eq!(users.data.len(), 2);
+        assert_eq!(users.data[0].name, "piano1029".to_string());
+        assert_eq!(users.data[0].id, 375760054);
+    }
+
+    #[tokio::test]
+    async fn bulk_users_by_id() {
+        let mut jar = authenticated_jar().await;
+        let users = crate::users::users::bulk_users_by_id(&mut jar, vec![375760054, 1444131924])
+            .await
+            .unwrap();
+
+        println!("{:#?}", users);
+
+        assert_eq!(users.data.len(), 2);
+        assert_eq!(users.data[0].name, "piano1029".to_string());
     }
 }
