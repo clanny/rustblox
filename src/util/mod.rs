@@ -10,13 +10,15 @@ pub enum Error {
     JSON,
     Authentication,
     Throttled,
+    InvalidPageLimit,
 }
 
-fn error_to_user_message(err: Error) -> String {
+pub fn error_to_user_message(err: Error) -> String {
     match err {
         Error::Network => "Network error".to_string(),
         Error::JSON => "JSON error".to_string(),
         Error::Authentication => "Authentication error".to_string(),
         Error::Throttled => "Throttled, too many requests".to_string(),
+        Error::InvalidPageLimit => "Invalid page limit".to_string(),
     }
 }
