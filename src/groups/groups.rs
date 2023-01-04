@@ -5,7 +5,7 @@ use crate::{
     users::users::MinimalGroupUser,
     util::{
         jar::RequestJar,
-        paging::{get_page, PageLimit},
+        paging::{get_page, PageLimit, SortOrder},
         Error,
     },
 };
@@ -118,9 +118,17 @@ pub async fn audit_log(
     jar: &mut RequestJar,
     group_id: usize,
     limit: PageLimit,
+    user_id: Option<usize>,
+    sort_order: Option<SortOrder>,
     //cursor: Option<String>,
 ) -> Result<Vec<GroupAuditLogEntry>, Box<Error>> {
-    let url = format!("https://groups.roblox.com/v1/groups/{}/audit-log", group_id);
+    let mut url = format!("https://groups.roblox.com/v1/groups/{}/audit-log", group_id);
+    if user_id.is_some() {
+        let user_id = user_id.unwrap();
+        url = format!("{}?userId={}", url, user_id);
+    }
+    url = format!("{}&sortOrder={}", url, sort_order.unwrap_or(SortOrder::Asc));
+
     let response = get_page(jar, url.as_str(), limit, None).await?; // TODO: cursor
     Ok(response)
 }
