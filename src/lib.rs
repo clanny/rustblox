@@ -1,5 +1,6 @@
 use std::fs;
 
+pub mod groups;
 pub mod users;
 pub mod util;
 
@@ -211,4 +212,20 @@ mod tests {
         assert_eq!(users.len(), 10);
         assert_eq!(users[0].name, "miemper".to_string());
     }
+
+    #[tokio::test]
+    async fn get_group() {
+        let mut jar = unauthenticated_jar().await;
+        let group = crate::groups::groups::group_by_id(&mut jar, 7370273)
+            .await
+            .unwrap();
+
+        println!("{:#?}", group);
+
+        assert_eq!(group.id, 7370273);
+        assert_eq!(group.name, "Clanny Systems".to_string());
+        assert_eq!(group.owner.username, "ClannyBot".to_string())
+    }
+
+    // TODO: Create test for audit log, but that requires a group (which requires robux)
 }
