@@ -9,7 +9,7 @@ use super::responses::{FailedRobloxResponse, RobloxError, RobloxResponse};
 
 pub struct RequestJar {
     pub roblosecurity: Option<String>,
-    pub xsrf_token: Option<String>,
+    pub xcsrf_token: Option<String>,
 
     pub proxy: Option<String>,
 }
@@ -18,7 +18,7 @@ impl RequestJar {
     pub async fn new() -> RequestJar {
         RequestJar {
             roblosecurity: None,
-            xsrf_token: None,
+            xcsrf_token: None,
 
             proxy: None,
         }
@@ -26,7 +26,7 @@ impl RequestJar {
 
     pub async fn set_roblosecurity(&mut self, roblosecurity: String) -> Result<(), Box<Error>> {
         self.roblosecurity = Some(roblosecurity);
-        self.get_xsrf_token().await?;
+        self.get_xcsrf_token(0).await?;
         Ok(())
     }
 
@@ -128,19 +128,19 @@ impl RequestJar {
             .header("Content-Type", "application/json")
             .header(
                 "X-CSRF-TOKEN",
-                self.xsrf_token.as_ref().unwrap_or(&"".to_string()),
+                self.xcsrf_token.as_ref().unwrap_or(&"".to_string()),
             )
             .send()
             .await;
 
-        // If the response returned a X-Csrf-Token header, update the client's xsrf token.
+        // If the response returned a X-Csrf-Token header, update the client's xcsrf token.
         if response
             .as_ref()
             .unwrap()
             .headers()
             .contains_key("X-CSRF-TOKEN")
         {
-            self.xsrf_token = Some(
+            self.xcsrf_token = Some(
                 response
                     .as_ref()
                     .unwrap()
@@ -187,7 +187,7 @@ impl RequestJar {
             let json = response.json::<FailedRobloxResponse>().await.unwrap();
 
             if json.errors[0].clone().message == "Token Validation Failed" {
-                self.get_xsrf_token().await?;
+                self.get_xcsrf_token(0).await?;
                 //panic!("E");
                 return self.post_json(url, json_data).await;
             }
@@ -226,19 +226,19 @@ impl RequestJar {
             .header("Content-Type", "application/json")
             .header(
                 "X-CSRF-TOKEN",
-                self.xsrf_token.as_ref().unwrap_or(&"".to_string()),
+                self.xcsrf_token.as_ref().unwrap_or(&"".to_string()),
             )
             .send()
             .await;
 
-        // If the response returned a X-Csrf-Token header, update the client's xsrf token.
+        // If the response returned a X-Csrf-Token header, update the client's xcsrf token.
         if response
             .as_ref()
             .unwrap()
             .headers()
             .contains_key("X-CSRF-TOKEN")
         {
-            self.xsrf_token = Some(
+            self.xcsrf_token = Some(
                 response
                     .as_ref()
                     .unwrap()
@@ -285,7 +285,7 @@ impl RequestJar {
             let json = response.json::<FailedRobloxResponse>().await.unwrap();
 
             if json.errors[0].clone().message == "Token Validation Failed" {
-                self.get_xsrf_token().await?;
+                self.get_xcsrf_token(0).await?;
                 //panic!("E");
                 return self.post_json(url, json_data).await;
             }
@@ -301,7 +301,8 @@ impl RequestJar {
         }
     }
 
-    pub async fn get_xsrf_token(&mut self) -> Result<(), Box<Error>> {
+    #[async_recursion]
+    pub async fn get_xcsrf_token(&mut self, depth: u32) -> Result<(), Box<Error>> {
         //panic!("Not implemented yet");
         //return Ok(()); // TODO: Implement this? Might not be needed, its in noblox.js but from my very limited research it doesnt appear to be used anymore
         // After more resarch it is very needed on not get requests
@@ -325,20 +326,29 @@ impl RequestJar {
             .unwrap(); // TODO: Handle error
 
         // Get the X-Csrf-Token header
-        let token = response
-            .headers()
-            .get("X-CSRF-TOKEN")
-            .unwrap()
-            .to_str()
-            .unwrap();
-        self.xsrf_token = Some(token.to_string());
+        let token_header = response.headers().get("X-CSRF-TOKEN");
+
+        match token_header {
+            Some(token) => {
+                self.xcsrf_token = Some(token.to_str().unwrap().to_string());
+                return Ok(());
+            }
+            None => {
+                if depth > 3 {
+                    return Err(Box::new(Error::XcsrfToken));
+                }
+                return self.get_xcsrf_token(depth + 1).await;
+            }
+        }
+
+        //self.xcsrf_token = Some(token.to_string());
 
         //let text = res.text().await?;
         //let doc = Html::parse_document(&text);
         //let selector = Selector::parse("meta[name='X-CSRF-TOKEN']").unwrap();
         //let meta = doc.select(&selector).next().unwrap();
         //let token = meta.value().attr("content").unwrap();
-        //self.xsrf_token = Some(token.to_string());
+        //self.xcsrf_token = Some(token.to_string());
         Ok(())
     }
 }

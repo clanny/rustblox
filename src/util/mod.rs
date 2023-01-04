@@ -15,16 +15,22 @@ pub enum Error {
     RateLimited,
     InvalidPageLimit,
     RobloxError(RobloxError),
+    XcsrfToken,
 }
 
 pub fn error_to_user_message(err: Error) -> String {
     match err {
-        Error::Network => "Network error".to_string(),
-        Error::JSON => "JSON error".to_string(),
-        Error::Authentication => "Authentication error".to_string(),
-        Error::Throttled => "Throttled, too many requests".to_string(),
-        Error::RateLimited => "Throttled, too many requests".to_string(),
-        Error::InvalidPageLimit => "Invalid page limit".to_string(),
-        Error::RobloxError(e) => "Roblox error: ".to_string() + &e.message,
+        Error::Network => "Network error",
+        Error::JSON => "JSON error",
+        Error::Authentication => "Authentication error",
+        Error::Throttled => "Throttled, too many requests",
+        Error::RateLimited => "Throttled, too many requests",
+        Error::InvalidPageLimit => "Invalid page limit",
+        Error::RobloxError(e) => {
+            let msg = format!("Roblox error: {}", e.message);
+            return msg;
+        }
+        Error::XcsrfToken => "Xcsrf token error",
     }
+    .to_string()
 }
