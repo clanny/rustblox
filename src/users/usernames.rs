@@ -5,7 +5,7 @@ use crate::{
     users::users::{MinimalAuthenticatedUser, User},
     util::{
         jar::RequestJar,
-        paging::{get_all_pages, PagedResponse},
+        paging::{get_page, PagedResponse},
         responses::RobloxResponse,
     },
     util::{status_codes::status_code_to_error, Error},
@@ -32,5 +32,5 @@ pub async fn username_history(
         user_id
     );
 
-    Ok(get_all_pages(jar, url.as_str()).await?)
+    Ok(get_page(jar, url.as_str(), crate::util::paging::PageLimit::All, None).await?)
 }

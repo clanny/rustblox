@@ -14,8 +14,38 @@ pub struct PagedResponse<T> {
     pub data: Vec<T>,
 }
 
+pub enum PageLimit {
+    /// Retrieves all pages
+    All,
+    /// Retrieves 10 items
+    Limit10,
+    /// Retrieves 25 items
+    Limit25,
+    /// Retrieves 50 items
+    Limit50,
+    /// Retrieves 100 items
+    Limit100,
+}
+
+// Implement a trait for PageLimit to get the limit as a number
+impl PageLimit {
+    pub fn get_limit(&self) -> usize {
+        match self {
+            PageLimit::All => 20000,
+            PageLimit::Limit10 => 10,
+            PageLimit::Limit25 => 25,
+            PageLimit::Limit50 => 50,
+            PageLimit::Limit100 => 100,
+        }
+    }
+}
+
 /// Retrieves all pages of a paged response
-pub async fn get_all_pages<T>(jar: &mut RequestJar, url: &str) -> Result<Vec<T>, Box<Error>>
+async fn get_all_pages<T>(
+    jar: &mut RequestJar,
+    url: &str,
+    limit: PageLimit,
+) -> Result<Vec<T>, Box<Error>>
 where
     T: for<'de> Deserialize<'de>,
 {
@@ -35,4 +65,28 @@ where
     }
 
     Ok(data)
+}
+
+/// Retrieves a paged response
+pub async fn get_page<T>(
+    jar: &mut RequestJar,
+    url: &str,
+    limit: PageLimit,
+    cursor: Option<String>,
+) -> Result<Vec<T>, Box<Error>>
+where
+    T: for<'de> Deserialize<'de>,
+{
+    if limit.get_limit() > 100 {
+        return get_all_pages(jar, url, limit).await;
+    }
+
+    let url = if let Some(cursor) = cursor {
+        format!("{}?cursor={}", url, cursor)
+    } else {
+        url.to_string()
+    };
+
+    let response = jar.get_json::<PagedResponse<T>>(&url).await?;
+    Ok(response.data)
 }
