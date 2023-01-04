@@ -4,6 +4,8 @@ use serde_json::Value;
 use crate::util::status_codes::status_code_to_error;
 use crate::util::Error;
 
+use super::responses::{FailedRobloxResponse, RobloxError, RobloxResponse};
+
 pub struct RequestJar {
     pub roblosecurity: Option<String>,
     pub xsrf_token: Option<String>,
@@ -67,12 +69,12 @@ impl RequestJar {
 
         match response {
             Ok(res) => {
-                if res.status() != 200 && !soft_fail {
-                    let error = status_code_to_error(res.status());
-                    if error.is_some() {
-                        return Err(Box::new(error.unwrap_or(Error::Network)));
-                    };
-                }
+                //if res.status() != 200 && !soft_fail {
+                //    let error = status_code_to_error(res.status());
+                //    if error.is_some() {
+                //        return Err(Box::new(error.unwrap_or(Error::Network)));
+                //    };
+                //}
                 Ok(res)
             }
             Err(_) => Err(Box::new(Error::Network)),
@@ -84,6 +86,12 @@ impl RequestJar {
         url: &str,
     ) -> Result<T, Box<Error>> {
         let response = self.get(url, false).await?;
+
+        if response.status() != 200 {
+            let json = response.json::<FailedRobloxResponse>().await.unwrap();
+            return Err(Box::new(Error::RobloxError(json.errors[0].clone())));
+        }
+
         let json = response.json::<T>().await;
 
         match json {
@@ -118,12 +126,12 @@ impl RequestJar {
 
         match response {
             Ok(res) => {
-                if res.status() != 200 && !soft_fail {
-                    let error = status_code_to_error(res.status());
-                    if error.is_some() {
-                        return Err(Box::new(error.unwrap_or(Error::Network)));
-                    };
-                }
+                //if res.status() != 200 && !soft_fail {
+                //    let error = status_code_to_error(res.status());
+                //    if error.is_some() {
+                //        return Err(Box::new(error.unwrap_or(Error::Network)));
+                //    };
+                //}
                 Ok(res)
             }
             Err(_) => Err(Box::new(Error::Network)),
@@ -137,6 +145,12 @@ impl RequestJar {
     ) -> Result<T, Box<Error>> {
         let data = serde_json::to_string(&data).unwrap();
         let response = self.post(url, false, data).await?;
+
+        if response.status() != 200 {
+            let json = response.json::<FailedRobloxResponse>().await.unwrap();
+            return Err(Box::new(Error::RobloxError(json.errors[0].clone())));
+        }
+
         let json = response.json::<T>().await;
 
         match json {
@@ -171,12 +185,12 @@ impl RequestJar {
 
         match response {
             Ok(res) => {
-                if res.status() != 200 && !soft_fail {
-                    let error = status_code_to_error(res.status());
-                    if error.is_some() {
-                        return Err(Box::new(error.unwrap_or(Error::Network)));
-                    };
-                }
+                //if res.status() != 200 && !soft_fail {
+                //    let error = status_code_to_error(res.status());
+                //    if error.is_some() {
+                //        return Err(Box::new(error.unwrap_or(Error::Network)));
+                //    };
+                //}
                 Ok(res)
             }
             Err(_) => Err(Box::new(Error::Network)),
@@ -190,6 +204,12 @@ impl RequestJar {
     ) -> Result<T, Box<Error>> {
         let data = serde_json::to_string(&data).unwrap();
         let response = self.patch(url, false, data).await?;
+
+        if response.status() != 200 {
+            let json = response.json::<FailedRobloxResponse>().await.unwrap();
+            return Err(Box::new(Error::RobloxError(json.errors[0].clone())));
+        }
+
         let json = response.json::<T>().await;
 
         match json {

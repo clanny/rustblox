@@ -1,19 +1,19 @@
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct RobloxError {
-    code: usize,
-    message: String,
-    user_facing_message: String,
+    pub code: usize,
+    pub message: String,
+    pub user_facing_message: String,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct FailedRobloxResponse {
-    errors: Vec<RobloxError>,
+    pub errors: Vec<RobloxError>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub enum RobloxResponse<T> {
     Success(T),
     Failed(FailedRobloxResponse),

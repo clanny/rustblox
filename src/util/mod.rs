@@ -1,3 +1,5 @@
+use self::responses::RobloxError;
+
 pub mod jar;
 pub mod paging;
 pub mod responses;
@@ -11,6 +13,7 @@ pub enum Error {
     Authentication,
     Throttled,
     InvalidPageLimit,
+    RobloxError(RobloxError),
 }
 
 pub fn error_to_user_message(err: Error) -> String {
@@ -20,5 +23,6 @@ pub fn error_to_user_message(err: Error) -> String {
         Error::Authentication => "Authentication error".to_string(),
         Error::Throttled => "Throttled, too many requests".to_string(),
         Error::InvalidPageLimit => "Invalid page limit".to_string(),
+        Error::RobloxError(e) => "Roblox error: ".to_string() + &e.message,
     }
 }
