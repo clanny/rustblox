@@ -301,6 +301,104 @@ impl RequestJar {
         }
     }
 
+    pub async fn delete(
+        &mut self,
+        url: &str,
+        soft_fail: bool, // Determines if it should error or not if the status code is not 200.
+        data: String,
+    ) -> Result<reqwest::Response, Box<Error>> {
+        let client = self.get_reqwest_client();
+
+        let response = client
+            .delete(url)
+            .body(data)
+            .header(
+                "Cookie",
+                if self.roblosecurity.is_some() {
+                    format!(".ROBLOSECURITY={};", self.roblosecurity.as_ref().unwrap())
+                } else {
+                    "".to_string()
+                },
+            )
+            .header("Accept", "application/json")
+            .header("Content-Type", "application/json")
+            .header(
+                "X-CSRF-TOKEN",
+                self.xcsrf_token.as_ref().unwrap_or(&"".to_string()),
+            )
+            .send()
+            .await;
+
+        // If the response returned a X-Csrf-Token header, update the client's xcsrf token.
+        if response
+            .as_ref()
+            .unwrap()
+            .headers()
+            .contains_key("X-CSRF-TOKEN")
+        {
+            self.xcsrf_token = Some(
+                response
+                    .as_ref()
+                    .unwrap()
+                    .headers()
+                    .get("X-CSRF-TOKEN")
+                    .unwrap()
+                    .to_str()
+                    .unwrap()
+                    .to_string(),
+            );
+        }
+
+        match response {
+            Ok(res) => {
+                //if res.status() != 200 && !soft_fail {
+                //    let error = status_code_to_error(res.status());
+                //    if error.is_some() {
+                //        return Err(Box::new(error.unwrap_or(Error::Network)));
+                //    };
+                //}
+                Ok(res)
+            }
+            Err(_) => Err(Box::new(Error::Network)),
+        }
+    }
+
+    #[async_recursion]
+    pub async fn delete_json<
+        T: for<'de> serde::Deserialize<'de>,
+        PD: serde::Serialize + std::marker::Send,
+    >(
+        &mut self,
+        url: &str,
+        json_data: PD,
+    ) -> Result<T, Box<Error>> {
+        let data = serde_json::to_string(&json_data).unwrap();
+        let response = self.delete(url, false, data).await?;
+
+        if response.status() != 200 {
+            if response.status() == 429 {
+                return Err(Box::new(Error::RateLimited));
+            }
+
+            let json = response.json::<FailedRobloxResponse>().await.unwrap();
+
+            if json.errors[0].clone().message == "Token Validation Failed" {
+                self.get_xcsrf_token(0).await?;
+                //panic!("E");
+                return self.post_json(url, json_data).await;
+            }
+
+            return Err(Box::new(Error::RobloxError(json.errors[0].clone())));
+        }
+
+        let json = response.json::<T>().await;
+
+        match json {
+            Ok(json) => Ok(json),
+            Err(_) => Err(Box::new(Error::JSON)),
+        }
+    }
+
     #[async_recursion]
     pub async fn get_xcsrf_token(&mut self, depth: u32) -> Result<(), Box<Error>> {
         //panic!("Not implemented yet");
