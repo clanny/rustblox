@@ -285,3 +285,40 @@ pub async fn update_description(
         .await?;
     Ok(response)
 }
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct NewNameRequest {
+    pub name: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct NewNameResponse {
+    pub new_name: String,
+}
+
+/// Updates a group's name
+///
+/// **THIS COSTS ROBUX!**
+///
+/// # Error codes
+/// - 1: Group is invalid or does not exist.
+/// - 18: The description is too long.
+/// - 23: Insufficient permissions to complete the request.
+/// - 29: Your group description was empty.
+pub async fn update_name(
+    jar: &mut RequestJar,
+    group_id: usize,
+    name: String,
+) -> Result<NewNameResponse, Box<Error>> {
+    let url = format!(
+        "https://groups.roblox.com/v1/groups/{}/description",
+        group_id
+    );
+    let request = NewNameRequest { name };
+    let response = jar
+        .patch_json::<NewNameResponse, NewNameRequest>(&url, request)
+        .await?;
+    Ok(response)
+}
