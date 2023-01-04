@@ -41,6 +41,25 @@ impl PageLimit {
     }
 }
 
+#[derive(PartialEq)]
+pub enum SortOrder {
+    /// Sort in ascending order
+    Asc,
+    /// Sort in descending order
+    Desc,
+}
+
+// Implement a trait for PageLimit to get the limit as a number
+impl SortOrder {
+    pub fn get_sort_order_string(&self) -> String {
+        match self {
+            SortOrder::Asc => "Asc",
+            SortOrder::Desc => "Desc",
+        }
+        .to_string()
+    }
+}
+
 /// Retrieves all pages of a paged response
 async fn get_all_pages<T>(
     jar: &mut RequestJar,
