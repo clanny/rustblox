@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 pub struct RobloxError {
     pub code: usize,
     pub message: String,
-    pub user_facing_message: String,
+    pub user_facing_message: Option<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
