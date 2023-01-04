@@ -204,13 +204,23 @@ mod tests {
             "miemper".to_string(),
             util::paging::PageLimit::Limit10,
         )
-        .await
-        .unwrap();
+        .await;
 
-        println!("{:#?}", users);
-
-        assert_eq!(users.len(), 10);
-        assert_eq!(users[0].name, "miemper".to_string());
+        match users {
+            Ok(users) => {
+                assert_eq!(users.len(), 10);
+                assert_eq!(users[0].name, "miemper".to_string());
+            }
+            Err(e) => match *e {
+                crate::util::Error::RateLimited => {
+                    // This is fine, it just means we're being rate limited
+                }
+                _ => {
+                    // This isn't
+                    panic!("Unexpected error: {:?}", e);
+                }
+            },
+        }
     }
 
     #[tokio::test]
