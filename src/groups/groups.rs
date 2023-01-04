@@ -161,3 +161,56 @@ pub async fn name_history(
     let response = get_page(jar, url.as_str(), limit, None).await?; // TODO: cursor
     Ok(response)
 }
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct GroupSettings {
+    pub is_approval_required: bool,
+    pub is_builders_club_required: bool,
+    pub are_enemies_allowed: bool,
+    pub are_group_funds_visible: bool,
+    pub are_group_games_visible: bool,
+    pub is_group_name_change_enabled: bool,
+}
+
+/// Gets a group's settings
+///
+/// # Error codes
+/// - 1: Group is invalid or does not exist.
+/// - 23: Insufficient permissions to complete the request.
+pub async fn settings(jar: &mut RequestJar, group_id: usize) -> Result<GroupSettings, Box<Error>> {
+    let url = format!("https://groups.roblox.com/v1/groups/{}/settings", group_id);
+    let response = jar.get_json::<GroupSettings>(&url).await?;
+    Ok(response)
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct GroupSettingsUpdateRequest {
+    pub is_approval_required: Option<bool>,
+    pub are_enemies_allowed: Option<bool>,
+    pub are_group_funds_visible: Option<bool>,
+    pub are_group_games_visible: Option<bool>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct GroupSettingsUpdateResponse {}
+
+/// Updates a group's settings
+///
+/// # Error codes
+/// - 1: Group is invalid or does not exist.
+/// - 23: Insufficient permissions to complete the request.
+/// - 31: Service is currently unavailable.
+pub async fn update_settings(
+    jar: &mut RequestJar,
+    group_id: usize,
+    request: GroupSettingsUpdateRequest,
+) -> Result<GroupSettingsUpdateResponse, Box<Error>> {
+    let url = format!("https://groups.roblox.com/v1/groups/{}/settings", group_id);
+    let response = jar
+        .patch_json::<GroupSettingsUpdateResponse, GroupSettingsUpdateRequest>(&url, request)
+        .await?;
+    Ok(response)
+}

@@ -255,4 +255,19 @@ mod tests {
 
         assert_eq!(group_name_history.len(), 0);
     }
+
+    // TODO: Re-enable this test when we got a test group
+    //#[tokio::test]
+    //async fn get_group_settings() {
+    //    let mut jar = unauthenticated_jar().await;
+    //    let group_settings = crate::groups::groups::settings(&mut jar, 7370273)
+    //        .await
+    //        .unwrap();
+    //
+    //    println!("{:#?}", group_settings);
+    //
+    //    assert_eq!(group_settings.is_approval_required, false)
+    //}
+
+    // TODO: Create test for updating group settings, but that requires a group (which requires robux)
 }
