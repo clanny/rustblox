@@ -24,6 +24,7 @@ pub struct Group {
     pub member_count: usize,
     pub is_builders_club_only: bool,
     pub public_entry_allowed: bool,
+    pub is_locked: Option<bool>,
     pub has_verified_badge: bool,
 }
 

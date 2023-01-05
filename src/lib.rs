@@ -432,4 +432,68 @@ mod tests {
         assert_eq!(user_role.rank, 255);
         assert_eq!(user_role.name, "Clanny".to_string());
     }
+
+    #[tokio::test]
+    async fn group_relationships() {
+        // TODO: Improve this test
+        let mut jar = unauthenticated_jar().await;
+        let group_relationships =
+            crate::groups::relationships(&mut jar, 7370273, groups::RelationshipType::All)
+                .await
+                .unwrap();
+
+        println!("{:#?}", group_relationships);
+
+        assert_eq!(group_relationships.groups.len(), 0);
+    }
+
+    #[tokio::test]
+    async fn group_enemies() {
+        // TODO: Improve this test
+        let mut jar = unauthenticated_jar().await;
+        let group_relationships =
+            crate::groups::relationships(&mut jar, 7370273, groups::RelationshipType::Enemy)
+                .await
+                .unwrap();
+
+        println!("{:#?}", group_relationships);
+
+        assert_eq!(group_relationships.groups.len(), 0);
+    }
+
+    #[tokio::test]
+    async fn group_enemies_easy() {
+        // TODO: Improve this test
+        let mut jar = unauthenticated_jar().await;
+        let group_relationships = crate::groups::enemies(&mut jar, 7370273).await.unwrap();
+
+        println!("{:#?}", group_relationships);
+
+        assert_eq!(group_relationships.groups.len(), 0);
+    }
+
+    #[tokio::test]
+    async fn group_allies() {
+        // TODO: Improve this test
+        let mut jar = unauthenticated_jar().await;
+        let group_relationships =
+            crate::groups::relationships(&mut jar, 7370273, groups::RelationshipType::Ally)
+                .await
+                .unwrap();
+
+        println!("{:#?}", group_relationships);
+
+        assert_eq!(group_relationships.groups.len(), 0);
+    }
+
+    #[tokio::test]
+    async fn group_allies_easy() {
+        // TODO: Improve this test
+        let mut jar = unauthenticated_jar().await;
+        let group_relationships = crate::groups::allies(&mut jar, 7370273).await.unwrap();
+
+        println!("{:#?}", group_relationships);
+
+        assert_eq!(group_relationships.groups.len(), 0);
+    }
 }
