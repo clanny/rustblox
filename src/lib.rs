@@ -378,4 +378,15 @@ mod tests {
 
         assert_eq!(pending_requests.len(), 0);
     }
+
+    #[tokio::test]
+    async fn friend_groups() {
+        let mut jar = authenticated_jar().await;
+
+        let friend_groups = crate::groups::friend_groups(&mut jar).await.unwrap();
+
+        println!("{:#?}", friend_groups);
+
+        assert_eq!(friend_groups.len(), 0);
+    }
 }

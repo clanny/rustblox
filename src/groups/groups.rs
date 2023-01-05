@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 use strum_macros::{Display, EnumString};
 
 use crate::{
-    users::MinimalGroupUser,
+    users::{whoami, MinimalGroupUser},
     util::{
         jar::RequestJar,
         paging::{get_page, PageLimit, SortOrder},
@@ -13,7 +13,7 @@ use crate::{
 
 use super::{permissions::GroupPermissions, roles::GroupRole};
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct Group {
     pub id: usize,
@@ -27,7 +27,7 @@ pub struct Group {
     pub has_verified_badge: bool,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct GroupShout {
     pub body: String,
@@ -398,6 +398,37 @@ pub async fn pending_requests(jar: &mut RequestJar) -> Result<Vec<Group>, Box<Er
     let url = format!("https://groups.roblox.com/v1/user/groups/pending");
     let response = jar
         .get_json::<DataWrapper<Vec<Group>>>(url.as_str())
+        .await?;
+    Ok(response.data)
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct FriendGroupsGroupItem {
+    pub group: Group,
+    pub role: GroupRole,
+    pub is_primary_group: bool,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct FriendGroupsItem {
+    pub user: MinimalGroupUser,
+    pub groups: Vec<FriendGroupsGroupItem>,
+}
+
+/// Gets all the groups the currently authenticated user's friends are in
+///
+/// # Error codes
+/// - 3: The user is invalid or does not exist.
+pub async fn friend_groups(jar: &mut RequestJar) -> Result<Vec<FriendGroupsItem>, Box<Error>> {
+    let user_id = whoami(jar).await?.id;
+    let url = format!(
+        "https://groups.roblox.com/v1/users/{}/friends/groups/roles",
+        user_id
+    );
+    let response = jar
+        .get_json::<DataWrapper<Vec<FriendGroupsItem>>>(url.as_str())
         .await?;
     Ok(response.data)
 }

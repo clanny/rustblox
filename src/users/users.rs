@@ -18,7 +18,7 @@ pub struct User {
     pub display_name: String,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct MinimalGroupUser {
     pub has_verified_badge: bool,
