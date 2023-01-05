@@ -413,4 +413,23 @@ mod tests {
 
     // TODO: Add test for change_owner, but that requires a group (which requires robux)
     // TODO: Add test for remove_user, but that requires a group (which requires robux)
+    // TODO: Add test for promote, but that requires a group (which requires robux)
+    // TODO: Add test for demote, but that requires a group (which requires robux)
+    // TODO: Add test for set_role, but that requires a group (which requires robux)
+    // TODO: Add test for set_rank, but that requires a group (which requires robux)
+    // TODO: Add test for modify_rank_by_amount, but that requires a group (which requires robux)
+
+    #[tokio::test]
+    async fn user_role() {
+        let mut jar = authenticated_jar().await;
+        let group = crate::groups::group_by_id(&mut jar, 7370273).await.unwrap();
+        let user_role = crate::groups::user_role(&mut jar, 7370273, group.owner.user_id)
+            .await
+            .unwrap();
+
+        println!("{:#?}", user_role);
+
+        assert_eq!(user_role.rank, 255);
+        assert_eq!(user_role.name, "Clanny".to_string());
+    }
 }
