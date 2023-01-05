@@ -459,3 +459,53 @@ pub async fn user_memberships(
         .await?;
     Ok(response.data)
 }
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct GroupOwnershipChangeRequest {
+    pub user_id: usize,
+}
+
+/// Changes the owner of a group
+///
+/// # Error codes
+/// - 1: The group is invalid or does not exist.
+/// - 3: The user is invalid or does not exist.
+/// - 15: User is not a member of the group.
+/// - 16: The user does not have the necessary level of premium membership.
+/// - 17: You are not authorized to change the owner of this group.
+/// - 25: 2-Step Verification is required to make further transactions. Go to Settings > Security to complete 2-Step Verification.
+pub async fn change_owner(
+    jar: &mut RequestJar,
+    group_id: usize,
+    user_id: usize,
+) -> Result<(), Box<Error>> {
+    let url = format!(
+        "https://groups.roblox.com/v1/groups/{}/change-owner",
+        group_id
+    );
+    let request = GroupOwnershipChangeRequest { user_id };
+    jar.post_json(url.as_str(), &request).await?;
+    Ok(())
+}
+
+/// Claims the ownership of a group
+///
+/// # Error codes
+/// - 1: The group is invalid or does not exist.
+/// - 11: You are not authorized to claim this group.
+/// - 12: This group already has an owner.
+/// - 13: Too many attempts to claim groups. Please try again later.
+/// - 18: The operation is temporarily unavailable. Please try again later.
+pub async fn claim_ownership(
+    jar: &mut RequestJar,
+    group_id: usize,
+    user_id: usize,
+) -> Result<(), Box<Error>> {
+    let url = format!(
+        "https://groups.roblox.com/v1/groups/{}/claim-ownership",
+        group_id
+    );
+    jar.post(url.as_str(), true, "".to_string()).await?;
+    Ok(())
+}
