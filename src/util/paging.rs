@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 use strum_macros::Display;
 
 use crate::{
-    users::users::{MinimalAuthenticatedUser, User},
+    users::{MinimalAuthenticatedUser, User},
     util::{jar::RequestJar, responses::RobloxResponse},
     util::{status_codes::status_code_to_error, Error},
 };

@@ -41,16 +41,14 @@ mod tests {
     #[tokio::test]
     async fn whoami() {
         let mut jar = authenticated_jar().await;
-        let user = crate::users::users::whoami(&mut jar).await.unwrap();
+        let user = crate::users::whoami(&mut jar).await.unwrap();
         println!("{:#?}", user);
     }
 
     #[tokio::test]
     async fn user_by_id() {
         let mut jar = unauthenticated_jar().await;
-        let user = crate::users::users::user_by_id(&mut jar, 375760054)
-            .await
-            .unwrap();
+        let user = crate::users::user_by_id(&mut jar, 375760054).await.unwrap();
         println!("{:#?}", user);
     }
 
@@ -59,14 +57,13 @@ mod tests {
     #[tokio::test]
     async fn validate_display_name_fail() {
         let mut jar = unauthenticated_jar().await;
-        let display_name =
-            crate::users::display_names::validate_display_name(&mut jar, "shit".to_string())
-                .await
-                .unwrap();
+        let display_name = crate::users::validate_display_name(&mut jar, "shit".to_string())
+            .await
+            .unwrap();
 
         // Panic if it's valid
         match display_name {
-            crate::users::display_names::ValidateDisplayNameResponseEnum::Success(_) => {
+            crate::users::ValidateDisplayNameResponseEnum::Success(_) => {
                 panic!("Display name is valid when it shouldn't be")
             }
             _ => {}
@@ -76,14 +73,13 @@ mod tests {
     #[tokio::test]
     async fn validate_display_name_success() {
         let mut jar = unauthenticated_jar().await;
-        let display_name =
-            crate::users::display_names::validate_display_name(&mut jar, "test".to_string())
-                .await
-                .unwrap();
+        let display_name = crate::users::validate_display_name(&mut jar, "test".to_string())
+            .await
+            .unwrap();
 
         // Panic if it's valid
         match display_name {
-            crate::users::display_names::ValidateDisplayNameResponseEnum::Failed(_) => {
+            crate::users::ValidateDisplayNameResponseEnum::Failed(_) => {
                 panic!("Display name is invalid when it shouldn't be")
             }
             _ => {}
@@ -93,23 +89,20 @@ mod tests {
     #[tokio::test]
     async fn validate_display_name_for_user() {
         let mut jar = authenticated_jar().await;
-        let user_id = crate::users::users::whoami(&mut jar).await.unwrap().id;
+        let user_id = crate::users::whoami(&mut jar).await.unwrap().id;
 
         if user_id != 4205503041 {
             return; // This account gets used for CI, we only want to run this test on that account bc ratelimits
         }
 
-        let display_name = crate::users::display_names::validate_display_name_for_user(
-            &mut jar,
-            "test".to_string(),
-            user_id,
-        )
-        .await
-        .unwrap();
+        let display_name =
+            crate::users::validate_display_name_for_user(&mut jar, "test".to_string(), user_id)
+                .await
+                .unwrap();
 
         // Panic if it's valid
         match display_name {
-            crate::users::display_names::ValidateDisplayNameResponseEnum::Failed(_) => {
+            crate::users::ValidateDisplayNameResponseEnum::Failed(_) => {
                 panic!("Display name is invalid when it shouldn't be")
             }
             _ => {}
@@ -119,15 +112,15 @@ mod tests {
     //#[tokio::test]
     //async fn set_display_name() {
     //    let mut jar = authenticated_jar().await;
-    //    crate::users::display_names::set_display_name(&mut jar, "notest".to_string())
+    //    crate::users::set_display_name(&mut jar, "notest".to_string())
     //        .await
     //        .unwrap();
-    //    let whoami1 = crate::users::users::whoami(&mut jar).await.unwrap();
-    //    crate::users::display_names::set_display_name(&mut jar, "test".to_string())
+    //    let whoami1 = crate::users::whoami(&mut jar).await.unwrap();
+    //    crate::users::set_display_name(&mut jar, "test".to_string())
     //        .await
     //        .unwrap();
     //
-    //    let whoami2 = crate::users::users::whoami(&mut jar).await.unwrap();
+    //    let whoami2 = crate::users::whoami(&mut jar).await.unwrap();
     //
     //    assert_ne!(whoami1.display_name, whoami2.display_name);
     //    assert_eq!(whoami2.display_name, "test".to_string());
@@ -137,21 +130,21 @@ mod tests {
     #[tokio::test]
     async fn get_age_bracket() {
         let mut jar = authenticated_jar().await;
-        let age_bracket = crate::users::users::age_bracket(&mut jar).await.unwrap();
+        let age_bracket = crate::users::age_bracket(&mut jar).await.unwrap();
         assert_eq!(age_bracket.age_bracket, 0);
     }
 
     #[tokio::test]
     async fn get_country_code() {
         let mut jar = authenticated_jar().await;
-        let country_code = crate::users::users::country_code(&mut jar).await.unwrap();
+        let country_code = crate::users::country_code(&mut jar).await.unwrap();
         assert_eq!(country_code.country_code, "NL");
     }
 
     #[tokio::test]
     async fn get_roles() {
         let mut jar = authenticated_jar().await;
-        let roles = crate::users::users::roles(&mut jar).await.unwrap();
+        let roles = crate::users::roles(&mut jar).await.unwrap();
         let empty_vec: Vec<String> = Vec::new();
         assert_eq!(roles.roles, empty_vec);
     }
@@ -159,7 +152,7 @@ mod tests {
     #[tokio::test]
     async fn bulk_users_by_username() {
         let mut jar = authenticated_jar().await;
-        let users = crate::users::users::bulk_users_by_username(
+        let users = crate::users::bulk_users_by_username(
             &mut jar,
             vec!["piano1029".to_string(), "ClannyBot".to_string()],
         )
@@ -174,7 +167,7 @@ mod tests {
     #[tokio::test]
     async fn bulk_users_by_id() {
         let mut jar = authenticated_jar().await;
-        let users = crate::users::users::bulk_users_by_id(&mut jar, vec![375760054, 1444131924])
+        let users = crate::users::bulk_users_by_id(&mut jar, vec![375760054, 1444131924])
             .await
             .unwrap();
 
@@ -187,7 +180,7 @@ mod tests {
     #[tokio::test]
     async fn username_history() {
         let mut jar = unauthenticated_jar().await;
-        let users = crate::users::usernames::username_history(&mut jar, 375760054)
+        let users = crate::users::username_history(&mut jar, 375760054)
             .await
             .unwrap();
 
@@ -199,7 +192,7 @@ mod tests {
     #[tokio::test]
     async fn username_search() {
         let mut jar = unauthenticated_jar().await;
-        let users = crate::users::username_search::username_search(
+        let users = crate::users::username_search(
             &mut jar,
             "miemper".to_string(),
             util::paging::PageLimit::Limit10,
@@ -226,9 +219,7 @@ mod tests {
     #[tokio::test]
     async fn get_group() {
         let mut jar = unauthenticated_jar().await;
-        let group = crate::groups::groups::group_by_id(&mut jar, 7370273)
-            .await
-            .unwrap();
+        let group = crate::groups::group_by_id(&mut jar, 7370273).await.unwrap();
 
         println!("{:#?}", group);
 
@@ -242,7 +233,7 @@ mod tests {
     #[tokio::test]
     async fn get_group_name_history() {
         let mut jar = unauthenticated_jar().await;
-        let group_name_history = crate::groups::groups::name_history(
+        let group_name_history = crate::groups::name_history(
             &mut jar,
             7370273,
             util::paging::PageLimit::All,
@@ -260,7 +251,7 @@ mod tests {
     //#[tokio::test]
     //async fn get_group_settings() {
     //    let mut jar = unauthenticated_jar().await;
-    //    let group_settings = crate::groups::groups::settings(&mut jar, 7370273)
+    //    let group_settings = crate::groups::settings(&mut jar, 7370273)
     //        .await
     //        .unwrap();
     //
@@ -274,9 +265,7 @@ mod tests {
     #[tokio::test]
     async fn group_configuration_metadata() {
         let mut jar = unauthenticated_jar().await;
-        let group_configuration_metadata = crate::groups::metadata::config_metadata(&mut jar)
-            .await
-            .unwrap();
+        let group_configuration_metadata = crate::groups::config_metadata(&mut jar).await.unwrap();
 
         println!("{:#?}", group_configuration_metadata);
 
@@ -286,7 +275,7 @@ mod tests {
     #[tokio::test]
     async fn group_metadata() {
         let mut jar = unauthenticated_jar().await;
-        let group_metadata = crate::groups::metadata::metadata(&mut jar).await.unwrap();
+        let group_metadata = crate::groups::metadata(&mut jar).await.unwrap();
 
         println!("{:#?}", group_metadata);
 
@@ -296,7 +285,7 @@ mod tests {
     #[tokio::test]
     async fn group_compliance() {
         let mut jar = authenticated_jar().await;
-        let group_compliance = crate::groups::groups::compliance(&mut jar, vec![7370273])
+        let group_compliance = crate::groups::compliance(&mut jar, vec![7370273])
             .await
             .unwrap();
 
@@ -315,9 +304,7 @@ mod tests {
     #[tokio::test]
     async fn group_membership() {
         let mut jar = authenticated_jar().await;
-        let group_membership = crate::groups::groups::membership(&mut jar, 7370273)
-            .await
-            .unwrap();
+        let group_membership = crate::groups::membership(&mut jar, 7370273).await.unwrap();
 
         println!("{:#?}", group_membership);
 
@@ -329,9 +316,7 @@ mod tests {
     #[tokio::test]
     async fn group_roles() {
         let mut jar = authenticated_jar().await;
-        let group_roles = crate::groups::roles::roles(&mut jar, 7370273)
-            .await
-            .unwrap();
+        let group_roles = crate::groups::roles(&mut jar, 7370273).await.unwrap();
 
         println!("{:#?}", group_roles);
 
@@ -346,13 +331,11 @@ mod tests {
     #[tokio::test]
     async fn group_role_members() {
         let mut jar = authenticated_jar().await;
-        let group_roles = crate::groups::roles::roles(&mut jar, 7370273)
-            .await
-            .unwrap();
+        let group_roles = crate::groups::roles(&mut jar, 7370273).await.unwrap();
 
         let clanny_role_id = group_roles[group_roles.len() - 1].id;
 
-        let group_role_members = crate::groups::roles::users_on_role(
+        let group_role_members = crate::groups::users_on_role(
             &mut jar,
             7370273,
             clanny_role_id,

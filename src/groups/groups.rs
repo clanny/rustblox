@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 use strum_macros::{Display, EnumString};
 
 use crate::{
-    users::users::MinimalGroupUser,
+    users::MinimalGroupUser,
     util::{
         jar::RequestJar,
         paging::{get_page, PageLimit, SortOrder},

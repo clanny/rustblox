@@ -1,5 +1,11 @@
-pub mod groups;
-pub mod join_requests;
-pub mod metadata;
-pub mod permissions;
-pub mod roles;
+mod groups;
+mod join_requests;
+mod metadata;
+mod permissions;
+mod roles;
+
+pub use groups::*;
+pub use join_requests::*;
+pub use metadata::*;
+pub use permissions::*;
+pub use roles::*;

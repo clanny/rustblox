@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    users::users::MinimalGroupUser,
+    users::MinimalGroupUser,
     util::{
         jar::RequestJar,
         paging::{get_page, PageLimit, SortOrder},

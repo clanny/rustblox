@@ -1,8 +1,8 @@
-pub mod batch {
+pub mod join_requests {
     use serde::{Deserialize, Serialize};
 
     use crate::{
-        users::users::MinimalGroupUser,
+        users::MinimalGroupUser,
         util::{
             jar::RequestJar,
             paging::{get_page, PageLimit},
@@ -84,11 +84,11 @@ pub mod batch {
     }
 }
 
-pub mod single {
+pub mod join_request {
     use serde::{Deserialize, Serialize};
 
     use crate::{
-        users::users::MinimalGroupUser,
+        users::MinimalGroupUser,
         util::{jar::RequestJar, Error},
     };
 
