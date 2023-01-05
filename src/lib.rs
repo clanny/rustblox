@@ -342,4 +342,29 @@ mod tests {
             "Clanny".to_string()
         );
     }
+
+    #[tokio::test]
+    async fn group_role_members() {
+        let mut jar = authenticated_jar().await;
+        let group_roles = crate::groups::roles::get_roles(&mut jar, 7370273)
+            .await
+            .unwrap();
+
+        let clanny_role_id = group_roles[group_roles.len() - 1].id;
+
+        let group_role_members = crate::groups::roles::get_users_on_role(
+            &mut jar,
+            7370273,
+            clanny_role_id,
+            util::paging::PageLimit::Limit10,
+            None,
+        )
+        .await
+        .unwrap();
+
+        println!("{:#?}", group_role_members);
+
+        assert_eq!(group_role_members.len(), 1);
+        assert_eq!(group_role_members[0].username, "ClannyBot".to_string());
+    }
 }

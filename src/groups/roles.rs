@@ -1,6 +1,13 @@
 use serde::{Deserialize, Serialize};
 
-use crate::util::{jar::RequestJar, Error};
+use crate::{
+    users::users::MinimalGroupUser,
+    util::{
+        jar::RequestJar,
+        paging::{get_page, PageLimit, SortOrder},
+        Error,
+    },
+};
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -30,4 +37,26 @@ pub async fn get_roles(
     let url = format!("https://groups.roblox.com/v1/groups/{}/roles", group_id);
     let response = jar.get_json::<GroupRoleResponse>(&url).await?;
     Ok(response.roles)
+}
+
+/// Gets users on a group's role.
+///
+/// # Error codes
+/// - 1: The group is invalid or does not exist.
+pub async fn get_users_on_role(
+    jar: &mut RequestJar,
+    group_id: usize,
+    role_id: usize,
+    limit: PageLimit,
+    sort_order: Option<SortOrder>,
+) -> Result<Vec<MinimalGroupUser>, Box<Error>> {
+    let url = format!(
+        "https://groups.roblox.com/v1/groups/{}/roles/{}/users?sortOrder={}",
+        group_id,
+        role_id,
+        sort_order.unwrap_or(SortOrder::Asc).get_sort_order_string()
+    );
+    //let response = jar.get_json::<GroupRoleResponse>(&url).await?;
+    let response = get_page(jar, url.as_str(), limit, None).await?;
+    Ok(response)
 }
