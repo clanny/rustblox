@@ -20,7 +20,7 @@ pub struct Group {
     pub name: String,
     pub description: String,
     pub owner: MinimalGroupUser,
-    pub shout: GroupShout,
+    pub shout: Option<GroupShout>,
     pub member_count: usize,
     pub is_builders_club_only: bool,
     pub public_entry_allowed: bool,
@@ -407,7 +407,7 @@ pub async fn pending_requests(jar: &mut RequestJar) -> Result<Vec<Group>, Box<Er
 pub struct FriendGroupsGroupItem {
     pub group: Group,
     pub role: GroupRole,
-    pub is_primary_group: bool,
+    pub is_primary_group: Option<bool>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -429,6 +429,33 @@ pub async fn friend_groups(jar: &mut RequestJar) -> Result<Vec<FriendGroupsItem>
     );
     let response = jar
         .get_json::<DataWrapper<Vec<FriendGroupsItem>>>(url.as_str())
+        .await?;
+    Ok(response.data)
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct UserMembershipsGroupItem {
+    pub group: Group,
+    pub role: GroupRole,
+    pub is_primary_group: Option<bool>,
+}
+
+/// Gets all the groups the specified user is in.
+/// It also includes the role the user is
+///
+/// # Error codes
+/// - 3: The user is invalid or does not exist.
+pub async fn user_memberships(
+    jar: &mut RequestJar,
+    user_id: usize,
+) -> Result<Vec<UserMembershipsGroupItem>, Box<Error>> {
+    let url = format!(
+        "https://groups.roblox.com/v1/users/{}/groups/roles",
+        user_id
+    );
+    let response = jar
+        .get_json::<DataWrapper<Vec<UserMembershipsGroupItem>>>(url.as_str())
         .await?;
     Ok(response.data)
 }

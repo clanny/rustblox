@@ -389,4 +389,25 @@ mod tests {
 
         assert_eq!(friend_groups.len(), 0);
     }
+
+    #[tokio::test]
+    async fn user_group_memberships() {
+        let mut jar = authenticated_jar().await;
+        let user_group_memberships = crate::groups::user_memberships(&mut jar, 375760054)
+            .await
+            .unwrap();
+
+        // Filter where group_id is 7370273
+        let clanny_group_membership = user_group_memberships
+            .into_iter()
+            .find(|group_membership| group_membership.group.id == 7370273)
+            .unwrap();
+
+        println!("{:#?}", clanny_group_membership);
+
+        assert_eq!(clanny_group_membership.group.id, 7370273);
+        assert_eq!(clanny_group_membership.role.rank, 254);
+        assert_eq!(clanny_group_membership.is_primary_group.is_some(), true);
+        assert_eq!(clanny_group_membership.is_primary_group.unwrap(), true);
+    }
 }
