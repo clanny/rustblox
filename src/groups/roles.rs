@@ -5,9 +5,12 @@ use crate::{
     util::{
         jar::RequestJar,
         paging::{get_page, PageLimit, SortOrder},
+        responses::RobloxError,
         Error,
     },
 };
+
+use super::user_memberships;
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
@@ -57,4 +60,35 @@ pub async fn users_on_role(
     //let response = jar.get_json::<GroupRoleResponse>(&url).await?;
     let response = get_page(jar, url.as_str(), limit, None).await?;
     Ok(response)
+}
+
+/// Gets a user's role in a group.
+///
+/// # Error codes
+/// - 1: The group is invalid or does not exist.
+/// - 3: The user is invalid or does not exist.
+///
+/// - 200: The user is not in the group.
+pub async fn user_role(
+    jar: &mut RequestJar,
+    group_id: usize,
+    user_id: usize,
+) -> Result<GroupRole, Box<Error>> {
+    let roles = user_memberships(jar, user_id).await?;
+
+    // Filter to the group we want
+    let group_roles = roles
+        .into_iter()
+        .filter(|group| group.group.id == group_id)
+        .collect::<Vec<_>>();
+
+    if group_roles.len() == 0 {
+        return Err(Box::new(Error::RobloxError(RobloxError {
+            code: 200,
+            message: "The user is not in the group.".to_string(),
+            user_facing_message: Some("The user is not in the group.".to_string()),
+        })));
+    } else {
+        return Ok(group_roles[0].role.clone());
+    }
 }
