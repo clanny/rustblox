@@ -365,3 +365,23 @@ pub async fn membership(
     let response = jar.get_json::<GroupMembership>(&url).await?;
     Ok(response)
 }
+
+/// Gets a list of users in a group
+///
+/// # Error codes
+/// 1: The group is invalid or does not exist.
+pub async fn members(
+    jar: &mut RequestJar,
+    group_id: usize,
+    limit: PageLimit,
+    sort_order: Option<SortOrder>,
+) -> Result<Vec<GroupMembershipUserRole>, Box<Error>> {
+    let url = format!(
+        "https://groups.roblox.com/v1/groups/{}/users?sortOrder={}",
+        group_id,
+        sort_order.unwrap_or(SortOrder::Asc).get_sort_order_string()
+    );
+    //let response = jar.get_json::<GroupRoleResponse>(&url).await?;
+    let response = get_page(jar, url.as_str(), limit, None).await?;
+    Ok(response)
+}

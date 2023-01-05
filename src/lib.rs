@@ -330,7 +330,7 @@ mod tests {
 
     #[tokio::test]
     async fn group_role_members() {
-        let mut jar = authenticated_jar().await;
+        let mut jar = unauthenticated_jar().await;
         let group_roles = crate::groups::roles(&mut jar, 7370273).await.unwrap();
 
         let clanny_role_id = group_roles[group_roles.len() - 1].id;
@@ -349,5 +349,23 @@ mod tests {
 
         assert_eq!(group_role_members.len(), 1);
         assert_eq!(group_role_members[0].username, "ClannyBot".to_string());
+    }
+
+    #[tokio::test]
+    async fn group_members() {
+        let mut jar = unauthenticated_jar().await;
+        let group_members = crate::groups::members(
+            &mut jar,
+            7370273,
+            util::paging::PageLimit::Limit10,
+            Some(util::paging::SortOrder::Asc),
+        )
+        .await
+        .unwrap();
+
+        println!("{:#?}", group_members);
+
+        assert_eq!(group_members.len(), 10);
+        assert_eq!(group_members[0].user.username, "ClannyBot".to_string());
     }
 }

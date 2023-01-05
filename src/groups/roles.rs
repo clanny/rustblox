@@ -16,7 +16,7 @@ pub struct GroupRole {
     pub name: String,
     pub description: Option<String>,
     pub rank: usize,
-    pub member_count: usize,
+    pub member_count: Option<usize>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
