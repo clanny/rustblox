@@ -14,6 +14,7 @@ pub enum Error {
     Throttled,
     RateLimited,
     InvalidPageLimit,
+    InvalidRelationshipType,
     RobloxError(RobloxError),
     XcsrfToken,
 }
@@ -26,6 +27,7 @@ pub fn error_to_user_message(err: Error) -> String {
         Error::Throttled => "Throttled, too many requests",
         Error::RateLimited => "Throttled, too many requests",
         Error::InvalidPageLimit => "Invalid page limit",
+        Error::InvalidRelationshipType => "Invalid group relationship type",
         Error::RobloxError(e) => {
             let msg = format!("Roblox error: {}", e.message);
             return msg;

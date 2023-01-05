@@ -268,3 +268,136 @@ pub async fn ally_requests(
 ) -> Result<GroupRelationships, Box<Error>> {
     relationship_requests(jar, group_id, RelationshipType::Ally).await
 }
+
+/// Removes the specified group from the specified group's relationship list.
+///
+/// # Error codes
+/// - 2: Invalid group.
+/// - 3: Target group is invalid or does not exist.
+/// - 8: You are blocked from communicating with this user.
+/// - 11: Relationship does not exist.
+pub async fn remove(
+    jar: &mut RequestJar,
+    group_id: usize,
+    target_group_id: usize,
+    relationship_type: RelationshipType,
+) -> Result<(), Box<Error>> {
+    if relationship_type == RelationshipType::All {
+        return Err(Box::new(Error::InvalidRelationshipType));
+    }
+
+    let url = format!(
+        "https://groups.roblox.com/v1/groups/{}/relationships/{}/{}",
+        group_id,
+        relationship_type.get_relationship_type_string(),
+        target_group_id
+    );
+    jar.delete(&url, true, "".to_string()).await?;
+    Ok(())
+}
+
+/// Removes the specified group from the specified group's enemies list.
+///
+/// # Error codes
+/// - 2: Invalid group.
+/// - 3: Target group is invalid or does not exist.
+/// - 8: You are blocked from communicating with this user.
+/// - 11: Relationship does not exist.
+pub async fn remove_enemy(
+    jar: &mut RequestJar,
+    group_id: usize,
+    target_group_id: usize,
+) -> Result<(), Box<Error>> {
+    remove(jar, group_id, target_group_id, RelationshipType::Enemy).await?;
+    Ok(())
+}
+
+/// Removes the specified group from the specified group's allies list.
+///
+/// # Error codes
+/// - 2: Invalid group.
+/// - 3: Target group is invalid or does not exist.
+/// - 8: You are blocked from communicating with this user.
+/// - 11: Relationship does not exist.
+pub async fn remove_ally(
+    jar: &mut RequestJar,
+    group_id: usize,
+    target_group_id: usize,
+) -> Result<(), Box<Error>> {
+    remove(jar, group_id, target_group_id, RelationshipType::Ally).await?;
+    Ok(())
+}
+
+/// Sends a relationship request to the specified group.
+///
+/// # Error codes
+/// - 1: Group relationship type or request type is invalid.
+/// - 2: Invalid group.
+/// - 3: Target group is invalid or does not exist.
+/// - 4: Your group cannot establish a relationship with itself.
+/// - 5: Your group does not allow enemy declarations.
+/// - 6: Other group does not allow enemy declarations.
+/// - 7: Your group already has a relationship with the target group.
+/// - 8: You are blocked from communicating with this user.
+/// - 9: Insufficient permissions.
+pub async fn send_request(
+    jar: &mut RequestJar,
+    group_id: usize,
+    target_group_id: usize,
+    relationship_type: RelationshipType,
+) -> Result<(), Box<Error>> {
+    if relationship_type == RelationshipType::All {
+        return Err(Box::new(Error::InvalidRelationshipType));
+    }
+
+    let url = format!(
+        "https://groups.roblox.com/v1/groups/{}/relationships/{}/{}",
+        group_id,
+        relationship_type.get_relationship_type_string(),
+        target_group_id
+    );
+    jar.delete(&url, true, "".to_string()).await?;
+    Ok(())
+}
+
+/// Sends an enemy relationship request to the specified group.
+///
+/// # Error codes
+/// - 1: Group relationship type or request type is invalid.
+/// - 2: Invalid group.
+/// - 3: Target group is invalid or does not exist.
+/// - 4: Your group cannot establish a relationship with itself.
+/// - 5: Your group does not allow enemy declarations.
+/// - 6: Other group does not allow enemy declarations.
+/// - 7: Your group already has a relationship with the target group.
+/// - 8: You are blocked from communicating with this user.
+/// - 9: Insufficient permissions.
+pub async fn send_enemy_request(
+    jar: &mut RequestJar,
+    group_id: usize,
+    target_group_id: usize,
+) -> Result<(), Box<Error>> {
+    send_request(jar, group_id, target_group_id, RelationshipType::Enemy).await?;
+    Ok(())
+}
+
+/// Sends an ally relationship request to the specified group.
+///
+/// # Error codes
+/// - 1: Group relationship type or request type is invalid.
+/// - 2: Invalid group.
+/// - 3: Target group is invalid or does not exist.
+/// - 4: Your group cannot establish a relationship with itself.
+/// - 5: Your group does not allow enemy declarations.
+/// - 6: Other group does not allow enemy declarations.
+/// - 7: Your group already has a relationship with the target group.
+/// - 8: You are blocked from communicating with this user.
+/// - 9: Insufficient permissions.
+pub async fn send_ally_request(
+    jar: &mut RequestJar,
+    group_id: usize,
+    target_group_id: usize,
+) -> Result<(), Box<Error>> {
+    send_request(jar, group_id, target_group_id, RelationshipType::Ally).await?;
+    Ok(())
+}
