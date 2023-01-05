@@ -329,7 +329,7 @@ mod tests {
     #[tokio::test]
     async fn group_roles() {
         let mut jar = authenticated_jar().await;
-        let group_roles = crate::groups::roles::get_roles(&mut jar, 7370273)
+        let group_roles = crate::groups::roles::roles(&mut jar, 7370273)
             .await
             .unwrap();
 
@@ -346,13 +346,13 @@ mod tests {
     #[tokio::test]
     async fn group_role_members() {
         let mut jar = authenticated_jar().await;
-        let group_roles = crate::groups::roles::get_roles(&mut jar, 7370273)
+        let group_roles = crate::groups::roles::roles(&mut jar, 7370273)
             .await
             .unwrap();
 
         let clanny_role_id = group_roles[group_roles.len() - 1].id;
 
-        let group_role_members = crate::groups::roles::get_users_on_role(
+        let group_role_members = crate::groups::roles::users_on_role(
             &mut jar,
             7370273,
             clanny_role_id,

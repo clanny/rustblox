@@ -30,10 +30,7 @@ pub struct GroupRoleResponse {
 ///
 /// # Error codes
 /// - 1: The group is invalid or does not exist.
-pub async fn get_roles(
-    jar: &mut RequestJar,
-    group_id: usize,
-) -> Result<Vec<GroupRole>, Box<Error>> {
+pub async fn roles(jar: &mut RequestJar, group_id: usize) -> Result<Vec<GroupRole>, Box<Error>> {
     let url = format!("https://groups.roblox.com/v1/groups/{}/roles", group_id);
     let response = jar.get_json::<GroupRoleResponse>(&url).await?;
     Ok(response.roles)
@@ -44,7 +41,7 @@ pub async fn get_roles(
 /// # Error codes
 /// - 1: The group is invalid or does not exist.
 /// - 2: The roleset is invalid or does not exist.
-pub async fn get_users_on_role(
+pub async fn users_on_role(
     jar: &mut RequestJar,
     group_id: usize,
     role_id: usize,
