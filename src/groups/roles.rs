@@ -43,6 +43,7 @@ pub async fn get_roles(
 ///
 /// # Error codes
 /// - 1: The group is invalid or does not exist.
+/// - 2: The roleset is invalid or does not exist.
 pub async fn get_users_on_role(
     jar: &mut RequestJar,
     group_id: usize,
