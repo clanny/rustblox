@@ -410,4 +410,7 @@ mod tests {
         assert_eq!(clanny_group_membership.is_primary_group.is_some(), true);
         assert_eq!(clanny_group_membership.is_primary_group.unwrap(), true);
     }
+
+    // TODO: Add test for change_owner, but that requires a group (which requires robux)
+    // TODO: Add test for remove_user, but that requires a group (which requires robux)
 }
