@@ -1,11 +1,11 @@
-use std::fs;
-
 pub mod groups;
 pub mod users;
 pub mod util;
 
 #[cfg(test)]
 mod tests {
+    use std::fs;
+
     use super::*;
 
     async fn authenticated_jar() -> util::jar::RequestJar {
@@ -13,7 +13,7 @@ mod tests {
         let contents = fs::read_to_string("roblosecurity.txt").unwrap();
         let roblosecurity = contents.trim().to_string();
         let mut jar = util::jar::RequestJar::new().await;
-        jar.set_roblosecurity(roblosecurity).await;
+        jar.set_roblosecurity(roblosecurity).await.unwrap();
 
         // If the file proxy.txt exists, use it as a proxy
         if fs::metadata("proxy.txt").is_ok() {

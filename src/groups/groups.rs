@@ -498,11 +498,7 @@ pub async fn change_owner(
 /// - 12: This group already has an owner.
 /// - 13: Too many attempts to claim groups. Please try again later.
 /// - 18: The operation is temporarily unavailable. Please try again later.
-pub async fn claim_ownership(
-    jar: &mut RequestJar,
-    group_id: usize,
-    user_id: usize,
-) -> Result<(), Box<Error>> {
+pub async fn claim_ownership(jar: &mut RequestJar, group_id: usize) -> Result<(), Box<Error>> {
     let url = format!(
         "https://groups.roblox.com/v1/groups/{}/claim-ownership",
         group_id

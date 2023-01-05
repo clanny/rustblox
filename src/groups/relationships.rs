@@ -19,7 +19,7 @@ pub mod relationships {
 
     /// Declines a batch of group relationships for a group.
     #[async_recursion::async_recursion]
-    #[allow(unused_assignments)] // It appears to be a bug in the checker, this kinda fixes it.
+    #[allow(unused)] // It appears to be a bug in the checker, this kinda fixes it.
     pub async fn decline(
         jar: &mut RequestJar,
         group_id: usize,
@@ -44,7 +44,7 @@ pub mod relationships {
 
     /// Accepts a batch of group relationships for a group.
     #[async_recursion::async_recursion]
-    #[allow(unused_assignments)] // It appears to be a bug in the checker, this kinda fixes it.
+    #[allow(unused)] // It appears to be a bug in the checker, this kinda fixes it.
     pub async fn accept(
         jar: &mut RequestJar,
         group_id: usize,
@@ -77,7 +77,7 @@ pub mod relationship {
 
     /// Declines a group relationships for a group.
     #[async_recursion::async_recursion]
-    #[allow(unused_assignments)] // It appears to be a bug in the checker, this kinda fixes it.
+    #[allow(unused)] // It appears to be a bug in the checker, this kinda fixes it.
     pub async fn decline(
         jar: &mut RequestJar,
         group_id: usize,
@@ -98,7 +98,7 @@ pub mod relationship {
 
     /// Accepts a group relationships for a group.
     #[async_recursion::async_recursion]
-    #[allow(unused_assignments)] // It appears to be a bug in the checker, this kinda fixes it.
+    #[allow(unused)] // It appears to be a bug in the checker, this kinda fixes it.
     pub async fn accept(
         jar: &mut RequestJar,
         group_id: usize,

@@ -28,6 +28,7 @@ pub mod join_requests {
     /// # Error codes
     /// - 1: The group is invalid or does not exist.
     /// - 19: You have insufficient permissions for this request.
+    #[allow(unused)] // It appears to be a bug in the checker, this kinda fixes it.
     pub async fn get(
         jar: &mut RequestJar,
         group_id: usize,
@@ -50,6 +51,7 @@ pub mod join_requests {
     /// - 18: The operation is temporarily unavailable. Please try again later.
     /// - 19: You have insufficient permissions for this request.
     /// - 20: The group join request is invalid.
+    #[allow(unused)] // It appears to be a bug in the checker, this kinda fixes it.
     pub async fn accept(
         jar: &mut RequestJar,
         group_id: usize,
@@ -69,6 +71,7 @@ pub mod join_requests {
     /// # Error codes
     /// - 1: The group is invalid or does not exist.
     /// - 3: The user is invalid or does not exist.
+    #[allow(unused)] // It appears to be a bug in the checker, this kinda fixes it.
     pub async fn decline(
         jar: &mut RequestJar,
         group_id: usize,

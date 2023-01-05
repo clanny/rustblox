@@ -1,12 +1,7 @@
-use reqwest::StatusCode;
 use serde::{Deserialize, Serialize};
 use strum_macros::Display;
 
-use crate::{
-    users::{MinimalAuthenticatedUser, User},
-    util::{jar::RequestJar, responses::RobloxResponse},
-    util::{status_codes::status_code_to_error, Error},
-};
+use crate::{util::jar::RequestJar, util::Error};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct PagedResponse<T> {
@@ -62,11 +57,7 @@ impl SortOrder {
 }
 
 /// Retrieves all pages of a paged response
-async fn get_all_pages<T>(
-    jar: &mut RequestJar,
-    url: &str,
-    limit: PageLimit,
-) -> Result<Vec<T>, Box<Error>>
+async fn get_all_pages<T>(jar: &mut RequestJar, url: &str) -> Result<Vec<T>, Box<Error>>
 where
     T: for<'de> Deserialize<'de>,
 {
@@ -99,7 +90,7 @@ where
     T: for<'de> Deserialize<'de>,
 {
     if limit.get_limit() > 100 {
-        return get_all_pages(jar, url, limit).await;
+        return get_all_pages(jar, url).await;
     }
 
     let mut url = if let Some(cursor) = cursor {

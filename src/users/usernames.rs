@@ -1,17 +1,9 @@
-use reqwest::StatusCode;
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    users::users::{MinimalAuthenticatedUser, User},
-    util::{
-        jar::RequestJar,
-        paging::{get_page, PagedResponse},
-        responses::RobloxResponse,
-    },
-    util::{status_codes::status_code_to_error, Error},
+    util::Error,
+    util::{jar::RequestJar, paging::get_page},
 };
-
-use super::users::whoami;
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct UsernameHistoryEntry {

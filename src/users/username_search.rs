@@ -1,14 +1,11 @@
-use reqwest::StatusCode;
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    users::users::{MinimalAuthenticatedUser, User},
+    util::Error,
     util::{
         jar::RequestJar,
-        paging::{get_page, PageLimit, PagedResponse},
-        responses::RobloxResponse,
+        paging::{get_page, PageLimit},
     },
-    util::{status_codes::status_code_to_error, Error},
 };
 
 #[derive(Debug, Serialize, Deserialize)]

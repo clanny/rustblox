@@ -1,11 +1,7 @@
-use async_recursion::async_recursion;
-use serde_json::Value;
-
-//use std::error::Error;
-use crate::util::status_codes::status_code_to_error;
 use crate::util::Error;
+use async_recursion::async_recursion;
 
-use super::responses::{FailedRobloxResponse, RobloxError, RobloxResponse};
+use super::responses::FailedRobloxResponse;
 
 pub struct RequestJar {
     pub roblosecurity: Option<String>,
@@ -459,6 +455,5 @@ impl RequestJar {
         //let meta = doc.select(&selector).next().unwrap();
         //let token = meta.value().attr("content").unwrap();
         //self.xcsrf_token = Some(token.to_string());
-        Ok(())
     }
 }

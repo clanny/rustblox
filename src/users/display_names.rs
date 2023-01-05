@@ -2,7 +2,6 @@ use reqwest::StatusCode;
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    users::users::{MinimalAuthenticatedUser, User},
     util::{jar::RequestJar, responses::RobloxResponse},
     util::{status_codes::status_code_to_error, Error},
 };

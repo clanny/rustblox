@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::util::{jar::RequestJar, responses::RobloxError, Error};
 
-use super::{membership, roles, user_role};
+use super::{roles, user_role};
 
 /// Removes a user from a group
 ///
@@ -110,7 +110,7 @@ pub async fn modify_rank_by_amount(
 
     // Get the index of the new rank
     let new_rank_index = user_rank_index.unwrap() + amount;
-    if new_rank_index < 0 || new_rank_index >= ranks.len() {
+    if new_rank_index >= ranks.len() {
         return Err(Box::new(Error::RobloxError(RobloxError {
             code: 2,
             message: "The roleset is invalid or does not exist.".to_string(),
