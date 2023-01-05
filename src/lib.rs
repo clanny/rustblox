@@ -368,4 +368,14 @@ mod tests {
         assert_eq!(group_members.len(), 10);
         assert_eq!(group_members[0].user.username, "ClannyBot".to_string());
     }
+
+    #[tokio::test]
+    async fn pending_requests() {
+        let mut jar = authenticated_jar().await;
+        let pending_requests = crate::groups::pending_requests(&mut jar).await.unwrap();
+
+        println!("{:#?}", pending_requests);
+
+        assert_eq!(pending_requests.len(), 0);
+    }
 }

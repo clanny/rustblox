@@ -6,6 +6,7 @@ use crate::{
     util::{
         jar::RequestJar,
         paging::{get_page, PageLimit, SortOrder},
+        responses::DataWrapper,
         Error,
     },
 };
@@ -384,4 +385,19 @@ pub async fn members(
     //let response = jar.get_json::<GroupRoleResponse>(&url).await?;
     let response = get_page(jar, url.as_str(), limit, None).await?;
     Ok(response)
+}
+
+// Note: Joining a group is not implemented and will not be implemented, as it is not needed and requires a captcha.
+
+/// Gets all groups the authenticated user is pending for
+/// **This does not list the pend requests for a specific group**
+///
+/// # Error codes
+/// There are no error codes for this endpoint.
+pub async fn pending_requests(jar: &mut RequestJar) -> Result<Vec<Group>, Box<Error>> {
+    let url = format!("https://groups.roblox.com/v1/user/groups/pending");
+    let response = jar
+        .get_json::<DataWrapper<Vec<Group>>>(url.as_str())
+        .await?;
+    Ok(response.data)
 }

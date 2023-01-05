@@ -18,3 +18,8 @@ pub enum RobloxResponse<T> {
     Success(T),
     Failed(FailedRobloxResponse),
 }
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct DataWrapper<T> {
+    pub data: T,
+}
