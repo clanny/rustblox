@@ -1,6 +1,9 @@
 use serde::{Deserialize, Serialize};
 
-use crate::{util::jar::RequestJar, util::Error};
+use crate::{
+    util::Error,
+    util::{jar::RequestJar, responses::DataWrapper},
+};
 
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -106,11 +109,11 @@ pub struct BulkUsersByUsernameRequest {
     exclude_banned_users: bool,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
-#[serde(rename_all = "camelCase")]
-pub struct BulkUsersByUsernameResponse {
-    pub data: Vec<MinimalBulkUserByUsername>,
-}
+//#[derive(Debug, Deserialize, Serialize)]
+//#[serde(rename_all = "camelCase")]
+//pub struct BulkUsersByUsernameResponse {
+//    pub data: Vec<MinimalBulkUserByUsername>,
+//}
 
 /// Gets a list of users by their usernames
 ///
@@ -119,16 +122,19 @@ pub struct BulkUsersByUsernameResponse {
 pub async fn bulk_users_by_username(
     jar: &mut RequestJar,
     usernames: Vec<String>,
-) -> Result<BulkUsersByUsernameResponse, Box<Error>> {
+) -> Result<Vec<MinimalBulkUserByUsername>, Box<Error>> {
     let url = format!("https://users.roblox.com/v1/usernames/users");
     let request = BulkUsersByUsernameRequest {
         usernames,
         exclude_banned_users: true,
     };
     let response = jar
-        .post_json::<BulkUsersByUsernameResponse, BulkUsersByUsernameRequest>(&url, request)
+        .post_json::<DataWrapper<Vec<MinimalBulkUserByUsername>>, BulkUsersByUsernameRequest>(
+            &url, request,
+        )
         .await?;
-    Ok(response)
+
+    Ok(response.data)
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -147,11 +153,11 @@ pub struct BulkUsersByIdRequest {
     exclude_banned_users: bool,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
-#[serde(rename_all = "camelCase")]
-pub struct BulkUsersByIdResponse {
-    pub data: Vec<MinimalBulkUserById>,
-}
+//#[derive(Debug, Deserialize, Serialize)]
+//#[serde(rename_all = "camelCase")]
+//pub struct BulkUsersByIdResponse {
+//    pub data: Vec<MinimalBulkUserById>,
+//}
 
 /// Gets a list of users by their ids
 ///
@@ -160,14 +166,14 @@ pub struct BulkUsersByIdResponse {
 pub async fn bulk_users_by_id(
     jar: &mut RequestJar,
     user_ids: Vec<usize>,
-) -> Result<BulkUsersByIdResponse, Box<Error>> {
+) -> Result<Vec<MinimalBulkUserById>, Box<Error>> {
     let url = format!("https://users.roblox.com/v1/users");
     let request = BulkUsersByIdRequest {
         user_ids,
         exclude_banned_users: true,
     };
     let response = jar
-        .post_json::<BulkUsersByIdResponse, BulkUsersByIdRequest>(&url, request)
+        .post_json::<DataWrapper<Vec<MinimalBulkUserById>>, BulkUsersByIdRequest>(&url, request)
         .await?;
-    Ok(response)
+    Ok(response.data)
 }

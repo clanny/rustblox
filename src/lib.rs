@@ -159,9 +159,9 @@ mod tests {
         .await
         .unwrap();
 
-        assert_eq!(users.data.len(), 2);
-        assert_eq!(users.data[0].name, "piano1029".to_string());
-        assert_eq!(users.data[0].id, 375760054);
+        assert_eq!(users.len(), 2);
+        assert_eq!(users[0].name, "piano1029".to_string());
+        assert_eq!(users[0].id, 375760054);
     }
 
     #[tokio::test]
@@ -173,8 +173,8 @@ mod tests {
 
         println!("{:#?}", users);
 
-        assert_eq!(users.data.len(), 2);
-        assert_eq!(users.data[0].name, "piano1029".to_string());
+        assert_eq!(users.len(), 2);
+        assert_eq!(users[0].name, "piano1029".to_string());
     }
 
     #[tokio::test]
