@@ -21,7 +21,7 @@ pub async fn remove_user(
         "https://groups.roblox.com/v1/groups/{}/users/{}",
         group_id, user_id
     );
-    jar.delete(&url, true, "".to_string()).await?;
+    jar.delete(&url, "".to_string()).await?;
     Ok(())
 }
 

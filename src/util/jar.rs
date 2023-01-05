@@ -43,11 +43,7 @@ impl RequestJar {
         client
     }
 
-    pub async fn get(
-        &mut self,
-        url: &str,
-        soft_fail: bool, // Determines if it should error or not if the status code is not 200.
-    ) -> Result<reqwest::Response, Box<Error>> {
+    pub async fn get(&mut self, url: &str) -> Result<reqwest::Response, Box<Error>> {
         let client = self.get_reqwest_client();
 
         let response = client
@@ -82,7 +78,7 @@ impl RequestJar {
         &mut self,
         url: &str,
     ) -> Result<T, Box<Error>> {
-        let response = self.get(url, false).await?;
+        let response = self.get(url).await?;
 
         if response.status() != 200 {
             if response.status() == 429 {
@@ -104,12 +100,7 @@ impl RequestJar {
         }
     }
 
-    pub async fn post(
-        &mut self,
-        url: &str,
-        soft_fail: bool, // Determines if it should error or not if the status code is not 200.
-        data: String,
-    ) -> Result<reqwest::Response, Box<Error>> {
+    pub async fn post(&mut self, url: &str, data: String) -> Result<reqwest::Response, Box<Error>> {
         let client = self.get_reqwest_client();
 
         let response = client
@@ -176,7 +167,7 @@ impl RequestJar {
         json_data: PD,
     ) -> Result<T, Box<Error>> {
         let data = serde_json::to_string(&json_data).unwrap();
-        let response = self.post(url, false, data).await?;
+        let response = self.post(url, data).await?;
 
         if response.status() != 200 {
             if response.status() == 429 {
@@ -208,7 +199,7 @@ impl RequestJar {
     pub async fn patch(
         &mut self,
         url: &str,
-        soft_fail: bool, // Determines if it should error or not if the status code is not 200.
+
         data: String,
     ) -> Result<reqwest::Response, Box<Error>> {
         let client = self.get_reqwest_client();
@@ -277,7 +268,7 @@ impl RequestJar {
         json_data: PD,
     ) -> Result<T, Box<Error>> {
         let data = serde_json::to_string(&json_data).unwrap();
-        let response = self.patch(url, false, data).await?;
+        let response = self.patch(url, data).await?;
 
         if response.status() != 200 {
             if response.status() == 429 {
@@ -309,7 +300,7 @@ impl RequestJar {
     pub async fn delete(
         &mut self,
         url: &str,
-        soft_fail: bool, // Determines if it should error or not if the status code is not 200.
+
         data: String,
     ) -> Result<reqwest::Response, Box<Error>> {
         let client = self.get_reqwest_client();
@@ -378,7 +369,7 @@ impl RequestJar {
         json_data: PD,
     ) -> Result<T, Box<Error>> {
         let data = serde_json::to_string(&json_data).unwrap();
-        let response = self.delete(url, false, data).await?;
+        let response = self.delete(url, data).await?;
 
         if response.status() != 200 {
             if response.status() == 429 {

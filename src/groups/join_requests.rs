@@ -144,7 +144,7 @@ pub mod join_request {
             "https://groups.roblox.com/v1/groups/{}/join-requests/users/{}",
             group_id, user_id
         );
-        jar.post(&url, true, "".to_string()).await?;
+        jar.post(&url, "".to_string()).await?;
         Ok(())
     }
 
@@ -162,7 +162,7 @@ pub mod join_request {
             "https://groups.roblox.com/v1/groups/{}/join-requests/users/{}",
             group_id, user_id
         );
-        jar.delete(&url, true, "".to_string()).await?;
+        jar.delete(&url, "".to_string()).await?;
         Ok(())
     }
 }

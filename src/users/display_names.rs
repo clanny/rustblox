@@ -49,7 +49,7 @@ pub async fn validate_display_name(
         "https://users.roblox.com/v1/display-names/validate?displayName={}&birthdate=1999-12-31T23:00:00.000Z", // Birthdate is required, but it doesn't really matter what it is.
         display_name
     );
-    let response = jar.get(&url, true).await?;
+    let response = jar.get(&url).await?;
     let status = response.status();
 
     match status {
@@ -89,7 +89,7 @@ pub async fn validate_display_name_for_user(
         user_id.to_string(),
         display_name
     );
-    let response = jar.get(&url, true).await?;
+    let response = jar.get(&url).await?;
     let status = response.status();
 
     match status {

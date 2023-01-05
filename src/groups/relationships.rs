@@ -91,7 +91,7 @@ pub mod relationship {
             relation_group_id
         );
 
-        jar.delete(&url, true, "".to_string()).await?;
+        jar.delete(&url, "".to_string()).await?;
 
         Ok(())
     }
@@ -112,7 +112,7 @@ pub mod relationship {
             relation_group_id
         );
 
-        jar.post(&url, true, "".to_string()).await?;
+        jar.post(&url, "".to_string()).await?;
 
         Ok(())
     }
@@ -292,7 +292,7 @@ pub async fn remove(
         relationship_type.get_relationship_type_string(),
         target_group_id
     );
-    jar.delete(&url, true, "".to_string()).await?;
+    jar.delete(&url, "".to_string()).await?;
     Ok(())
 }
 
@@ -356,7 +356,7 @@ pub async fn send_request(
         relationship_type.get_relationship_type_string(),
         target_group_id
     );
-    jar.delete(&url, true, "".to_string()).await?;
+    jar.delete(&url, "".to_string()).await?;
     Ok(())
 }
 

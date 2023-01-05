@@ -503,6 +503,6 @@ pub async fn claim_ownership(jar: &mut RequestJar, group_id: usize) -> Result<()
         "https://groups.roblox.com/v1/groups/{}/claim-ownership",
         group_id
     );
-    jar.post(url.as_str(), true, "".to_string()).await?;
+    jar.post(url.as_str(), "".to_string()).await?;
     Ok(())
 }
