@@ -325,4 +325,21 @@ mod tests {
         assert_eq!(group_membership.are_group_funds_visible, false);
         assert_eq!(group_membership.can_configure, false);
     }
+
+    #[tokio::test]
+    async fn group_roles() {
+        let mut jar = authenticated_jar().await;
+        let group_roles = crate::groups::roles::get_roles(&mut jar, 7370273)
+            .await
+            .unwrap();
+
+        println!("{:#?}", group_roles);
+
+        assert_eq!(group_roles.len(), 10);
+        assert_eq!(group_roles[0].name, "Guest".to_string());
+        assert_eq!(
+            group_roles[group_roles.len() - 1].name,
+            "Clanny".to_string()
+        );
+    }
 }
