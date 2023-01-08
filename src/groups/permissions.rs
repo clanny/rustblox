@@ -143,3 +143,23 @@ pub async fn update_role_permissions(
 
     Ok(())
 }
+
+/// Gets the permissions for the group's guest role
+///
+/// # Error codes
+/// - 1: Group is invalid or does not exist.
+/// - 2: The roleset is invalid or does not exist.
+/// - 3: You are not authorized to view/edit permissions for this role.
+pub async fn guest_permissions(
+    jar: &mut RequestJar,
+    group_id: usize,
+) -> Result<RolePermissions, Box<Error>> {
+    let url = format!(
+        "https://groups.roblox.com/v1/groups/{}/roles/guest/permissions",
+        group_id,
+    );
+
+    let response = jar.get_json(&url).await?;
+
+    Ok(response)
+}

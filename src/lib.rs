@@ -500,4 +500,5 @@ mod tests {
     // TODO: Add tests for group relationships, but that requires a group (which requires robux)
     // TODO: Add test for role_permissions, but that requires a group (which requires robux)
     // TODO: Add test for update_role_permissions, but that requires a group (which requires robux)
+    // TODO: Add test for guest_permissions, but that requires a group (which requires robux)
 }
