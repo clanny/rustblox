@@ -81,3 +81,26 @@ pub async fn add_social_link(
     jar.post_json(&url, &social_link).await?;
     Ok(())
 }
+
+/// Deletes a social link from a group.
+///
+/// # Error codes
+/// - 1: Group is invalid or does not exist.
+/// - 2: You do not have permission to configure this social link.
+/// - 10: The social link is not for a group.
+/// - 11: Social links cannot be processed as this time.
+/// - 13: Only users who are over thirteen years of age may edit social links.
+/// - 15: The social link id doesn't match the group id.
+pub async fn delete_social_link(
+    jar: &mut RequestJar,
+    group_id: usize,
+    social_link_id: usize,
+) -> Result<(), Box<Error>> {
+    let url = format!(
+        "https://groups.roblox.com/v1/groups/{}/social-links/{}",
+        group_id, social_link_id
+    );
+
+    jar.delete(&url, "".to_string()).await?;
+    Ok(())
+}
