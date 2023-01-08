@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use crate::util::{jar::RequestJar, Error};
+use crate::util::{jar::RequestJar, responses::DataWrapper, Error};
 
 use super::GroupRole;
 
@@ -162,4 +162,26 @@ pub async fn guest_permissions(
     let response = jar.get_json(&url).await?;
 
     Ok(response)
+}
+
+/// Gets the permissions for all the group's roles
+///
+/// # Error codes
+/// - 1: Group is invalid or does not exist.
+///
+/// *Note: None were provided in the documentation*
+pub async fn permissions(
+    jar: &mut RequestJar,
+    group_id: usize,
+) -> Result<Vec<RolePermissions>, Box<Error>> {
+    let url = format!(
+        "https://groups.roblox.com/v1/groups/{}/roles/permissions",
+        group_id,
+    );
+
+    let response = jar
+        .get_json::<DataWrapper<Vec<RolePermissions>>>(&url)
+        .await?;
+
+    Ok(response.data)
 }
