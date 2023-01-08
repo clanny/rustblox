@@ -517,4 +517,5 @@ mod tests {
 
     // TODO: Add test for add_social_link, but that requires a group (which requires robux)
     // TODO: Add test for delete_social_link, but that requires a group (which requires robux)
+    // TODO: Add test for update_social_link, but that requires a group (which requires robux)
 }

@@ -63,11 +63,13 @@ pub async fn social_links(
 /// - 3: The social link title is too long.
 /// - 4: The social link title cannot be empty.
 /// - 5: The social link url cannot be empty.
+/// - 6: The social link url was improperly formatted.
 /// - 7: The request was null.
 /// - 8: The requested group or social link was not found.
 /// - 9: The social link type is invalid.
 /// - 11: Social links cannot be processed as this time.
 /// - 12: The social link title was moderated.
+/// - 16: A social link with this type already exists on this group.
 pub async fn add_social_link(
     jar: &mut RequestJar,
     group_id: usize,
@@ -102,5 +104,36 @@ pub async fn delete_social_link(
     );
 
     jar.delete(&url, "".to_string()).await?;
+    Ok(())
+}
+
+/// Updates a group's social link.
+///
+/// # Error codes
+/// - 1: Group is invalid or does not exist.
+/// - 2: You do not have permission to configure this social link.
+/// - 3: The social link title is too long.
+/// - 4: The social link title cannot be empty.
+/// - 5: The social link url cannot be empty.
+/// - 6: The social link url was improperly formatted.
+/// - 7: The request was null.
+/// - 8: The requested group or social link was not found.
+/// - 9: The social link type is invalid.
+/// - 10: The social link is not for a group.
+/// - 11: Social links cannot be processed as this time.
+/// - 12: The social link title was moderated.
+/// - 16: A social link with this type already exists on this group.
+pub async fn update_social_link(
+    jar: &mut RequestJar,
+    group_id: usize,
+    social_link: SocialLink,
+) -> Result<(), Box<Error>> {
+    let url = format!(
+        "https://groups.roblox.com/v1/groups/{}/social-links/{}",
+        group_id,
+        social_link.id.unwrap()
+    );
+
+    jar.patch_json(&url, &social_link).await?;
     Ok(())
 }
