@@ -514,4 +514,6 @@ mod tests {
 
         assert_eq!(social_links.len(), 0);
     }
+
+    // TODO: Add test for add_social_link, but that requires a group (which requires robux)
 }
