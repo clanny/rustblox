@@ -502,4 +502,16 @@ mod tests {
     // TODO: Add test for update_role_permissions, but that requires a group (which requires robux)
     // TODO: Add test for guest_permissions, but that requires a group (which requires robux)
     // TODO: Add test for permissions, but that requires a group (which requires robux)
+
+    #[tokio::test]
+    async fn social_links() {
+        let mut jar = authenticated_jar().await;
+        let social_links = crate::groups::social_links(&mut jar, 7370273)
+            .await
+            .unwrap();
+
+        println!("{:#?}", social_links);
+
+        assert_eq!(social_links.len(), 0);
+    }
 }
