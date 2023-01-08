@@ -88,3 +88,58 @@ pub async fn role_permissions(
 
     Ok(response)
 }
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct UpdateRolePermissionsRequestPermissions {
+    pub delete_from_wall: Option<bool>,
+    pub post_to_wall: Option<bool>,
+    pub invite_members: Option<bool>,
+    pub post_to_status: Option<bool>,
+    pub remove_members: Option<bool>,
+    pub view_status: Option<bool>,
+    pub view_wall: Option<bool>,
+    pub change_rank: Option<bool>,
+    pub advertise_group: Option<bool>,
+    pub manage_relationships: Option<bool>,
+    pub add_group_places: Option<bool>,
+    pub view_audit_logs: Option<bool>,
+    pub create_items: Option<bool>,
+    pub manage_items: Option<bool>,
+    pub spend_group_funds: Option<bool>,
+    pub manage_clan: Option<bool>,
+    pub manage_group_games: Option<bool>,
+    pub use_cloud_authentication: Option<bool>,
+    pub administer_cloud_authentication: Option<bool>,
+    pub view_analytics: Option<bool>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct UpdateRolePermissionsRequest {
+    pub permissions: UpdateRolePermissionsRequestPermissions,
+}
+
+/// Sets the permissions for a specific role in a group
+///
+/// # Error codes
+/// - 1: Group is invalid or does not exist.
+/// - 2: The roleset is invalid or does not exist.
+/// - 3: You are not authorized to view/edit permissions for this role.
+/// - 4: This role's permissions can not be modified.
+pub async fn update_role_permissions(
+    jar: &mut RequestJar,
+    group_id: usize,
+    role_id: usize,
+    permissions: UpdateRolePermissionsRequestPermissions,
+) -> Result<(), Box<Error>> {
+    let url = format!(
+        "https://groups.roblox.com/v1/groups/{}/roles/{}/permissions",
+        group_id, role_id
+    );
+
+    jar.patch_json(&url, &(UpdateRolePermissionsRequest { permissions }))
+        .await?;
+
+    Ok(())
+}
