@@ -518,4 +518,23 @@ mod tests {
     // TODO: Add test for add_social_link, but that requires a group (which requires robux)
     // TODO: Add test for delete_social_link, but that requires a group (which requires robux)
     // TODO: Add test for update_social_link, but that requires a group (which requires robux)
+
+    #[tokio::test]
+    async fn read_wall() {
+        let mut jar = unauthenticated_jar().await;
+        let wall = crate::groups::wall(&mut jar, 7370273, util::paging::PageLimit::All, None)
+            .await
+            .unwrap();
+
+        println!("{:#?}", wall);
+
+        // Panic if wall does not include a post from piano1029
+        wall.iter()
+            .find(|post| post.poster.user_id == 375760054)
+            .unwrap();
+
+        println!("{:#?}", wall);
+
+        assert_ne!(wall.len(), 0);
+    }
 }
