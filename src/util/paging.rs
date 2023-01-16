@@ -4,6 +4,7 @@ use strum_macros::Display;
 use crate::{util::jar::RequestJar, util::Error};
 
 #[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct PagedResponse<T> {
     pub next_page_cursor: Option<String>,
     pub previous_page_cursor: Option<String>,
@@ -70,6 +71,13 @@ where
         } else {
             format!("{}?cursor={}", url, cursor)
         };
+
+        // Extend the url with the limit
+        let url = format!(
+            "{}{}limit=100",
+            url,
+            if url.contains("?") { "&" } else { "?" }
+        );
 
         let response = jar.get_json::<PagedResponse<T>>(&url).await?;
         data.extend(response.data);
