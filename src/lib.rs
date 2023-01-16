@@ -537,4 +537,6 @@ mod tests {
 
         assert_ne!(wall.len(), 0);
     }
+
+    // TODO: Add test for deleting group wall posts, but that requires a group (which requires robux)
 }

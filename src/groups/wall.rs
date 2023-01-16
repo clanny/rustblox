@@ -38,3 +38,26 @@ pub async fn wall(
     let response = get_page::<WallPost>(jar, &url, limit, None).await?; // TODO: Add cursor support
     Ok(response)
 }
+
+// Probs shouldnt implement posting to the group wall
+
+// TODO: Figure out what /v1/groups/{groupId}/wall/subscribe does
+
+/// Deletes a group's wall post.
+///
+/// # Error codes
+/// - 1: The group is invalid or does not exist.
+/// - 2: You do not have permission to access this group wall
+/// - 3: The group wall post id is invalid or does not exist.
+pub async fn delete_wall_post(
+    jar: &mut RequestJar,
+    group_id: usize,
+    post_id: usize,
+) -> Result<(), Box<Error>> {
+    let url = format!(
+        "https://groups.roblox.com/v1/groups/{}/wall/posts/{}",
+        group_id, post_id
+    );
+    jar.delete_json(&url, "".to_string()).await?;
+    Ok(())
+}
