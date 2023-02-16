@@ -612,4 +612,6 @@ mod tests {
         assert_eq!(primary_group.group.name, "Clanny Systems");
         assert_eq!(primary_group.role.name, "Developer");
     }
+
+    // TODO: Add test for removing primary group
 }

@@ -27,3 +27,15 @@ pub async fn primary_group(
 
     Ok(jar.get_json::<PrimaryGroupResponse>(&url).await?)
 }
+
+/// Removes the currently authenticated user's primary group.
+///
+/// # Error codes
+/// - 0: Authorization has been denied for this request.
+pub async fn remove_primary_group(jar: &mut RequestJar) -> Result<(), Box<Error>> {
+    let url = "https://groups.roblox.com/v1/user/groups/primary";
+
+    jar.delete(&url, "".to_string()).await?;
+
+    Ok(())
+}
