@@ -61,3 +61,22 @@ pub async fn delete_wall_post(
     jar.delete_json(&url, "".to_string()).await?;
     Ok(())
 }
+
+/// Delete all posts by a user on a group's wall.
+///
+/// # Error codes
+/// 1: The group is invalid or does not exist.
+/// 2: You do not have permission to access this group wall.
+/// 6: The user specified is invalid or does not exist.
+pub async fn delete_wall_posts_by_user(
+    jar: &mut RequestJar,
+    group_id: usize,
+    user_id: usize,
+) -> Result<(), Box<Error>> {
+    let url = format!(
+        "https://groups.roblox.com/v1/groups/{}/wall/users/{}/posts",
+        group_id, user_id
+    );
+    jar.delete_json(&url, "".to_string()).await?;
+    Ok(())
+}
