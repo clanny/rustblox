@@ -5,7 +5,7 @@ use crate::{
     util::{
         jar::RequestJar,
         paging::{get_page, PageLimit, SortOrder},
-        responses::RobloxError,
+        responses::{DataWrapper, RobloxError},
         Error,
     },
 };
@@ -91,4 +91,25 @@ pub async fn user_role(
     } else {
         return Ok(group_roles[0].role.clone());
     }
+}
+
+/// Gets roles by id.
+///
+/// # Error codes
+/// - 1: Ids could not be parsed from request.
+/// - 2: Too many ids in request.
+pub async fn roles_by_id(
+    jar: &mut RequestJar,
+    role_ids: Vec<usize>,
+) -> Result<Vec<GroupRole>, Box<Error>> {
+    let string_ids = role_ids.iter().map(|id| id.to_string()).collect::<Vec<_>>();
+    let url = format!(
+        "https://groups.roblox.com/v1/roles?ids={}",
+        string_ids.join(",")
+    );
+
+    Ok(jar
+        .get_json::<DataWrapper<Vec<GroupRole>>>(&url)
+        .await?
+        .data)
 }

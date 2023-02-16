@@ -580,4 +580,22 @@ mod tests {
 
         assert_ne!(search_results.len(), 0);
     }
+
+    #[tokio::test]
+    async fn group_roles_by_id() {
+        let mut jar = unauthenticated_jar().await;
+        let group_roles = crate::groups::roles(&mut jar, 7370273).await.unwrap();
+
+        println!("{:#?}", group_roles);
+
+        let test_role = &group_roles[0];
+        let role_by_id = crate::groups::roles_by_id(&mut jar, vec![test_role.id])
+            .await
+            .unwrap();
+
+        println!("{:#?}", role_by_id);
+
+        assert_eq!(role_by_id[0].id, test_role.id);
+        assert_eq!(role_by_id[0].name, test_role.name);
+    }
 }
