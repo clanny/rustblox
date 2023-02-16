@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use crate::util::{jar::RequestJar, paging::PageLimit, Error};
+use crate::util::{jar::RequestJar, paging::PageLimit, responses::DataWrapper, Error};
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
@@ -76,4 +76,25 @@ pub async fn search(
     }
 
     Ok(jar.get_json::<GroupSearchResponse>(&url).await?)
+}
+
+/// Search for a group with a keyword, prioritizing exact matches.
+///
+/// # Error codes
+/// 2: Search term not appropriate for Roblox.
+/// 3: Search term was left empty.
+/// 4: Search terms can be 2 to 50 characters long.
+pub async fn exact_search(
+    jar: &mut RequestJar,
+    group_name: String,
+) -> Result<Vec<MinimalSearchGroup>, Box<Error>> {
+    let url = format!(
+        "https://groups.roblox.com/v1/groups/search/lookup?groupName={}",
+        group_name
+    );
+
+    Ok(jar
+        .get_json::<DataWrapper<Vec<MinimalSearchGroup>>>(&url)
+        .await?
+        .data)
 }

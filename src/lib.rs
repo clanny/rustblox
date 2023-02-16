@@ -565,4 +565,19 @@ mod tests {
 
         assert_ne!(search_results.results.len(), 0);
     }
+
+    #[tokio::test]
+    async fn group_exact_search() {
+        let mut jar = unauthenticated_jar().await;
+        let search_results = crate::groups::exact_search(&mut jar, "Clanny Systems".to_string())
+            .await
+            .unwrap();
+
+        println!("{:#?}", search_results);
+
+        assert_eq!(search_results[0].name, "Clanny Systems");
+        assert_eq!(search_results[0].id, 7370273);
+
+        assert_ne!(search_results.len(), 0);
+    }
 }
