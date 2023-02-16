@@ -11,7 +11,7 @@ pub struct PagedResponse<T> {
     pub data: Vec<T>,
 }
 
-#[derive(PartialEq, Display)]
+#[derive(PartialEq, Display, Debug, Clone, Copy)]
 pub enum PageLimit {
     /// Retrieves all pages
     All,
