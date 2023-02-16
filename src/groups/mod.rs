@@ -6,6 +6,7 @@ mod permissions;
 mod relationships;
 mod revenue;
 mod roles;
+mod search;
 mod social_links;
 mod wall;
 
@@ -17,5 +18,6 @@ pub use permissions::*;
 pub use relationships::*;
 pub use revenue::*;
 pub use roles::*;
+pub use search::*;
 pub use social_links::*;
 pub use wall::*;

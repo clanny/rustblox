@@ -6,6 +6,8 @@ pub mod util;
 mod tests {
     use std::fs;
 
+    use crate::{groups::GroupSearchProps, util::paging::PageLimit};
+
     use super::*;
 
     async fn authenticated_jar() -> util::jar::RequestJar {
@@ -520,7 +522,7 @@ mod tests {
     // TODO: Add test for update_social_link, but that requires a group (which requires robux)
 
     #[tokio::test]
-    async fn read_wall() {
+    async fn read_group_wall() {
         let mut jar = unauthenticated_jar().await;
         let wall = crate::groups::wall(&mut jar, 7370273, util::paging::PageLimit::All, None)
             .await
@@ -539,4 +541,28 @@ mod tests {
     }
 
     // TODO: Add test for deleting group wall posts, but that requires a group (which requires robux)
+
+    #[tokio::test]
+    async fn group_search() {
+        let mut jar = unauthenticated_jar().await;
+        let search_results = crate::groups::search(
+            &mut jar,
+            "Clanny Systems".to_string(),
+            Some(GroupSearchProps {
+                prioritize_exact_match: Some(true),
+                limit: Some(PageLimit::Limit10),
+                cursor: None,
+            }),
+        )
+        .await
+        .unwrap();
+
+        println!("{:#?}", search_results);
+
+        assert_eq!(search_results.results[0].name, "Clanny Systems");
+        assert_eq!(search_results.results[0].id, 7370273);
+        assert_eq!(search_results.keyword, "Clanny Systems");
+
+        assert_ne!(search_results.results.len(), 0);
+    }
 }
