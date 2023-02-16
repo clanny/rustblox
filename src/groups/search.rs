@@ -98,3 +98,20 @@ pub async fn exact_search(
         .await?
         .data)
 }
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct GroupSearchMetadata {
+    pub suggested_group_keywords: Vec<String>,
+    pub show_friends_groups_sort: bool,
+}
+
+/// Get group search metadata
+///
+/// # Error codes
+/// 5: No Localized Version of group search category exists
+pub async fn search_metadata(jar: &mut RequestJar) -> Result<GroupSearchMetadata, Box<Error>> {
+    let url = "https://groups.roblox.com/v1/groups/search/metadata";
+
+    Ok(jar.get_json::<GroupSearchMetadata>(&url).await?)
+}
