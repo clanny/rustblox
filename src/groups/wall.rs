@@ -65,9 +65,9 @@ pub async fn delete_wall_post(
 /// Delete all posts by a user on a group's wall.
 ///
 /// # Error codes
-/// 1: The group is invalid or does not exist.
-/// 2: You do not have permission to access this group wall.
-/// 6: The user specified is invalid or does not exist.
+/// - 1: The group is invalid or does not exist.
+/// - 2: You do not have permission to access this group wall.
+/// - 6: The user specified is invalid or does not exist.
 pub async fn delete_wall_posts_by_user(
     jar: &mut RequestJar,
     group_id: usize,

@@ -371,7 +371,7 @@ pub async fn membership(
 /// Gets a list of users in a group
 ///
 /// # Error codes
-/// 1: The group is invalid or does not exist.
+/// - 1: The group is invalid or does not exist.
 pub async fn members(
     jar: &mut RequestJar,
     group_id: usize,

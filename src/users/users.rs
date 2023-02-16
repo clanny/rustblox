@@ -30,7 +30,7 @@ pub struct MinimalGroupUser {
 /// Gets a user by their user ID
 ///
 /// # Error codes
-/// 3: The user id is invalid
+/// - 3: The user id is invalid
 pub async fn user_by_id(jar: &mut RequestJar, user_id: usize) -> Result<User, Box<Error>> {
     let url = format!("https://users.roblox.com/v1/users/{}", user_id);
     let response = jar.get_json::<User>(&url).await?;
@@ -118,7 +118,7 @@ pub struct BulkUsersByUsernameRequest {
 /// Gets a list of users by their usernames
 ///
 /// # Error codes
-/// 2: Too many usernames
+/// - 2: Too many usernames
 pub async fn bulk_users_by_username(
     jar: &mut RequestJar,
     usernames: Vec<String>,
@@ -162,7 +162,7 @@ pub struct BulkUsersByIdRequest {
 /// Gets a list of users by their ids
 ///
 /// # Error codes
-/// 2: Too many ids
+/// - 2: Too many ids
 pub async fn bulk_users_by_id(
     jar: &mut RequestJar,
     user_ids: Vec<usize>,

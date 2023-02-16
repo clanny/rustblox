@@ -45,9 +45,9 @@ pub struct GroupSearchResponse {
 /// Search for a group with a keyword
 ///
 /// # Error codes
-/// 2: Search term not appropriate for Roblox.
-/// 3: Search term was left empty.
-/// 4: Search terms can be 2 to 50 characters long.
+/// - 2: Search term not appropriate for Roblox.
+/// - 3: Search term was left empty.
+/// - 4: Search terms can be 2 to 50 characters long.
 pub async fn search(
     jar: &mut RequestJar,
     keyword: String,
@@ -81,9 +81,9 @@ pub async fn search(
 /// Search for a group with a keyword, prioritizing exact matches.
 ///
 /// # Error codes
-/// 2: Search term not appropriate for Roblox.
-/// 3: Search term was left empty.
-/// 4: Search terms can be 2 to 50 characters long.
+/// - 2: Search term not appropriate for Roblox.
+/// - 3: Search term was left empty.
+/// - 4: Search terms can be 2 to 50 characters long.
 pub async fn exact_search(
     jar: &mut RequestJar,
     group_name: String,
@@ -109,7 +109,7 @@ pub struct GroupSearchMetadata {
 /// Get group search metadata
 ///
 /// # Error codes
-/// 5: No Localized Version of group search category exists
+/// - 5: No Localized Version of group search category exists
 pub async fn search_metadata(jar: &mut RequestJar) -> Result<GroupSearchMetadata, Box<Error>> {
     let url = "https://groups.roblox.com/v1/groups/search/metadata";
 

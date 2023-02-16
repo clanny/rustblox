@@ -120,11 +120,11 @@ struct SetDisplayNameRequest {
 /// Sets the user's display name
 ///
 /// # Error codes
-/// 1: Display name is too short
-/// 2: Display name is too long
-/// 3: Display name contains invalid characters
-/// 4: Display name has been moderated
-/// 5: Display name updates for this user have been throttled
+/// - 1: Display name is too short
+/// - 2: Display name is too long
+/// - 3: Display name contains invalid characters
+/// - 4: Display name has been moderated
+/// - 5: Display name updates for this user have been throttled
 pub async fn set_display_name(
     jar: &mut RequestJar,
     new_display_name: String,
