@@ -21,7 +21,7 @@ pub struct Group {
     pub description: String,
     pub owner: MinimalGroupUser,
     pub shout: Option<GroupShout>,
-    pub member_count: usize,
+    pub member_count: Option<usize>,
     pub is_builders_club_only: bool,
     pub public_entry_allowed: bool,
     pub is_locked: Option<bool>,

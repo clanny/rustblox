@@ -598,4 +598,18 @@ mod tests {
         assert_eq!(role_by_id[0].id, test_role.id);
         assert_eq!(role_by_id[0].name, test_role.name);
     }
+
+    #[tokio::test]
+    async fn primary_group() {
+        let mut jar = unauthenticated_jar().await;
+        let primary_group = crate::groups::primary_group(&mut jar, 375760054)
+            .await
+            .unwrap();
+
+        println!("{:#?}", primary_group);
+
+        assert_eq!(primary_group.group.id, 7370273);
+        assert_eq!(primary_group.group.name, "Clanny Systems");
+        assert_eq!(primary_group.role.name, "Developer");
+    }
 }
