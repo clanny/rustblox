@@ -39,3 +39,27 @@ pub async fn remove_primary_group(jar: &mut RequestJar) -> Result<(), Box<Error>
 
     Ok(())
 }
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct SetPrimaryGroupRequest {
+    pub group_id: usize,
+}
+
+/// Sets the currently authenticated user's primary group.
+///
+/// # Error codes
+/// 0: Authorization has been denied for this request.
+/// 1: Group is invalid or does not exist.
+/// 2: You aren't a member of the group specified.
+pub async fn set_primary_group(jar: &mut RequestJar, group_id: usize) -> Result<(), Box<Error>> {
+    let url = format!(
+        "https://groups.roblox.com/v1/user/groups/{}/primary",
+        group_id
+    );
+
+    jar.post_json(&url, SetPrimaryGroupRequest { group_id })
+        .await?;
+
+    Ok(())
+}

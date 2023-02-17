@@ -613,5 +613,5 @@ mod tests {
         assert_eq!(primary_group.role.name, "Developer");
     }
 
-    // TODO: Add test for removing primary group
+    // TODO: Add test for removing and setting primary group
 }
