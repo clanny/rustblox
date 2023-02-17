@@ -1,4 +1,5 @@
 pub mod groups;
+pub mod thumbnails;
 pub mod users;
 pub mod util;
 
@@ -614,4 +615,6 @@ mod tests {
     }
 
     // TODO: Add test for removing and setting primary group
+
+    // TODO: Add tests for thumbnails!
 }
