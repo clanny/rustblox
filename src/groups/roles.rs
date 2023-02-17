@@ -113,3 +113,6 @@ pub async fn roles_by_id(
         .await?
         .data)
 }
+
+// TODO: Add updating roles
+// Creating and deleting roles is dangerous bc it costs robux and will NOT be added
