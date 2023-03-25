@@ -12,14 +12,14 @@ use super::{ThumbnailFormat, ThumbnailResponse, ThumbnailSize};
 /// - 10: Circular thumbnail requests are not allowed
 pub async fn get_developer_product_icons(
     jar: &mut RequestJar,
-    badge_ids: Vec<usize>,
+    developer_product_ids: Vec<usize>,
     thumbnail_size: Option<ThumbnailSize>,
     thumbnail_format: Option<ThumbnailFormat>,
     is_circular: bool,
 ) -> Result<ThumbnailResponse, Box<Error>> {
     let url = format!(
         "https://thumbnails.roblox.com/v1/developer-products/icons?developerProductIds={}&size={}&format={}&isCircular={}",
-        badge_ids
+        developer_product_ids
             .iter()
             .map(|id| id.to_string())
             .collect::<Vec<String>>()
