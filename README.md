@@ -1,3 +1,5 @@
+**lmao this library gonna get nuked by the Rust Foundation with the current trademark stuff**
+
 # RustyRoblox
 A Rust library for interacting with the Roblox API
 
