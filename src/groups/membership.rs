@@ -13,7 +13,7 @@ use super::{roles, user_role};
 /// - 18: The operation is temporarily unavailable. Please try again later.
 /// - 25: 2-Step Verification is required to make further transactions. Go to Settings > Security to complete 2-Step Verification.
 pub async fn remove_user(
-    jar: &mut RequestJar,
+    jar: &RequestJar,
     group_id: usize,
     user_id: usize,
 ) -> Result<(), Box<Error>> {
@@ -42,7 +42,7 @@ pub struct UpdateUserRoleRequest {
 /// - 23: You cannot change your own role.
 /// - 26: You cannot change the user's role to the same role.
 pub async fn set_role(
-    jar: &mut RequestJar,
+    jar: &RequestJar,
     group_id: usize,
     user_id: usize,
     role_id: usize,
@@ -68,7 +68,7 @@ pub async fn set_role(
 /// - 23: You cannot change your own role.
 /// - 26: You cannot change the user's role to the same role.
 pub async fn set_rank(
-    jar: &mut RequestJar,
+    jar: &RequestJar,
     group_id: usize,
     user_id: usize,
     role_id: usize,
@@ -90,7 +90,7 @@ pub async fn set_rank(
 ///
 /// - 200: The user's rank was not found.
 pub async fn modify_rank_by_amount(
-    jar: &mut RequestJar,
+    jar: &RequestJar,
     group_id: usize,
     user_id: usize,
     amount: usize,
@@ -131,11 +131,7 @@ pub async fn modify_rank_by_amount(
 /// - 18: The operation is temporarily unavailable. Please try again later.
 /// - 23: You cannot change your own role.
 /// - 26: You cannot change the user's role to the same role.
-pub async fn promote(
-    jar: &mut RequestJar,
-    group_id: usize,
-    user_id: usize,
-) -> Result<(), Box<Error>> {
+pub async fn promote(jar: &RequestJar, group_id: usize, user_id: usize) -> Result<(), Box<Error>> {
     modify_rank_by_amount(jar, group_id, user_id, 1).await?;
     Ok(())
 }
@@ -150,11 +146,7 @@ pub async fn promote(
 /// - 18: The operation is temporarily unavailable. Please try again later.
 /// - 23: You cannot change your own role.
 /// - 26: You cannot change the user's role to the same role.
-pub async fn demote(
-    jar: &mut RequestJar,
-    group_id: usize,
-    user_id: usize,
-) -> Result<(), Box<Error>> {
+pub async fn demote(jar: &RequestJar, group_id: usize, user_id: usize) -> Result<(), Box<Error>> {
     modify_rank_by_amount(jar, group_id, user_id, 1).await?;
     Ok(())
 }

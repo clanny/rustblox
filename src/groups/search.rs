@@ -49,7 +49,7 @@ pub struct GroupSearchResponse {
 /// - 3: Search term was left empty.
 /// - 4: Search terms can be 2 to 50 characters long.
 pub async fn search(
-    jar: &mut RequestJar,
+    jar: &RequestJar,
     keyword: String,
     props: Option<GroupSearchProps>,
 ) -> Result<GroupSearchResponse, Box<Error>> {
@@ -85,7 +85,7 @@ pub async fn search(
 /// - 3: Search term was left empty.
 /// - 4: Search terms can be 2 to 50 characters long.
 pub async fn exact_search(
-    jar: &mut RequestJar,
+    jar: &RequestJar,
     group_name: String,
 ) -> Result<Vec<MinimalSearchGroup>, Box<Error>> {
     let url = format!(
@@ -110,7 +110,7 @@ pub struct GroupSearchMetadata {
 ///
 /// # Error codes
 /// - 5: No Localized Version of group search category exists
-pub async fn search_metadata(jar: &mut RequestJar) -> Result<GroupSearchMetadata, Box<Error>> {
+pub async fn search_metadata(jar: &RequestJar) -> Result<GroupSearchMetadata, Box<Error>> {
     let url = "https://groups.roblox.com/v1/groups/search/metadata";
 
     Ok(jar.get_json::<GroupSearchMetadata>(&url).await?)

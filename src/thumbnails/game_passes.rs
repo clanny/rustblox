@@ -11,7 +11,7 @@ use super::{ThumbnailFormat, ThumbnailResponse, ThumbnailSize};
 /// - 4: The requested Ids are invalid, of an invalid type or missing.
 /// - 10: Circular thumbnail requests are not allowed
 pub async fn get_game_pass_icons(
-    jar: &mut RequestJar,
+    jar: &RequestJar,
     game_pass_ids: Vec<usize>,
     thumbnail_size: Option<ThumbnailSize>,
     thumbnail_format: Option<ThumbnailFormat>,

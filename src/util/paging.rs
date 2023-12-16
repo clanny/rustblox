@@ -58,7 +58,7 @@ impl SortOrder {
 }
 
 /// Retrieves all pages of a paged response
-async fn get_all_pages<T>(jar: &mut RequestJar, url: &str) -> Result<Vec<T>, Box<Error>>
+async fn get_all_pages<T>(jar: &RequestJar, url: &str) -> Result<Vec<T>, Box<Error>>
 where
     T: for<'de> Deserialize<'de>,
 {
@@ -89,7 +89,7 @@ where
 
 /// Retrieves a paged response
 pub async fn get_page<T>(
-    jar: &mut RequestJar,
+    jar: &RequestJar,
     url: &str,
     limit: PageLimit,
     cursor: Option<String>,

@@ -11,7 +11,7 @@ use super::ThumbnailResponse;
 /// - 4: The requested Ids are invalid, of an invalid type or missing.
 /// - 10: Circular thumbnail requests are not allowed
 pub async fn get_badge_thumbnails(
-    jar: &mut RequestJar,
+    jar: &RequestJar,
     badge_ids: Vec<usize>,
     is_circular: bool,
 ) -> Result<ThumbnailResponse, Box<Error>> {

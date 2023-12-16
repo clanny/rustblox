@@ -75,7 +75,7 @@ pub struct RolePermissions {
 /// - 2: The roleset is invalid or does not exist.
 /// - 3: You are not authorized to view/edit permissions for this role.
 pub async fn role_permissions(
-    jar: &mut RequestJar,
+    jar: &RequestJar,
     group_id: usize,
     role_id: usize,
 ) -> Result<RolePermissions, Box<Error>> {
@@ -128,7 +128,7 @@ pub struct UpdateRolePermissionsRequest {
 /// - 3: You are not authorized to view/edit permissions for this role.
 /// - 4: This role's permissions can not be modified.
 pub async fn update_role_permissions(
-    jar: &mut RequestJar,
+    jar: &RequestJar,
     group_id: usize,
     role_id: usize,
     permissions: UpdateRolePermissionsRequestPermissions,
@@ -151,7 +151,7 @@ pub async fn update_role_permissions(
 /// - 2: The roleset is invalid or does not exist.
 /// - 3: You are not authorized to view/edit permissions for this role.
 pub async fn guest_permissions(
-    jar: &mut RequestJar,
+    jar: &RequestJar,
     group_id: usize,
 ) -> Result<RolePermissions, Box<Error>> {
     let url = format!(
@@ -171,7 +171,7 @@ pub async fn guest_permissions(
 ///
 /// *Note: None were provided in the documentation*
 pub async fn permissions(
-    jar: &mut RequestJar,
+    jar: &RequestJar,
     group_id: usize,
 ) -> Result<Vec<RolePermissions>, Box<Error>> {
     let url = format!(

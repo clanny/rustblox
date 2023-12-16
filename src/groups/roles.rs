@@ -33,7 +33,7 @@ pub struct GroupRoleResponse {
 ///
 /// # Error codes
 /// - 1: The group is invalid or does not exist.
-pub async fn roles(jar: &mut RequestJar, group_id: usize) -> Result<Vec<GroupRole>, Box<Error>> {
+pub async fn roles(jar: &RequestJar, group_id: usize) -> Result<Vec<GroupRole>, Box<Error>> {
     let url = format!("https://groups.roblox.com/v1/groups/{}/roles", group_id);
     let response = jar.get_json::<GroupRoleResponse>(&url).await?;
     Ok(response.roles)
@@ -45,7 +45,7 @@ pub async fn roles(jar: &mut RequestJar, group_id: usize) -> Result<Vec<GroupRol
 /// - 1: The group is invalid or does not exist.
 /// - 2: The roleset is invalid or does not exist.
 pub async fn users_on_role(
-    jar: &mut RequestJar,
+    jar: &RequestJar,
     group_id: usize,
     role_id: usize,
     limit: PageLimit,
@@ -70,7 +70,7 @@ pub async fn users_on_role(
 ///
 /// - 200: The user is not in the group.
 pub async fn user_role(
-    jar: &mut RequestJar,
+    jar: &RequestJar,
     group_id: usize,
     user_id: usize,
 ) -> Result<GroupRole, Box<Error>> {
@@ -99,7 +99,7 @@ pub async fn user_role(
 /// - 1: Ids could not be parsed from request.
 /// - 2: Too many ids in request.
 pub async fn roles_by_id(
-    jar: &mut RequestJar,
+    jar: &RequestJar,
     role_ids: Vec<usize>,
 ) -> Result<Vec<GroupRole>, Box<Error>> {
     let string_ids = role_ids.iter().map(|id| id.to_string()).collect::<Vec<_>>();

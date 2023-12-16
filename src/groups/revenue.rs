@@ -18,7 +18,7 @@ pub struct PayoutRestrictions {
 /// - 1: Group is invalid or does not exist.
 /// - 9: You don't have permission to view this group's payouts.
 pub async fn get_payout_restrictions(
-    jar: &mut RequestJar,
+    jar: &RequestJar,
     group_id: usize,
 ) -> Result<PayoutRestrictions, Box<Error>> {
     let url = format!(
@@ -42,7 +42,7 @@ pub struct RecurringPayout {
 /// - 1: Group is invalid or does not exist.
 /// - 9: You don't have permission to view this group's payouts.
 pub async fn get_recurring_payouts(
-    jar: &mut RequestJar,
+    jar: &RequestJar,
     group_id: usize,
 ) -> Result<Vec<RecurringPayout>, Box<Error>> {
     let url = format!("https://groups.roblox.com/v1/groups/{}/payouts", group_id);

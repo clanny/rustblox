@@ -20,7 +20,7 @@ pub struct UsernameSearchEntry {
 
 /// Searches for a user using a keyword
 pub async fn username_search(
-    jar: &mut RequestJar,
+    jar: &RequestJar,
     keyword: String,
     limit: PageLimit,
 ) -> Result<Vec<UsernameSearchEntry>, Box<Error>> {

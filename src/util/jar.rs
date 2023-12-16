@@ -20,14 +20,16 @@ impl RequestJar {
         }
     }
 
-    pub async fn set_roblosecurity(&mut self, roblosecurity: String) -> Result<(), Box<Error>> {
-        self.roblosecurity = Some(roblosecurity);
+    pub async fn set_roblosecurity(&self, roblosecurity: String) -> Result<(), Box<Error>> {
+        // TODO: Fix this
+        // self.roblosecurity = Some(roblosecurity);
         self.get_xcsrf_token(0).await?;
         Ok(())
     }
 
-    pub fn set_proxy(&mut self, proxy: String) {
-        self.proxy = Some(proxy);
+    pub fn set_proxy(&self, proxy: String) {
+        // TODO: Fix this
+        // self.proxy = Some(proxy);
     }
 
     pub fn get_reqwest_client(&self) -> reqwest::Client {
@@ -43,7 +45,7 @@ impl RequestJar {
         client
     }
 
-    pub async fn get(&mut self, url: &str) -> Result<reqwest::Response, Box<Error>> {
+    pub async fn get(&self, url: &str) -> Result<reqwest::Response, Box<Error>> {
         let client = self.get_reqwest_client();
 
         let response = client
@@ -75,7 +77,7 @@ impl RequestJar {
     }
 
     pub async fn get_json<T: for<'de> serde::Deserialize<'de>>(
-        &mut self,
+        &self,
         url: &str,
     ) -> Result<T, Box<Error>> {
         let response = self.get(url).await?;
@@ -100,7 +102,7 @@ impl RequestJar {
         }
     }
 
-    pub async fn post(&mut self, url: &str, data: String) -> Result<reqwest::Response, Box<Error>> {
+    pub async fn post(&self, url: &str, data: String) -> Result<reqwest::Response, Box<Error>> {
         let client = self.get_reqwest_client();
 
         let response = client
@@ -130,17 +132,18 @@ impl RequestJar {
             .headers()
             .contains_key("X-CSRF-TOKEN")
         {
-            self.xcsrf_token = Some(
-                response
-                    .as_ref()
-                    .unwrap()
-                    .headers()
-                    .get("X-CSRF-TOKEN")
-                    .unwrap()
-                    .to_str()
-                    .unwrap()
-                    .to_string(),
-            );
+            // TODO: Fix this
+            // self.xcsrf_token = Some(
+            //     response
+            //         .as_ref()
+            //         .unwrap()
+            //         .headers()
+            //         .get("X-CSRF-TOKEN")
+            //         .unwrap()
+            //         .to_str()
+            //         .unwrap()
+            //         .to_string(),
+            // );
         }
 
         match response {
@@ -162,7 +165,7 @@ impl RequestJar {
         T: for<'de> serde::Deserialize<'de>,
         PD: serde::Serialize + std::marker::Send,
     >(
-        &mut self,
+        &self,
         url: &str,
         json_data: PD,
     ) -> Result<T, Box<Error>> {
@@ -196,12 +199,7 @@ impl RequestJar {
         }
     }
 
-    pub async fn patch(
-        &mut self,
-        url: &str,
-
-        data: String,
-    ) -> Result<reqwest::Response, Box<Error>> {
+    pub async fn patch(&self, url: &str, data: String) -> Result<reqwest::Response, Box<Error>> {
         let client = self.get_reqwest_client();
 
         let response = client
@@ -231,17 +229,18 @@ impl RequestJar {
             .headers()
             .contains_key("X-CSRF-TOKEN")
         {
-            self.xcsrf_token = Some(
-                response
-                    .as_ref()
-                    .unwrap()
-                    .headers()
-                    .get("X-CSRF-TOKEN")
-                    .unwrap()
-                    .to_str()
-                    .unwrap()
-                    .to_string(),
-            );
+            // TODO: Fix this
+            // self.xcsrf_token = Some(
+            //     response
+            //         .as_ref()
+            //         .unwrap()
+            //         .headers()
+            //         .get("X-CSRF-TOKEN")
+            //         .unwrap()
+            //         .to_str()
+            //         .unwrap()
+            //         .to_string(),
+            // );
         }
 
         match response {
@@ -263,7 +262,7 @@ impl RequestJar {
         T: for<'de> serde::Deserialize<'de>,
         PD: serde::Serialize + std::marker::Send,
     >(
-        &mut self,
+        &self,
         url: &str,
         json_data: PD,
     ) -> Result<T, Box<Error>> {
@@ -297,12 +296,7 @@ impl RequestJar {
         }
     }
 
-    pub async fn delete(
-        &mut self,
-        url: &str,
-
-        data: String,
-    ) -> Result<reqwest::Response, Box<Error>> {
+    pub async fn delete(&self, url: &str, data: String) -> Result<reqwest::Response, Box<Error>> {
         let client = self.get_reqwest_client();
 
         let response = client
@@ -332,17 +326,18 @@ impl RequestJar {
             .headers()
             .contains_key("X-CSRF-TOKEN")
         {
-            self.xcsrf_token = Some(
-                response
-                    .as_ref()
-                    .unwrap()
-                    .headers()
-                    .get("X-CSRF-TOKEN")
-                    .unwrap()
-                    .to_str()
-                    .unwrap()
-                    .to_string(),
-            );
+            // TODO: Fix this
+            // self.xcsrf_token = Some(
+            //     response
+            //         .as_ref()
+            //         .unwrap()
+            //         .headers()
+            //         .get("X-CSRF-TOKEN")
+            //         .unwrap()
+            //         .to_str()
+            //         .unwrap()
+            //         .to_string(),
+            // );
         }
 
         match response {
@@ -364,7 +359,7 @@ impl RequestJar {
         T: for<'de> serde::Deserialize<'de>,
         PD: serde::Serialize + std::marker::Send,
     >(
-        &mut self,
+        &self,
         url: &str,
         json_data: PD,
     ) -> Result<T, Box<Error>> {
@@ -399,7 +394,7 @@ impl RequestJar {
     }
 
     #[async_recursion]
-    pub async fn get_xcsrf_token(&mut self, depth: u32) -> Result<(), Box<Error>> {
+    pub async fn get_xcsrf_token(&self, depth: u32) -> Result<(), Box<Error>> {
         //panic!("Not implemented yet");
         //return Ok(()); // TODO: Implement this? Might not be needed, its in noblox.js but from my very limited research it doesnt appear to be used anymore
         // After more resarch it is very needed on not get requests
@@ -427,7 +422,8 @@ impl RequestJar {
 
         match token_header {
             Some(token) => {
-                self.xcsrf_token = Some(token.to_str().unwrap().to_string());
+                // TODO: Fix this
+                // self.xcsrf_token = Some(token.to_str().unwrap().to_string());
                 return Ok(());
             }
             None => {

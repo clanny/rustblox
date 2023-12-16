@@ -31,7 +31,7 @@ pub struct MinimalGroupUser {
 ///
 /// # Error codes
 /// - 3: The user id is invalid
-pub async fn user_by_id(jar: &mut RequestJar, user_id: usize) -> Result<User, Box<Error>> {
+pub async fn user_by_id(jar: &RequestJar, user_id: usize) -> Result<User, Box<Error>> {
     let url = format!("https://users.roblox.com/v1/users/{}", user_id);
     let response = jar.get_json::<User>(&url).await?;
     Ok(response)
@@ -45,7 +45,7 @@ pub struct MinimalAuthenticatedUser {
     pub display_name: String,
 }
 
-pub async fn whoami(jar: &mut RequestJar) -> Result<MinimalAuthenticatedUser, Box<Error>> {
+pub async fn whoami(jar: &RequestJar) -> Result<MinimalAuthenticatedUser, Box<Error>> {
     let url = "https://users.roblox.com/v1/users/authenticated";
     let response = jar.get_json::<MinimalAuthenticatedUser>(&url).await?;
     Ok(response)
@@ -58,7 +58,7 @@ pub struct AgeBracketResponse {
 }
 
 /// Gets the age bracket of the currently authenticated user
-pub async fn age_bracket(jar: &mut RequestJar) -> Result<AgeBracketResponse, Box<Error>> {
+pub async fn age_bracket(jar: &RequestJar) -> Result<AgeBracketResponse, Box<Error>> {
     let url = format!("https://users.roblox.com/v1/users/authenticated/age-bracket");
     let response = jar.get_json::<AgeBracketResponse>(&url).await?;
     Ok(response)
@@ -71,7 +71,7 @@ pub struct CountryCodeResponse {
 }
 
 /// Gets the country code of the currently authenticated user
-pub async fn country_code(jar: &mut RequestJar) -> Result<CountryCodeResponse, Box<Error>> {
+pub async fn country_code(jar: &RequestJar) -> Result<CountryCodeResponse, Box<Error>> {
     let url = format!("https://users.roblox.com/v1/users/authenticated/country-code");
     let response = jar.get_json::<CountryCodeResponse>(&url).await?;
     Ok(response)
@@ -86,7 +86,7 @@ pub struct RolesResponse {
 /// Gets the roles of the currently authenticated user
 /// I have never seen this return anything other than an empty array
 /// Might be useless, don't know
-pub async fn roles(jar: &mut RequestJar) -> Result<RolesResponse, Box<Error>> {
+pub async fn roles(jar: &RequestJar) -> Result<RolesResponse, Box<Error>> {
     let url = format!("https://users.roblox.com/v1/users/authenticated/roles");
     let response = jar.get_json::<RolesResponse>(&url).await?;
     Ok(response)
@@ -120,7 +120,7 @@ pub struct BulkUsersByUsernameRequest {
 /// # Error codes
 /// - 2: Too many usernames
 pub async fn bulk_users_by_username(
-    jar: &mut RequestJar,
+    jar: &RequestJar,
     usernames: Vec<String>,
 ) -> Result<Vec<MinimalBulkUserByUsername>, Box<Error>> {
     let url = format!("https://users.roblox.com/v1/usernames/users");
@@ -164,7 +164,7 @@ pub struct BulkUsersByIdRequest {
 /// # Error codes
 /// - 2: Too many ids
 pub async fn bulk_users_by_id(
-    jar: &mut RequestJar,
+    jar: &RequestJar,
     user_ids: Vec<usize>,
 ) -> Result<Vec<MinimalBulkUserById>, Box<Error>> {
     let url = format!("https://users.roblox.com/v1/users");

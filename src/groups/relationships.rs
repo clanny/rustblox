@@ -21,7 +21,7 @@ pub mod relationships {
     #[async_recursion::async_recursion]
     #[allow(unused)] // It appears to be a bug in the checker, this kinda fixes it.
     pub async fn decline(
-        jar: &mut RequestJar,
+        jar: &RequestJar,
         group_id: usize,
         group_ids: Vec<usize>,
         relationship_type: RelationshipType,
@@ -46,7 +46,7 @@ pub mod relationships {
     #[async_recursion::async_recursion]
     #[allow(unused)] // It appears to be a bug in the checker, this kinda fixes it.
     pub async fn accept(
-        jar: &mut RequestJar,
+        jar: &RequestJar,
         group_id: usize,
         group_ids: Vec<usize>,
         relationship_type: RelationshipType,
@@ -79,7 +79,7 @@ pub mod relationship {
     #[async_recursion::async_recursion]
     #[allow(unused)] // It appears to be a bug in the checker, this kinda fixes it.
     pub async fn decline(
-        jar: &mut RequestJar,
+        jar: &RequestJar,
         group_id: usize,
         relation_group_id: usize,
         relationship_type: RelationshipType,
@@ -100,7 +100,7 @@ pub mod relationship {
     #[async_recursion::async_recursion]
     #[allow(unused)] // It appears to be a bug in the checker, this kinda fixes it.
     pub async fn accept(
-        jar: &mut RequestJar,
+        jar: &RequestJar,
         group_id: usize,
         relation_group_id: usize,
         relationship_type: RelationshipType,
@@ -156,7 +156,7 @@ pub struct GroupRelationships {
 /// - 8: Invalid or missing pagination parameters
 #[async_recursion::async_recursion]
 pub async fn relationships(
-    jar: &mut RequestJar,
+    jar: &RequestJar,
     group_id: usize,
     relationship_type: RelationshipType,
 ) -> Result<GroupRelationships, Box<Error>> {
@@ -187,10 +187,7 @@ pub async fn relationships(
 /// - 1: Group is invalid or does not exist.
 /// - 4: Group relationship type or request type is invalid.
 /// - 8: Invalid or missing pagination parameters
-pub async fn enemies(
-    jar: &mut RequestJar,
-    group_id: usize,
-) -> Result<GroupRelationships, Box<Error>> {
+pub async fn enemies(jar: &RequestJar, group_id: usize) -> Result<GroupRelationships, Box<Error>> {
     relationships(jar, group_id, RelationshipType::Enemy).await
 }
 
@@ -200,10 +197,7 @@ pub async fn enemies(
 /// - 1: Group is invalid or does not exist.
 /// - 4: Group relationship type or request type is invalid.
 /// - 8: Invalid or missing pagination parameters
-pub async fn allies(
-    jar: &mut RequestJar,
-    group_id: usize,
-) -> Result<GroupRelationships, Box<Error>> {
+pub async fn allies(jar: &RequestJar, group_id: usize) -> Result<GroupRelationships, Box<Error>> {
     relationships(jar, group_id, RelationshipType::Ally).await
 }
 
@@ -216,7 +210,7 @@ pub async fn allies(
 /// - 8: Invalid or missing pagination parameters
 #[async_recursion::async_recursion]
 pub async fn relationship_requests(
-    jar: &mut RequestJar,
+    jar: &RequestJar,
     group_id: usize,
     relationship_type: RelationshipType,
 ) -> Result<GroupRelationships, Box<Error>> {
@@ -249,7 +243,7 @@ pub async fn relationship_requests(
 /// - 5: You don't have permission to manage this group's relationships.
 /// - 8: Invalid or missing pagination parameters
 pub async fn enemy_requests(
-    jar: &mut RequestJar,
+    jar: &RequestJar,
     group_id: usize,
 ) -> Result<GroupRelationships, Box<Error>> {
     relationship_requests(jar, group_id, RelationshipType::Enemy).await
@@ -263,7 +257,7 @@ pub async fn enemy_requests(
 /// - 5: You don't have permission to manage this group's relationships.
 /// - 8: Invalid or missing pagination parameters
 pub async fn ally_requests(
-    jar: &mut RequestJar,
+    jar: &RequestJar,
     group_id: usize,
 ) -> Result<GroupRelationships, Box<Error>> {
     relationship_requests(jar, group_id, RelationshipType::Ally).await
@@ -277,7 +271,7 @@ pub async fn ally_requests(
 /// - 8: You are blocked from communicating with this user.
 /// - 11: Relationship does not exist.
 pub async fn remove(
-    jar: &mut RequestJar,
+    jar: &RequestJar,
     group_id: usize,
     target_group_id: usize,
     relationship_type: RelationshipType,
@@ -304,7 +298,7 @@ pub async fn remove(
 /// - 8: You are blocked from communicating with this user.
 /// - 11: Relationship does not exist.
 pub async fn remove_enemy(
-    jar: &mut RequestJar,
+    jar: &RequestJar,
     group_id: usize,
     target_group_id: usize,
 ) -> Result<(), Box<Error>> {
@@ -320,7 +314,7 @@ pub async fn remove_enemy(
 /// - 8: You are blocked from communicating with this user.
 /// - 11: Relationship does not exist.
 pub async fn remove_ally(
-    jar: &mut RequestJar,
+    jar: &RequestJar,
     group_id: usize,
     target_group_id: usize,
 ) -> Result<(), Box<Error>> {
@@ -341,7 +335,7 @@ pub async fn remove_ally(
 /// - 8: You are blocked from communicating with this user.
 /// - 9: Insufficient permissions.
 pub async fn send_request(
-    jar: &mut RequestJar,
+    jar: &RequestJar,
     group_id: usize,
     target_group_id: usize,
     relationship_type: RelationshipType,
@@ -373,7 +367,7 @@ pub async fn send_request(
 /// - 8: You are blocked from communicating with this user.
 /// - 9: Insufficient permissions.
 pub async fn send_enemy_request(
-    jar: &mut RequestJar,
+    jar: &RequestJar,
     group_id: usize,
     target_group_id: usize,
 ) -> Result<(), Box<Error>> {
@@ -394,7 +388,7 @@ pub async fn send_enemy_request(
 /// - 8: You are blocked from communicating with this user.
 /// - 9: Insufficient permissions.
 pub async fn send_ally_request(
-    jar: &mut RequestJar,
+    jar: &RequestJar,
     group_id: usize,
     target_group_id: usize,
 ) -> Result<(), Box<Error>> {

@@ -42,7 +42,7 @@ pub enum ValidateDisplayNameResponseEnum {
 ///
 /// (6 will never be returned because the birthdate is hardcoded)
 pub async fn validate_display_name(
-    jar: &mut RequestJar,
+    jar: &RequestJar,
     display_name: String,
 ) -> Result<ValidateDisplayNameResponseEnum, Box<Error>> {
     let url = format!(
@@ -80,7 +80,7 @@ pub async fn validate_display_name(
 /// - 3: Display name contains invalid characters
 /// - 4: Display name has been moderated
 pub async fn validate_display_name_for_user(
-    jar: &mut RequestJar,
+    jar: &RequestJar,
     display_name: String,
     user_id: usize,
 ) -> Result<ValidateDisplayNameResponseEnum, Box<Error>> {
@@ -126,7 +126,7 @@ struct SetDisplayNameRequest {
 /// - 4: Display name has been moderated
 /// - 5: Display name updates for this user have been throttled
 pub async fn set_display_name(
-    jar: &mut RequestJar,
+    jar: &RequestJar,
     new_display_name: String,
 ) -> Result<RobloxResponse<()>, Box<Error>> {
     let this_user = whoami(jar).await?;

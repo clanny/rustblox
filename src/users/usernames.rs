@@ -16,7 +16,7 @@ pub struct UsernameHistoryEntry {
 ///
 /// - 3: The user id is invalid
 pub async fn username_history(
-    jar: &mut RequestJar,
+    jar: &RequestJar,
     user_id: usize,
 ) -> Result<Vec<UsernameHistoryEntry>, Box<Error>> {
     let url = format!(

@@ -25,7 +25,7 @@ pub struct WallPost {
 /// - 1: The group is invalid or does not exist.
 /// - 2: You do not have permission to access this group wall.
 pub async fn wall(
-    jar: &mut RequestJar,
+    jar: &RequestJar,
     group_id: usize,
     limit: PageLimit,
     sort_order: Option<SortOrder>,
@@ -50,7 +50,7 @@ pub async fn wall(
 /// - 2: You do not have permission to access this group wall
 /// - 3: The group wall post id is invalid or does not exist.
 pub async fn delete_wall_post(
-    jar: &mut RequestJar,
+    jar: &RequestJar,
     group_id: usize,
     post_id: usize,
 ) -> Result<(), Box<Error>> {
@@ -69,7 +69,7 @@ pub async fn delete_wall_post(
 /// - 2: You do not have permission to access this group wall.
 /// - 6: The user specified is invalid or does not exist.
 pub async fn delete_wall_posts_by_user(
-    jar: &mut RequestJar,
+    jar: &RequestJar,
     group_id: usize,
     user_id: usize,
 ) -> Result<(), Box<Error>> {

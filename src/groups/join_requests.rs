@@ -30,7 +30,7 @@ pub mod join_requests {
     /// - 19: You have insufficient permissions for this request.
     #[allow(unused)] // It appears to be a bug in the checker, this kinda fixes it.
     pub async fn get(
-        jar: &mut RequestJar,
+        jar: &RequestJar,
         group_id: usize,
         limit: PageLimit,
     ) -> Result<Vec<JoinRequest>, Box<Error>> {
@@ -53,7 +53,7 @@ pub mod join_requests {
     /// - 20: The group join request is invalid.
     #[allow(unused)] // It appears to be a bug in the checker, this kinda fixes it.
     pub async fn accept(
-        jar: &mut RequestJar,
+        jar: &RequestJar,
         group_id: usize,
         user_ids: Vec<usize>,
     ) -> Result<(), Box<Error>> {
@@ -73,7 +73,7 @@ pub mod join_requests {
     /// - 3: The user is invalid or does not exist.
     #[allow(unused)] // It appears to be a bug in the checker, this kinda fixes it.
     pub async fn decline(
-        jar: &mut RequestJar,
+        jar: &RequestJar,
         group_id: usize,
         user_ids: Vec<usize>,
     ) -> Result<(), Box<Error>> {
@@ -114,7 +114,7 @@ pub mod join_request {
     /// - 1: The group is invalid or does not exist.
     /// - 19: You have insufficient permissions for this request.
     pub async fn get(
-        jar: &mut RequestJar,
+        jar: &RequestJar,
         group_id: usize,
         user_id: usize,
     ) -> Result<JoinRequest, Box<Error>> {
@@ -136,7 +136,7 @@ pub mod join_request {
     /// - 19: You have insufficient permissions for this request.
     /// - 20: The group join request is invalid.
     pub async fn accept(
-        jar: &mut RequestJar,
+        jar: &RequestJar,
         group_id: usize,
         user_id: usize,
     ) -> Result<(), Box<Error>> {
@@ -154,7 +154,7 @@ pub mod join_request {
     /// - 3: The user is invalid or does not exist.
     /// - 4: You do not have permission to manage this member.
     pub async fn decline(
-        jar: &mut RequestJar,
+        jar: &RequestJar,
         group_id: usize,
         user_id: usize,
     ) -> Result<(), Box<Error>> {

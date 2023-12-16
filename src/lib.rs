@@ -154,7 +154,7 @@ mod tests {
 
     #[tokio::test]
     async fn bulk_users_by_username() {
-        let mut jar = authenticated_jar().await;
+        let mut jar = unauthenticated_jar().await;
         let users = crate::users::bulk_users_by_username(
             &mut jar,
             vec!["piano1029".to_string(), "ClannyBot".to_string()],

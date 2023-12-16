@@ -15,3 +15,4 @@ Make sure to have a file named roblosecurity.txt containing a ROBLOSECURITY toke
 The following features are needed for production but haven't been implemented yet
 
 - Ratelimits
+- CSRF token handeling

@@ -49,7 +49,7 @@ pub struct GroupNameChangeConfigurationMetadata {
 }
 
 /// Gets the metadata for group configuration
-pub async fn config_metadata(jar: &mut RequestJar) -> Result<GroupConfigMetadata, Box<Error>> {
+pub async fn config_metadata(jar: &RequestJar) -> Result<GroupConfigMetadata, Box<Error>> {
     let url = "https://groups.roblox.com/v1/groups/configuration/metadata";
     let response = jar.get_json::<GroupConfigMetadata>(&url).await?;
     Ok(response)
@@ -70,7 +70,7 @@ pub struct GroupMetadata {
 }
 
 /// Gets the metadata for groups
-pub async fn metadata(jar: &mut RequestJar) -> Result<GroupMetadata, Box<Error>> {
+pub async fn metadata(jar: &RequestJar) -> Result<GroupMetadata, Box<Error>> {
     let url = "https://groups.roblox.com/v1/groups/metadata";
     let response = jar.get_json::<GroupMetadata>(&url).await?;
     Ok(response)

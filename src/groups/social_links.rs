@@ -44,7 +44,7 @@ pub struct SocialLink {
 /// - 11: Social links cannot be processed as this time.
 /// - 13: Only users who are over thirteen years of age may view social links.
 pub async fn social_links(
-    jar: &mut RequestJar,
+    jar: &RequestJar,
     group_id: usize,
 ) -> Result<Vec<SocialLink>, Box<Error>> {
     let url = format!(
@@ -71,7 +71,7 @@ pub async fn social_links(
 /// - 12: The social link title was moderated.
 /// - 16: A social link with this type already exists on this group.
 pub async fn add_social_link(
-    jar: &mut RequestJar,
+    jar: &RequestJar,
     group_id: usize,
     social_link: SocialLink,
 ) -> Result<(), Box<Error>> {
@@ -94,7 +94,7 @@ pub async fn add_social_link(
 /// - 13: Only users who are over thirteen years of age may edit social links.
 /// - 15: The social link id doesn't match the group id.
 pub async fn delete_social_link(
-    jar: &mut RequestJar,
+    jar: &RequestJar,
     group_id: usize,
     social_link_id: usize,
 ) -> Result<(), Box<Error>> {
@@ -124,7 +124,7 @@ pub async fn delete_social_link(
 /// - 12: The social link title was moderated.
 /// - 16: A social link with this type already exists on this group.
 pub async fn update_social_link(
-    jar: &mut RequestJar,
+    jar: &RequestJar,
     group_id: usize,
     social_link: SocialLink,
 ) -> Result<(), Box<Error>> {
