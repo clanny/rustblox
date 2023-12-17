@@ -12,7 +12,7 @@ use super::{ThumbnailFormat, ThumbnailResponse, ThumbnailSize};
 /// - 10: Circular thumbnail requests are not allowed
 pub async fn get_game_pass_icons(
     jar: &RequestJar,
-    game_pass_ids: Vec<u32>,
+    game_pass_ids: Vec<i64>,
     thumbnail_size: Option<ThumbnailSize>,
     thumbnail_format: Option<ThumbnailFormat>,
     is_circular: bool,

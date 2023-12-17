@@ -14,7 +14,7 @@ use super::{ThumbnailFormat, ThumbnailResponse, ThumbnailReturnPolicy, Thumbnail
 /// - 10: Circular thumbnail requests are not allowed
 pub async fn get_thumbnails(
     jar: &RequestJar,
-    asset_ids: Vec<u32>,
+    asset_ids: Vec<i64>,
     thumbnail_size: Option<ThumbnailSize>,
     thumbnail_return_policy: Option<ThumbnailReturnPolicy>,
     thumbnail_format: Option<ThumbnailFormat>,
@@ -46,7 +46,7 @@ pub async fn get_thumbnails(
 /// - 4: The requested Ids are invalid, of an invalid type or missing.
 pub async fn get_3d_thumbnail(
     jar: &RequestJar,
-    asset_id: u32,
+    asset_id: i64,
 ) -> Result<ThumbnailResponse, Box<Error>> {
     let url = format!(
         "https://thumbnails.roblox.com/v1/asset-thumbnail-3d?assetId={}",
@@ -62,7 +62,7 @@ pub async fn get_3d_thumbnail(
 /// - 4: The requested Ids are invalid, of an invalid type or missing.
 pub async fn get_animated_thumbnail(
     jar: &RequestJar,
-    asset_id: u32,
+    asset_id: i64,
 ) -> Result<ThumbnailResponse, Box<Error>> {
     let url = format!(
         "https://thumbnails.roblox.com/v1/asset-thumbnail-animated?assetId={}",

@@ -13,8 +13,8 @@ use super::{ThumbnailFormat, ThumbnailResponse, ThumbnailReturnPolicy, Thumbnail
 /// - 10: Circular thumbnail requests are not allowed
 pub async fn get_game_thumbnails(
     jar: &RequestJar,
-    universe_id: u32,
-    thumbnail_ids: Vec<u32>,
+    universe_id: i64,
+    thumbnail_ids: Vec<i64>,
     thumbnail_size: Option<ThumbnailSize>,
     thumbnail_format: Option<ThumbnailFormat>,
     is_circular: bool,
@@ -49,7 +49,7 @@ pub async fn get_game_thumbnails(
 /// - 10: Circular thumbnail requests are not allowed
 pub async fn get_game_icons(
     jar: &RequestJar,
-    universe_ids: Vec<u32>,
+    universe_ids: Vec<i64>,
     thumbnail_size: Option<ThumbnailSize>,
     thumbnail_return_policy: Option<ThumbnailReturnPolicy>,
     thumbnail_format: Option<ThumbnailFormat>,

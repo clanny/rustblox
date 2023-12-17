@@ -394,7 +394,7 @@ impl RequestJar {
     }
 
     #[async_recursion]
-    pub async fn get_xcsrf_token(&self, depth: u32) -> Result<(), Box<Error>> {
+    pub async fn get_xcsrf_token(&self, depth: i64) -> Result<(), Box<Error>> {
         //panic!("Not implemented yet");
         //return Ok(()); // TODO: Implement this? Might not be needed, its in noblox.js but from my very limited research it doesnt appear to be used anymore
         // After more resarch it is very needed on not get requests

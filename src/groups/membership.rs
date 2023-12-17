@@ -13,7 +13,7 @@ use super::{roles, user_role};
 /// - 4: You do not have permission to manage this member.
 /// - 18: The operation is temporarily unavailable. Please try again later.
 /// - 25: 2-Step Verification is required to make further transactions. Go to Settings > Security to complete 2-Step Verification.
-pub async fn remove_user(jar: &RequestJar, group_id: u32, user_id: u32) -> Result<(), Box<Error>> {
+pub async fn remove_user(jar: &RequestJar, group_id: i64, user_id: i64) -> Result<(), Box<Error>> {
     let url = format!(
         "https://groups.roblox.com/v1/groups/{}/users/{}",
         group_id, user_id
@@ -25,7 +25,7 @@ pub async fn remove_user(jar: &RequestJar, group_id: u32, user_id: u32) -> Resul
 #[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct UpdateUserRoleRequest {
-    pub role_id: u32,
+    pub role_id: i64,
 }
 
 /// Sets a user's role in a group.
@@ -40,9 +40,9 @@ pub struct UpdateUserRoleRequest {
 /// - 26: You cannot change the user's role to the same role.
 pub async fn set_role(
     jar: &RequestJar,
-    group_id: u32,
-    user_id: u32,
-    role_id: u32,
+    group_id: i64,
+    user_id: i64,
+    role_id: i64,
 ) -> Result<(), Box<Error>> {
     let url = format!(
         "https://groups.roblox.com/v1/groups/{}/users/{}",
@@ -66,9 +66,9 @@ pub async fn set_role(
 /// - 26: You cannot change the user's role to the same role.
 pub async fn set_rank(
     jar: &RequestJar,
-    group_id: u32,
-    user_id: u32,
-    role_id: u32,
+    group_id: i64,
+    user_id: i64,
+    role_id: i64,
 ) -> Result<(), Box<Error>> {
     set_role(jar, group_id, user_id, role_id).await?;
     Ok(())
@@ -88,9 +88,9 @@ pub async fn set_rank(
 /// - 200: The user's rank was not found.
 pub async fn modify_rank_by_amount(
     jar: &RequestJar,
-    group_id: u32,
-    user_id: u32,
-    amount: u32,
+    group_id: i64,
+    user_id: i64,
+    amount: i64,
 ) -> Result<(), Box<Error>> {
     let ranks = roles(jar, group_id).await?;
     let user_rank = user_role(jar, group_id, user_id).await?;
@@ -128,7 +128,7 @@ pub async fn modify_rank_by_amount(
 /// - 18: The operation is temporarily unavailable. Please try again later.
 /// - 23: You cannot change your own role.
 /// - 26: You cannot change the user's role to the same role.
-pub async fn promote(jar: &RequestJar, group_id: u32, user_id: u32) -> Result<(), Box<Error>> {
+pub async fn promote(jar: &RequestJar, group_id: i64, user_id: i64) -> Result<(), Box<Error>> {
     modify_rank_by_amount(jar, group_id, user_id, 1).await?;
     Ok(())
 }
@@ -143,7 +143,7 @@ pub async fn promote(jar: &RequestJar, group_id: u32, user_id: u32) -> Result<()
 /// - 18: The operation is temporarily unavailable. Please try again later.
 /// - 23: You cannot change your own role.
 /// - 26: You cannot change the user's role to the same role.
-pub async fn demote(jar: &RequestJar, group_id: u32, user_id: u32) -> Result<(), Box<Error>> {
+pub async fn demote(jar: &RequestJar, group_id: i64, user_id: i64) -> Result<(), Box<Error>> {
     modify_rank_by_amount(jar, group_id, user_id, 1).await?;
     Ok(())
 }

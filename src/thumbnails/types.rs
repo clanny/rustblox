@@ -105,7 +105,7 @@ impl ThumbnailFormat {
 #[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct ThumbnailResponse {
-    pub target_id: u32,
+    pub target_id: i64,
     pub state: String,
     pub image_url: String,
 }

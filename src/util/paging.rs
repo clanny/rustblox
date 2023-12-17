@@ -28,7 +28,7 @@ pub enum PageLimit {
 
 // Implement a trait for PageLimit to get the limit as a number
 impl PageLimit {
-    pub fn get_limit(&self) -> u32 {
+    pub fn get_limit(&self) -> i64 {
         match self {
             PageLimit::All => 20000,
             PageLimit::Limit10 => 10,

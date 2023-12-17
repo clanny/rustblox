@@ -20,7 +20,7 @@ pub struct PayoutRestrictions {
 /// - 9: You don't have permission to view this group's payouts.
 pub async fn get_payout_restrictions(
     jar: &RequestJar,
-    group_id: u32,
+    group_id: i64,
 ) -> Result<PayoutRestrictions, Box<Error>> {
     let url = format!(
         "https://groups.roblox.com/v1/groups/{}/payout-restrictions",
@@ -44,7 +44,7 @@ pub struct RecurringPayout {
 /// - 9: You don't have permission to view this group's payouts.
 pub async fn get_recurring_payouts(
     jar: &RequestJar,
-    group_id: u32,
+    group_id: i64,
 ) -> Result<Vec<RecurringPayout>, Box<Error>> {
     let url = format!("https://groups.roblox.com/v1/groups/{}/payouts", group_id);
     let response = jar

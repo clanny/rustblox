@@ -14,7 +14,7 @@ use crate::{
 pub struct UsernameSearchEntry {
     pub previous_usernames: Vec<String>,
     pub has_verified_badge: bool,
-    pub id: u32,
+    pub id: i64,
     pub name: String,
     pub display_name: String,
 }
