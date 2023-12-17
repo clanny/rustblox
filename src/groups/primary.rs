@@ -18,7 +18,7 @@ pub struct PrimaryGroupResponse {
 /// 4: User is invalid or does not exist.
 pub async fn primary_group(
     jar: &RequestJar,
-    user_id: usize,
+    user_id: u32,
 ) -> Result<PrimaryGroupResponse, Box<Error>> {
     let url = format!(
         "https://groups.roblox.com/v1/users/{}/groups/primary/role",
@@ -43,7 +43,7 @@ pub async fn remove_primary_group(jar: &RequestJar) -> Result<(), Box<Error>> {
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SetPrimaryGroupRequest {
-    pub group_id: usize,
+    pub group_id: u32,
 }
 
 /// Sets the currently authenticated user's primary group.
@@ -52,7 +52,7 @@ pub struct SetPrimaryGroupRequest {
 /// 0: Authorization has been denied for this request.
 /// 1: Group is invalid or does not exist.
 /// 2: You aren't a member of the group specified.
-pub async fn set_primary_group(jar: &RequestJar, group_id: usize) -> Result<(), Box<Error>> {
+pub async fn set_primary_group(jar: &RequestJar, group_id: u32) -> Result<(), Box<Error>> {
     let url = format!(
         "https://groups.roblox.com/v1/user/groups/{}/primary",
         group_id

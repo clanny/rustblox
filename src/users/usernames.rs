@@ -17,7 +17,7 @@ pub struct UsernameHistoryEntry {
 /// - 3: The user id is invalid
 pub async fn username_history(
     jar: &RequestJar,
-    user_id: usize,
+    user_id: u32,
 ) -> Result<Vec<UsernameHistoryEntry>, Box<Error>> {
     let url = format!(
         "https://users.roblox.com/v1/users/{}/username-history",

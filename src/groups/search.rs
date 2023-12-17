@@ -5,10 +5,10 @@ use crate::util::{jar::RequestJar, paging::PageLimit, responses::DataWrapper, Er
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct SearchGroup {
-    pub id: usize,
+    pub id: u32,
     pub name: String,
     pub description: String,
-    pub member_count: usize,
+    pub member_count: u32,
     pub previous_name: Option<String>,
     pub public_entry_allowed: bool,
     pub created: String,
@@ -19,9 +19,9 @@ pub struct SearchGroup {
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct MinimalSearchGroup {
-    pub id: usize,
+    pub id: u32,
     pub name: String,
-    pub member_count: usize,
+    pub member_count: u32,
     pub has_verified_badge: bool,
 }
 

@@ -12,7 +12,7 @@ use super::ThumbnailResponse;
 /// - 10: Circular thumbnail requests are not allowed
 pub async fn get_badge_thumbnails(
     jar: &RequestJar,
-    badge_ids: Vec<usize>,
+    badge_ids: Vec<u32>,
     is_circular: bool,
 ) -> Result<ThumbnailResponse, Box<Error>> {
     let url = format!(

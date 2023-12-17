@@ -12,7 +12,7 @@ use crate::{
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct WallPost {
-    pub id: usize,
+    pub id: u32,
     pub poster: MinimalGroupUser,
     pub body: String,
     pub created: String,
@@ -26,7 +26,7 @@ pub struct WallPost {
 /// - 2: You do not have permission to access this group wall.
 pub async fn wall(
     jar: &RequestJar,
-    group_id: usize,
+    group_id: u32,
     limit: PageLimit,
     sort_order: Option<SortOrder>,
 ) -> Result<Vec<WallPost>, Box<Error>> {
@@ -51,8 +51,8 @@ pub async fn wall(
 /// - 3: The group wall post id is invalid or does not exist.
 pub async fn delete_wall_post(
     jar: &RequestJar,
-    group_id: usize,
-    post_id: usize,
+    group_id: u32,
+    post_id: u32,
 ) -> Result<(), Box<Error>> {
     let url = format!(
         "https://groups.roblox.com/v1/groups/{}/wall/posts/{}",
@@ -70,8 +70,8 @@ pub async fn delete_wall_post(
 /// - 6: The user specified is invalid or does not exist.
 pub async fn delete_wall_posts_by_user(
     jar: &RequestJar,
-    group_id: usize,
-    user_id: usize,
+    group_id: u32,
+    user_id: u32,
 ) -> Result<(), Box<Error>> {
     let url = format!(
         "https://groups.roblox.com/v1/groups/{}/wall/users/{}/posts",

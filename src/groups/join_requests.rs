@@ -13,7 +13,7 @@ pub mod join_requests {
     #[derive(Debug, Serialize, Deserialize)]
     #[serde(rename_all = "camelCase")]
     pub struct BatchRequest {
-        pub user_ids: Vec<usize>,
+        pub user_ids: Vec<u32>,
     }
 
     #[derive(Debug, Serialize, Deserialize)]
@@ -31,7 +31,7 @@ pub mod join_requests {
     #[allow(unused)] // It appears to be a bug in the checker, this kinda fixes it.
     pub async fn get(
         jar: &RequestJar,
-        group_id: usize,
+        group_id: u32,
         limit: PageLimit,
     ) -> Result<Vec<JoinRequest>, Box<Error>> {
         let url = format!(
@@ -54,8 +54,8 @@ pub mod join_requests {
     #[allow(unused)] // It appears to be a bug in the checker, this kinda fixes it.
     pub async fn accept(
         jar: &RequestJar,
-        group_id: usize,
-        user_ids: Vec<usize>,
+        group_id: u32,
+        user_ids: Vec<u32>,
     ) -> Result<(), Box<Error>> {
         let url = format!(
             "https://groups.roblox.com/v1/groups/{}/join-requests",
@@ -74,8 +74,8 @@ pub mod join_requests {
     #[allow(unused)] // It appears to be a bug in the checker, this kinda fixes it.
     pub async fn decline(
         jar: &RequestJar,
-        group_id: usize,
-        user_ids: Vec<usize>,
+        group_id: u32,
+        user_ids: Vec<u32>,
     ) -> Result<(), Box<Error>> {
         let url = format!(
             "https://groups.roblox.com/v1/groups/{}/join-requests",
@@ -98,7 +98,7 @@ pub mod join_request {
     #[derive(Debug, Serialize, Deserialize)]
     #[serde(rename_all = "camelCase")]
     pub struct BatchRequest {
-        pub user_ids: Vec<usize>,
+        pub user_ids: Vec<u32>,
     }
 
     #[derive(Debug, Serialize, Deserialize)]
@@ -115,8 +115,8 @@ pub mod join_request {
     /// - 19: You have insufficient permissions for this request.
     pub async fn get(
         jar: &RequestJar,
-        group_id: usize,
-        user_id: usize,
+        group_id: u32,
+        user_id: u32,
     ) -> Result<JoinRequest, Box<Error>> {
         let url = format!(
             "https://groups.roblox.com/v1/groups/{}/join-requests/users/{}",
@@ -135,11 +135,7 @@ pub mod join_request {
     /// - 18: The operation is temporarily unavailable. Please try again later.
     /// - 19: You have insufficient permissions for this request.
     /// - 20: The group join request is invalid.
-    pub async fn accept(
-        jar: &RequestJar,
-        group_id: usize,
-        user_id: usize,
-    ) -> Result<(), Box<Error>> {
+    pub async fn accept(jar: &RequestJar, group_id: u32, user_id: u32) -> Result<(), Box<Error>> {
         let url = format!(
             "https://groups.roblox.com/v1/groups/{}/join-requests/users/{}",
             group_id, user_id
@@ -153,11 +149,7 @@ pub mod join_request {
     /// # Error codes
     /// - 3: The user is invalid or does not exist.
     /// - 4: You do not have permission to manage this member.
-    pub async fn decline(
-        jar: &RequestJar,
-        group_id: usize,
-        user_id: usize,
-    ) -> Result<(), Box<Error>> {
+    pub async fn decline(jar: &RequestJar, group_id: u32, user_id: u32) -> Result<(), Box<Error>> {
         let url = format!(
             "https://groups.roblox.com/v1/groups/{}/join-requests/users/{}",
             group_id, user_id

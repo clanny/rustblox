@@ -30,7 +30,7 @@ pub enum SocialLinkType {
 #[serde(rename_all = "camelCase")]
 pub struct SocialLink {
     /// Only present when retrieving social links. Do not provide when adding a social link.
-    pub id: Option<usize>,
+    pub id: Option<u32>,
     #[serde(rename = "type")] // Rust doesn't like "type" as a field name
     pub link_type: SocialLinkType,
     pub url: String,
@@ -43,10 +43,7 @@ pub struct SocialLink {
 /// - 1: The group is invalid or does not exist.
 /// - 11: Social links cannot be processed as this time.
 /// - 13: Only users who are over thirteen years of age may view social links.
-pub async fn social_links(
-    jar: &RequestJar,
-    group_id: usize,
-) -> Result<Vec<SocialLink>, Box<Error>> {
+pub async fn social_links(jar: &RequestJar, group_id: u32) -> Result<Vec<SocialLink>, Box<Error>> {
     let url = format!(
         "https://groups.roblox.com/v1/groups/{}/social-links",
         group_id
@@ -72,7 +69,7 @@ pub async fn social_links(
 /// - 16: A social link with this type already exists on this group.
 pub async fn add_social_link(
     jar: &RequestJar,
-    group_id: usize,
+    group_id: u32,
     social_link: SocialLink,
 ) -> Result<(), Box<Error>> {
     let url = format!(
@@ -95,8 +92,8 @@ pub async fn add_social_link(
 /// - 15: The social link id doesn't match the group id.
 pub async fn delete_social_link(
     jar: &RequestJar,
-    group_id: usize,
-    social_link_id: usize,
+    group_id: u32,
+    social_link_id: u32,
 ) -> Result<(), Box<Error>> {
     let url = format!(
         "https://groups.roblox.com/v1/groups/{}/social-links/{}",
@@ -125,7 +122,7 @@ pub async fn delete_social_link(
 /// - 16: A social link with this type already exists on this group.
 pub async fn update_social_link(
     jar: &RequestJar,
-    group_id: usize,
+    group_id: u32,
     social_link: SocialLink,
 ) -> Result<(), Box<Error>> {
     let url = format!(

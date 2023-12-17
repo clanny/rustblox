@@ -12,7 +12,7 @@ use super::{ThumbnailFormat, ThumbnailResponse, ThumbnailSize};
 /// - 10: Circular thumbnail requests are not allowed
 pub async fn get_developer_product_icons(
     jar: &RequestJar,
-    developer_product_ids: Vec<usize>,
+    developer_product_ids: Vec<u32>,
     thumbnail_size: Option<ThumbnailSize>,
     thumbnail_format: Option<ThumbnailFormat>,
     is_circular: bool,

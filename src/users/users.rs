@@ -13,7 +13,7 @@ pub struct User {
     pub is_banned: bool,
     pub external_app_display_name: Option<String>,
     pub has_verified_badge: bool,
-    pub id: usize,
+    pub id: u32,
     pub name: String,
     pub display_name: String,
 }
@@ -22,7 +22,7 @@ pub struct User {
 #[serde(rename_all = "camelCase")]
 pub struct MinimalGroupUser {
     pub has_verified_badge: bool,
-    pub user_id: usize,
+    pub user_id: u32,
     pub username: String,
     pub display_name: String,
 }
@@ -31,7 +31,7 @@ pub struct MinimalGroupUser {
 ///
 /// # Error codes
 /// - 3: The user id is invalid
-pub async fn user_by_id(jar: &RequestJar, user_id: usize) -> Result<User, Box<Error>> {
+pub async fn user_by_id(jar: &RequestJar, user_id: u32) -> Result<User, Box<Error>> {
     let url = format!("https://users.roblox.com/v1/users/{}", user_id);
     let response = jar.get_json::<User>(&url).await?;
     Ok(response)
@@ -40,7 +40,7 @@ pub async fn user_by_id(jar: &RequestJar, user_id: usize) -> Result<User, Box<Er
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct MinimalAuthenticatedUser {
-    pub id: usize,
+    pub id: u32,
     pub name: String,
     pub display_name: String,
 }
@@ -54,7 +54,7 @@ pub async fn whoami(jar: &RequestJar) -> Result<MinimalAuthenticatedUser, Box<Er
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct AgeBracketResponse {
-    pub age_bracket: usize,
+    pub age_bracket: u32,
 }
 
 /// Gets the age bracket of the currently authenticated user
@@ -97,7 +97,7 @@ pub async fn roles(jar: &RequestJar) -> Result<RolesResponse, Box<Error>> {
 pub struct MinimalBulkUserByUsername {
     pub requested_username: String,
     pub has_verified_badge: bool,
-    pub id: usize,
+    pub id: u32,
     pub name: String,
     pub display_name: String,
 }
@@ -141,7 +141,7 @@ pub async fn bulk_users_by_username(
 #[serde(rename_all = "camelCase")]
 pub struct MinimalBulkUserById {
     pub has_verified_badge: bool,
-    pub id: usize,
+    pub id: u32,
     pub name: String,
     pub display_name: String,
 }
@@ -149,7 +149,7 @@ pub struct MinimalBulkUserById {
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct BulkUsersByIdRequest {
-    pub user_ids: Vec<usize>,
+    pub user_ids: Vec<u32>,
     exclude_banned_users: bool,
 }
 
@@ -165,7 +165,7 @@ pub struct BulkUsersByIdRequest {
 /// - 2: Too many ids
 pub async fn bulk_users_by_id(
     jar: &RequestJar,
-    user_ids: Vec<usize>,
+    user_ids: Vec<u32>,
 ) -> Result<Vec<MinimalBulkUserById>, Box<Error>> {
     let url = format!("https://users.roblox.com/v1/users");
     let request = BulkUsersByIdRequest {

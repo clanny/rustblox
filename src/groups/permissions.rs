@@ -63,7 +63,7 @@ pub struct GroupOpenCloudPermissions {
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct RolePermissions {
-    pub group_id: usize,
+    pub group_id: u32,
     pub role: GroupRole,
     pub permissions: GroupPermissions,
 }
@@ -76,8 +76,8 @@ pub struct RolePermissions {
 /// - 3: You are not authorized to view/edit permissions for this role.
 pub async fn role_permissions(
     jar: &RequestJar,
-    group_id: usize,
-    role_id: usize,
+    group_id: u32,
+    role_id: u32,
 ) -> Result<RolePermissions, Box<Error>> {
     let url = format!(
         "https://groups.roblox.com/v1/groups/{}/roles/{}/permissions",
@@ -129,8 +129,8 @@ pub struct UpdateRolePermissionsRequest {
 /// - 4: This role's permissions can not be modified.
 pub async fn update_role_permissions(
     jar: &RequestJar,
-    group_id: usize,
-    role_id: usize,
+    group_id: u32,
+    role_id: u32,
     permissions: UpdateRolePermissionsRequestPermissions,
 ) -> Result<(), Box<Error>> {
     let url = format!(
@@ -152,7 +152,7 @@ pub async fn update_role_permissions(
 /// - 3: You are not authorized to view/edit permissions for this role.
 pub async fn guest_permissions(
     jar: &RequestJar,
-    group_id: usize,
+    group_id: u32,
 ) -> Result<RolePermissions, Box<Error>> {
     let url = format!(
         "https://groups.roblox.com/v1/groups/{}/roles/guest/permissions",
@@ -172,7 +172,7 @@ pub async fn guest_permissions(
 /// *Note: None were provided in the documentation*
 pub async fn permissions(
     jar: &RequestJar,
-    group_id: usize,
+    group_id: u32,
 ) -> Result<Vec<RolePermissions>, Box<Error>> {
     let url = format!(
         "https://groups.roblox.com/v1/groups/{}/roles/permissions",

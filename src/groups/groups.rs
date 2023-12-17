@@ -16,12 +16,12 @@ use super::{permissions::GroupPermissions, roles::GroupRole};
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct Group {
-    pub id: usize,
+    pub id: u32,
     pub name: String,
     pub description: String,
     pub owner: MinimalGroupUser,
     pub shout: Option<GroupShout>,
-    pub member_count: Option<usize>,
+    pub member_count: Option<u32>,
     pub is_builders_club_only: bool,
     pub public_entry_allowed: bool,
     pub is_locked: Option<bool>,
@@ -41,7 +41,7 @@ pub struct GroupShout {
 ///
 /// # Error codes
 /// - 1: Group is invalid or does not exist.
-pub async fn group_by_id(jar: &RequestJar, group_id: usize) -> Result<Group, Box<Error>> {
+pub async fn group_by_id(jar: &RequestJar, group_id: u32) -> Result<Group, Box<Error>> {
     let url = format!("https://groups.roblox.com/v1/groups/{}", group_id);
     let response = jar.get_json::<Group>(&url).await?;
     Ok(response)
@@ -120,9 +120,9 @@ pub enum GroupAuditLogActionType {
 /// - 23: Insufficient permissions to complete the request.
 pub async fn audit_log(
     jar: &RequestJar,
-    group_id: usize,
+    group_id: u32,
     limit: PageLimit,
-    user_id: Option<usize>,
+    user_id: Option<u32>,
     sort_order: Option<SortOrder>,
     //cursor: Option<String>,
 ) -> Result<Vec<GroupAuditLogEntry>, Box<Error>> {
@@ -151,7 +151,7 @@ pub struct GroupNameHistoryEntry {
 /// - 23: Insufficient permissions to complete the request.
 pub async fn name_history(
     jar: &RequestJar,
-    group_id: usize,
+    group_id: u32,
     limit: PageLimit,
     sort_order: Option<SortOrder>,
     //cursor: Option<String>,
@@ -182,7 +182,7 @@ pub struct GroupSettings {
 /// # Error codes
 /// - 1: Group is invalid or does not exist.
 /// - 23: Insufficient permissions to complete the request.
-pub async fn settings(jar: &RequestJar, group_id: usize) -> Result<GroupSettings, Box<Error>> {
+pub async fn settings(jar: &RequestJar, group_id: u32) -> Result<GroupSettings, Box<Error>> {
     let url = format!("https://groups.roblox.com/v1/groups/{}/settings", group_id);
     let response = jar.get_json::<GroupSettings>(&url).await?;
     Ok(response)
@@ -209,7 +209,7 @@ pub struct GroupSettingsUpdateResponse {}
 /// - 31: Service is currently unavailable.
 pub async fn update_settings(
     jar: &RequestJar,
-    group_id: usize,
+    group_id: u32,
     request: GroupSettingsUpdateRequest,
 ) -> Result<GroupSettingsUpdateResponse, Box<Error>> {
     let url = format!("https://groups.roblox.com/v1/groups/{}/settings", group_id);
@@ -225,7 +225,7 @@ pub async fn update_settings(
 #[serde(rename_all = "camelCase")]
 pub struct GroupComplianceItem {
     pub can_view_group: bool,
-    pub group_id: usize,
+    pub group_id: u32,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -237,7 +237,7 @@ pub struct GroupComplianceResponse {
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct GroupComplianceRequest {
-    pub group_ids: Vec<usize>,
+    pub group_ids: Vec<u32>,
 }
 
 /// Gets group policy info used for compliance
@@ -246,7 +246,7 @@ pub struct GroupComplianceRequest {
 /// - 2: Ids could not be parsed from request.
 pub async fn compliance(
     jar: &RequestJar,
-    group_ids: Vec<usize>,
+    group_ids: Vec<u32>,
 ) -> Result<GroupComplianceResponse, Box<Error>> {
     let url = format!("https://groups.roblox.com/v1/groups/policies");
     let request = GroupComplianceRequest { group_ids };
@@ -276,7 +276,7 @@ pub struct NewDescriptionResponse {
 /// - 29: Your group description was empty.
 pub async fn update_description(
     jar: &RequestJar,
-    group_id: usize,
+    group_id: u32,
     description: String,
 ) -> Result<NewDescriptionResponse, Box<Error>> {
     let url = format!(
@@ -313,7 +313,7 @@ pub struct NewNameResponse {
 /// - 29: Your group description was empty.
 pub async fn update_name(
     jar: &RequestJar,
-    group_id: usize,
+    group_id: u32,
     name: String,
 ) -> Result<NewNameResponse, Box<Error>> {
     let url = format!(
@@ -334,7 +334,7 @@ pub async fn update_name(
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct GroupMembership {
-    pub group_id: usize,
+    pub group_id: u32,
     pub is_primary: bool,
     pub is_pending_join: bool,
     pub group_role: Option<GroupMembershipUserRole>,
@@ -356,7 +356,7 @@ pub struct GroupMembershipUserRole {
 ///
 /// # Error codes
 /// - 1: Group is invalid or does not exist.
-pub async fn membership(jar: &RequestJar, group_id: usize) -> Result<GroupMembership, Box<Error>> {
+pub async fn membership(jar: &RequestJar, group_id: u32) -> Result<GroupMembership, Box<Error>> {
     let url = format!(
         "https://groups.roblox.com/v1/groups/{}/membership",
         group_id
@@ -371,7 +371,7 @@ pub async fn membership(jar: &RequestJar, group_id: usize) -> Result<GroupMember
 /// - 1: The group is invalid or does not exist.
 pub async fn members(
     jar: &RequestJar,
-    group_id: usize,
+    group_id: u32,
     limit: PageLimit,
     sort_order: Option<SortOrder>,
 ) -> Result<Vec<GroupMembershipUserRole>, Box<Error>> {
@@ -446,7 +446,7 @@ pub struct UserMembershipsGroupItem {
 /// - 3: The user is invalid or does not exist.
 pub async fn user_memberships(
     jar: &RequestJar,
-    user_id: usize,
+    user_id: u32,
 ) -> Result<Vec<UserMembershipsGroupItem>, Box<Error>> {
     let url = format!(
         "https://groups.roblox.com/v1/users/{}/groups/roles",
@@ -461,7 +461,7 @@ pub async fn user_memberships(
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct GroupOwnershipChangeRequest {
-    pub user_id: usize,
+    pub user_id: u32,
 }
 
 /// Changes the owner of a group
@@ -473,11 +473,7 @@ pub struct GroupOwnershipChangeRequest {
 /// - 16: The user does not have the necessary level of premium membership.
 /// - 17: You are not authorized to change the owner of this group.
 /// - 25: 2-Step Verification is required to make further transactions. Go to Settings > Security to complete 2-Step Verification.
-pub async fn change_owner(
-    jar: &RequestJar,
-    group_id: usize,
-    user_id: usize,
-) -> Result<(), Box<Error>> {
+pub async fn change_owner(jar: &RequestJar, group_id: u32, user_id: u32) -> Result<(), Box<Error>> {
     let url = format!(
         "https://groups.roblox.com/v1/groups/{}/change-owner",
         group_id
@@ -495,7 +491,7 @@ pub async fn change_owner(
 /// - 12: This group already has an owner.
 /// - 13: Too many attempts to claim groups. Please try again later.
 /// - 18: The operation is temporarily unavailable. Please try again later.
-pub async fn claim_ownership(jar: &RequestJar, group_id: usize) -> Result<(), Box<Error>> {
+pub async fn claim_ownership(jar: &RequestJar, group_id: u32) -> Result<(), Box<Error>> {
     let url = format!(
         "https://groups.roblox.com/v1/groups/{}/claim-ownership",
         group_id

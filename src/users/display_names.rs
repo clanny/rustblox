@@ -14,7 +14,7 @@ pub struct ValidateDisplayNameResponse {} // Yes, this is an empty struct. Roblo
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ValidateDisplayNameFailedResponseError {
-    code: usize,
+    code: u32,
     message: String,
     user_facing_message: String,
 }
@@ -82,7 +82,7 @@ pub async fn validate_display_name(
 pub async fn validate_display_name_for_user(
     jar: &RequestJar,
     display_name: String,
-    user_id: usize,
+    user_id: u32,
 ) -> Result<ValidateDisplayNameResponseEnum, Box<Error>> {
     let url = format!(
         "https://users.roblox.com/v1/users/{}/display-names/validate?displayName={}",

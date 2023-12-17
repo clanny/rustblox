@@ -7,7 +7,7 @@ use super::Group;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct BatchRequest {
-    pub group_ids: Vec<usize>,
+    pub group_ids: Vec<u32>,
 }
 
 /// Batch management of group relationships (enemies and allies)
@@ -22,8 +22,8 @@ pub mod relationships {
     #[allow(unused)] // It appears to be a bug in the checker, this kinda fixes it.
     pub async fn decline(
         jar: &RequestJar,
-        group_id: usize,
-        group_ids: Vec<usize>,
+        group_id: u32,
+        group_ids: Vec<u32>,
         relationship_type: RelationshipType,
     ) -> Result<(), Box<Error>> {
         if relationship_type == RelationshipType::All {
@@ -47,8 +47,8 @@ pub mod relationships {
     #[allow(unused)] // It appears to be a bug in the checker, this kinda fixes it.
     pub async fn accept(
         jar: &RequestJar,
-        group_id: usize,
-        group_ids: Vec<usize>,
+        group_id: u32,
+        group_ids: Vec<u32>,
         relationship_type: RelationshipType,
     ) -> Result<(), Box<Error>> {
         if relationship_type == RelationshipType::All {
@@ -80,8 +80,8 @@ pub mod relationship {
     #[allow(unused)] // It appears to be a bug in the checker, this kinda fixes it.
     pub async fn decline(
         jar: &RequestJar,
-        group_id: usize,
-        relation_group_id: usize,
+        group_id: u32,
+        relation_group_id: u32,
         relationship_type: RelationshipType,
     ) -> Result<(), Box<Error>> {
         let url = format!(
@@ -101,8 +101,8 @@ pub mod relationship {
     #[allow(unused)] // It appears to be a bug in the checker, this kinda fixes it.
     pub async fn accept(
         jar: &RequestJar,
-        group_id: usize,
-        relation_group_id: usize,
+        group_id: u32,
+        relation_group_id: u32,
         relationship_type: RelationshipType,
     ) -> Result<(), Box<Error>> {
         let url = format!(
@@ -141,9 +141,9 @@ impl RelationshipType {
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct GroupRelationships {
-    pub group_id: usize,
+    pub group_id: u32,
     pub relationship_type: RelationshipType,
-    pub total_group_count: usize,
+    pub total_group_count: u32,
     #[serde(rename = "relatedGroups")]
     pub groups: Vec<Group>,
 }
@@ -157,7 +157,7 @@ pub struct GroupRelationships {
 #[async_recursion::async_recursion]
 pub async fn relationships(
     jar: &RequestJar,
-    group_id: usize,
+    group_id: u32,
     relationship_type: RelationshipType,
 ) -> Result<GroupRelationships, Box<Error>> {
     if relationship_type == RelationshipType::All {
@@ -187,7 +187,7 @@ pub async fn relationships(
 /// - 1: Group is invalid or does not exist.
 /// - 4: Group relationship type or request type is invalid.
 /// - 8: Invalid or missing pagination parameters
-pub async fn enemies(jar: &RequestJar, group_id: usize) -> Result<GroupRelationships, Box<Error>> {
+pub async fn enemies(jar: &RequestJar, group_id: u32) -> Result<GroupRelationships, Box<Error>> {
     relationships(jar, group_id, RelationshipType::Enemy).await
 }
 
@@ -197,7 +197,7 @@ pub async fn enemies(jar: &RequestJar, group_id: usize) -> Result<GroupRelations
 /// - 1: Group is invalid or does not exist.
 /// - 4: Group relationship type or request type is invalid.
 /// - 8: Invalid or missing pagination parameters
-pub async fn allies(jar: &RequestJar, group_id: usize) -> Result<GroupRelationships, Box<Error>> {
+pub async fn allies(jar: &RequestJar, group_id: u32) -> Result<GroupRelationships, Box<Error>> {
     relationships(jar, group_id, RelationshipType::Ally).await
 }
 
@@ -211,7 +211,7 @@ pub async fn allies(jar: &RequestJar, group_id: usize) -> Result<GroupRelationsh
 #[async_recursion::async_recursion]
 pub async fn relationship_requests(
     jar: &RequestJar,
-    group_id: usize,
+    group_id: u32,
     relationship_type: RelationshipType,
 ) -> Result<GroupRelationships, Box<Error>> {
     if relationship_type == RelationshipType::All {
@@ -244,7 +244,7 @@ pub async fn relationship_requests(
 /// - 8: Invalid or missing pagination parameters
 pub async fn enemy_requests(
     jar: &RequestJar,
-    group_id: usize,
+    group_id: u32,
 ) -> Result<GroupRelationships, Box<Error>> {
     relationship_requests(jar, group_id, RelationshipType::Enemy).await
 }
@@ -258,7 +258,7 @@ pub async fn enemy_requests(
 /// - 8: Invalid or missing pagination parameters
 pub async fn ally_requests(
     jar: &RequestJar,
-    group_id: usize,
+    group_id: u32,
 ) -> Result<GroupRelationships, Box<Error>> {
     relationship_requests(jar, group_id, RelationshipType::Ally).await
 }
@@ -272,8 +272,8 @@ pub async fn ally_requests(
 /// - 11: Relationship does not exist.
 pub async fn remove(
     jar: &RequestJar,
-    group_id: usize,
-    target_group_id: usize,
+    group_id: u32,
+    target_group_id: u32,
     relationship_type: RelationshipType,
 ) -> Result<(), Box<Error>> {
     if relationship_type == RelationshipType::All {
@@ -299,8 +299,8 @@ pub async fn remove(
 /// - 11: Relationship does not exist.
 pub async fn remove_enemy(
     jar: &RequestJar,
-    group_id: usize,
-    target_group_id: usize,
+    group_id: u32,
+    target_group_id: u32,
 ) -> Result<(), Box<Error>> {
     remove(jar, group_id, target_group_id, RelationshipType::Enemy).await?;
     Ok(())
@@ -315,8 +315,8 @@ pub async fn remove_enemy(
 /// - 11: Relationship does not exist.
 pub async fn remove_ally(
     jar: &RequestJar,
-    group_id: usize,
-    target_group_id: usize,
+    group_id: u32,
+    target_group_id: u32,
 ) -> Result<(), Box<Error>> {
     remove(jar, group_id, target_group_id, RelationshipType::Ally).await?;
     Ok(())
@@ -336,8 +336,8 @@ pub async fn remove_ally(
 /// - 9: Insufficient permissions.
 pub async fn send_request(
     jar: &RequestJar,
-    group_id: usize,
-    target_group_id: usize,
+    group_id: u32,
+    target_group_id: u32,
     relationship_type: RelationshipType,
 ) -> Result<(), Box<Error>> {
     if relationship_type == RelationshipType::All {
@@ -368,8 +368,8 @@ pub async fn send_request(
 /// - 9: Insufficient permissions.
 pub async fn send_enemy_request(
     jar: &RequestJar,
-    group_id: usize,
-    target_group_id: usize,
+    group_id: u32,
+    target_group_id: u32,
 ) -> Result<(), Box<Error>> {
     send_request(jar, group_id, target_group_id, RelationshipType::Enemy).await?;
     Ok(())
@@ -389,8 +389,8 @@ pub async fn send_enemy_request(
 /// - 9: Insufficient permissions.
 pub async fn send_ally_request(
     jar: &RequestJar,
-    group_id: usize,
-    target_group_id: usize,
+    group_id: u32,
+    target_group_id: u32,
 ) -> Result<(), Box<Error>> {
     send_request(jar, group_id, target_group_id, RelationshipType::Ally).await?;
     Ok(())
