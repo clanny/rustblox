@@ -6,7 +6,7 @@ use crate::{
 };
 use rspc::Type;
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct User {
     pub description: String,
@@ -38,7 +38,7 @@ pub async fn user_by_id(jar: &RequestJar, user_id: i64) -> Result<User, Box<Erro
     Ok(response)
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct MinimalAuthenticatedUser {
     pub id: i64,
@@ -52,7 +52,7 @@ pub async fn whoami(jar: &RequestJar) -> Result<MinimalAuthenticatedUser, Box<Er
     Ok(response)
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct AgeBracketResponse {
     pub age_bracket: i64,
@@ -65,7 +65,7 @@ pub async fn age_bracket(jar: &RequestJar) -> Result<AgeBracketResponse, Box<Err
     Ok(response)
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct CountryCodeResponse {
     pub country_code: String,
@@ -78,7 +78,7 @@ pub async fn country_code(jar: &RequestJar) -> Result<CountryCodeResponse, Box<E
     Ok(response)
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct RolesResponse {
     pub roles: Vec<String>,
@@ -93,7 +93,7 @@ pub async fn roles(jar: &RequestJar) -> Result<RolesResponse, Box<Error>> {
     Ok(response)
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct MinimalBulkUserByUsername {
     pub requested_username: String,
@@ -103,14 +103,14 @@ pub struct MinimalBulkUserByUsername {
     pub display_name: String,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct BulkUsersByUsernameRequest {
     pub usernames: Vec<String>,
     exclude_banned_users: bool,
 }
 
-//#[derive(Debug, Deserialize, Serialize)]
+//#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 //#[serde(rename_all = "camelCase")]
 //pub struct BulkUsersByUsernameResponse {
 //    pub data: Vec<MinimalBulkUserByUsername>,
@@ -138,7 +138,7 @@ pub async fn bulk_users_by_username(
     Ok(response.data)
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct MinimalBulkUserById {
     pub has_verified_badge: bool,
@@ -147,14 +147,14 @@ pub struct MinimalBulkUserById {
     pub display_name: String,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct BulkUsersByIdRequest {
     pub user_ids: Vec<i64>,
     exclude_banned_users: bool,
 }
 
-//#[derive(Debug, Deserialize, Serialize)]
+//#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 //#[serde(rename_all = "camelCase")]
 //pub struct BulkUsersByIdResponse {
 //    pub data: Vec<MinimalBulkUserById>,

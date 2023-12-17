@@ -1,3 +1,4 @@
+use rspc::Type;
 use serde::{Deserialize, Serialize};
 
 use crate::{
@@ -5,7 +6,7 @@ use crate::{
     util::{jar::RequestJar, paging::get_page},
 };
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 pub struct UsernameHistoryEntry {
     pub name: String,
 }
