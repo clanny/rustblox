@@ -1,10 +1,11 @@
+use rspc::Type;
 use serde::{Deserialize, Serialize};
 
 use crate::util::{jar::RequestJar, responses::DataWrapper, Error};
 
 use super::GroupRole;
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct GroupPermissions {
     pub group_posts_permissions: GroupPostPermissions,
@@ -14,7 +15,7 @@ pub struct GroupPermissions {
     pub group_open_cloud_permissions: GroupOpenCloudPermissions,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct GroupPostPermissions {
     pub view_wall: bool,
@@ -24,7 +25,7 @@ pub struct GroupPostPermissions {
     pub post_to_status: bool,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct GroupMembershipPermissions {
     pub change_rank: bool,
@@ -32,7 +33,7 @@ pub struct GroupMembershipPermissions {
     pub remove_members: bool,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct GroupManagementPermissions {
     pub manage_relationships: bool,
@@ -40,7 +41,7 @@ pub struct GroupManagementPermissions {
     pub view_audit_logs: bool,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct GroupEconomyPermissions {
     pub spend_group_funds: bool,
@@ -53,14 +54,14 @@ pub struct GroupEconomyPermissions {
     pub view_analytics: bool,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct GroupOpenCloudPermissions {
     pub use_cloud_authentication: bool,
     pub administer_cloud_authentication: bool,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct RolePermissions {
     pub group_id: u32,
@@ -89,7 +90,7 @@ pub async fn role_permissions(
     Ok(response)
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct UpdateRolePermissionsRequestPermissions {
     pub delete_from_wall: Option<bool>,
@@ -114,7 +115,7 @@ pub struct UpdateRolePermissionsRequestPermissions {
     pub view_analytics: Option<bool>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct UpdateRolePermissionsRequest {
     pub permissions: UpdateRolePermissionsRequestPermissions,

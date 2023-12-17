@@ -1,3 +1,4 @@
+use rspc::Type;
 use serde::{Deserialize, Serialize};
 
 use crate::{
@@ -5,7 +6,7 @@ use crate::{
     util::{jar::RequestJar, responses::DataWrapper, Error},
 };
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct PayoutRestrictions {
     pub can_use_recurring_payout: bool,
@@ -29,7 +30,7 @@ pub async fn get_payout_restrictions(
     Ok(response)
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct RecurringPayout {
     pub user: MinimalGroupUser,

@@ -1,8 +1,9 @@
+use rspc::Type;
 use serde::{Deserialize, Serialize};
 
 use crate::util::{jar::RequestJar, Error};
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct GroupConfigMetadata {
     pub group_configuration: GroupConfigurationMetadata,
@@ -13,7 +14,7 @@ pub struct GroupConfigMetadata {
     pub is_default_emblem_policy_enabled: bool,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct GroupConfigurationMetadata {
     pub name_max_length: u32,
@@ -23,13 +24,13 @@ pub struct GroupConfigurationMetadata {
     pub is_using_two_step_webview_component: bool,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct GroupRecurringPayoutsConfigurationMetadata {
     pub max_payout_partners: u32,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct GroupRoleConfigurationMetadata {
     pub name_max_length: u32,
@@ -40,7 +41,7 @@ pub struct GroupRoleConfigurationMetadata {
     pub max_rank: u32,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct GroupNameChangeConfigurationMetadata {
     pub cost: u32,
@@ -55,7 +56,7 @@ pub async fn config_metadata(jar: &RequestJar) -> Result<GroupConfigMetadata, Bo
     Ok(response)
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct GroupMetadata {
     pub group_limit: u32,

@@ -1,4 +1,5 @@
 use reqwest::StatusCode;
+use rspc::Type;
 use serde::{Deserialize, Serialize};
 
 use crate::{
@@ -8,10 +9,10 @@ use crate::{
 
 use super::users::whoami;
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 pub struct ValidateDisplayNameResponse {} // Yes, this is an empty struct. Roblox's api really wants to return an empty object.
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct ValidateDisplayNameFailedResponseError {
     code: u32,
@@ -19,12 +20,12 @@ pub struct ValidateDisplayNameFailedResponseError {
     user_facing_message: String,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 pub struct ValidateDisplayNameFailedResponse {
     errors: Vec<ValidateDisplayNameFailedResponseError>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 pub enum ValidateDisplayNameResponseEnum {
     Success(ValidateDisplayNameResponse),
     Failed(ValidateDisplayNameFailedResponse),
@@ -111,7 +112,7 @@ pub async fn validate_display_name_for_user(
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 struct SetDisplayNameRequest {
     new_display_name: String,

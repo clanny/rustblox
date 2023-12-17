@@ -1,8 +1,9 @@
+use rspc::Type;
 use serde::{Deserialize, Serialize};
 
 use crate::util::{jar::RequestJar, paging::PageLimit, responses::DataWrapper, Error};
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct SearchGroup {
     pub id: u32,
@@ -16,7 +17,7 @@ pub struct SearchGroup {
     pub has_verified_badge: bool,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct MinimalSearchGroup {
     pub id: u32,
@@ -32,7 +33,7 @@ pub struct GroupSearchProps {
     pub cursor: Option<String>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct GroupSearchResponse {
     pub keyword: String,
@@ -99,7 +100,7 @@ pub async fn exact_search(
         .data)
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct GroupSearchMetadata {
     pub suggested_group_keywords: Vec<String>,

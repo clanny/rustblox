@@ -1,4 +1,5 @@
 pub mod join_requests {
+    use rspc::Type;
     use serde::{Deserialize, Serialize};
 
     use crate::{
@@ -10,13 +11,13 @@ pub mod join_requests {
         },
     };
 
-    #[derive(Debug, Serialize, Deserialize)]
+    #[derive(Debug, Serialize, Deserialize, Clone, Type)]
     #[serde(rename_all = "camelCase")]
     pub struct BatchRequest {
         pub user_ids: Vec<u32>,
     }
 
-    #[derive(Debug, Serialize, Deserialize)]
+    #[derive(Debug, Serialize, Deserialize, Clone, Type)]
     #[serde(rename_all = "camelCase")]
     pub struct JoinRequest {
         pub requestor: MinimalGroupUser,
@@ -88,6 +89,7 @@ pub mod join_requests {
 }
 
 pub mod join_request {
+    use rspc::Type;
     use serde::{Deserialize, Serialize};
 
     use crate::{
@@ -95,13 +97,13 @@ pub mod join_request {
         util::{jar::RequestJar, Error},
     };
 
-    #[derive(Debug, Serialize, Deserialize)]
+    #[derive(Debug, Serialize, Deserialize, Clone, Type)]
     #[serde(rename_all = "camelCase")]
     pub struct BatchRequest {
         pub user_ids: Vec<u32>,
     }
 
-    #[derive(Debug, Serialize, Deserialize)]
+    #[derive(Debug, Serialize, Deserialize, Clone, Type)]
     #[serde(rename_all = "camelCase")]
     pub struct JoinRequest {
         pub requestor: MinimalGroupUser,

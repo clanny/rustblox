@@ -1,3 +1,4 @@
+use rspc::Type;
 use serde::{Deserialize, Serialize};
 
 use crate::{
@@ -8,7 +9,7 @@ use crate::{
     },
 };
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct UsernameSearchEntry {
     pub previous_usernames: Vec<String>,

@@ -1,9 +1,10 @@
+use rspc::Type;
 use serde::{Deserialize, Serialize};
 use strum_macros::Display;
 
 use crate::{util::jar::RequestJar, util::Error};
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct PagedResponse<T> {
     pub next_page_cursor: Option<String>,

@@ -1,3 +1,4 @@
+use rspc::Type;
 use serde::{Deserialize, Serialize};
 use strum_macros::Display;
 
@@ -5,7 +6,7 @@ use crate::util::{jar::RequestJar, Error};
 
 use super::Group;
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 pub struct BatchRequest {
     pub group_ids: Vec<u32>,
 }
@@ -118,7 +119,7 @@ pub mod relationship {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Display)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Display, Type)]
 pub enum RelationshipType {
     #[serde(rename = "Enemies")]
     Enemy,
@@ -138,7 +139,7 @@ impl RelationshipType {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct GroupRelationships {
     pub group_id: u32,

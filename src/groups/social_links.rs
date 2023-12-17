@@ -1,9 +1,10 @@
+use rspc::Type;
 use serde::{Deserialize, Serialize};
 use strum_macros::Display;
 
 use crate::util::{jar::RequestJar, responses::DataWrapper, Error};
 
-#[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Display)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Display, Type)]
 pub enum SocialLinkType {
     #[serde(rename = "Facebook")]
     Facebook,
@@ -26,7 +27,7 @@ pub enum SocialLinkType {
     Guilded,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct SocialLink {
     /// Only present when retrieving social links. Do not provide when adding a social link.

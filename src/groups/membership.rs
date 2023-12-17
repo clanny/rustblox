@@ -1,3 +1,4 @@
+use rspc::Type;
 use serde::{Deserialize, Serialize};
 
 use crate::util::{jar::RequestJar, responses::RobloxError, Error};
@@ -21,7 +22,7 @@ pub async fn remove_user(jar: &RequestJar, group_id: u32, user_id: u32) -> Resul
     Ok(())
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct UpdateUserRoleRequest {
     pub role_id: u32,

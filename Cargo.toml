@@ -1,6 +1,6 @@
 [package]
 name = "rustyroblox"
-version = "0.5.0"
+version = "0.5.1"
 edition = "2021"
 description = "A Rust API wrapper for the Roblox API"
 authors = ["piano1029"]
@@ -16,3 +16,4 @@ serde_json = "1.0.108"
 strum = "0.25"
 strum_macros = "0.25.3"
 async-recursion = "1.0.5"
+rspc = { version = "0.1.3" }

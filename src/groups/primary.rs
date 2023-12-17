@@ -1,10 +1,11 @@
+use rspc::Type;
 use serde::{Deserialize, Serialize};
 
 use crate::util::{jar::RequestJar, Error};
 
 use super::{Group, GroupRole};
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct PrimaryGroupResponse {
     pub group: Group,
@@ -40,7 +41,7 @@ pub async fn remove_primary_group(jar: &RequestJar) -> Result<(), Box<Error>> {
     Ok(())
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct SetPrimaryGroupRequest {
     pub group_id: u32,

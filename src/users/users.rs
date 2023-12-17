@@ -4,6 +4,7 @@ use crate::{
     util::Error,
     util::{jar::RequestJar, responses::DataWrapper},
 };
+use rspc::Type;
 
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -18,7 +19,7 @@ pub struct User {
     pub display_name: String,
 }
 
-#[derive(Debug, Deserialize, Serialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct MinimalGroupUser {
     pub has_verified_badge: bool,

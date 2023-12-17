@@ -1,3 +1,4 @@
+use rspc::Type;
 use serde::{Deserialize, Serialize};
 
 use crate::{
@@ -12,7 +13,7 @@ use crate::{
 
 use super::user_memberships;
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct GroupRole {
     pub id: u32,
@@ -22,7 +23,7 @@ pub struct GroupRole {
     pub member_count: Option<u32>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct GroupRoleResponse {
     pub group_id: u32,

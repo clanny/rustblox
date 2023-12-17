@@ -1,3 +1,4 @@
+use rspc::Type;
 use serde::{Deserialize, Serialize};
 use strum_macros::{Display, EnumString};
 
@@ -13,7 +14,7 @@ use crate::{
 
 use super::{permissions::GroupPermissions, roles::GroupRole};
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct Group {
     pub id: u32,
@@ -28,7 +29,7 @@ pub struct Group {
     pub has_verified_badge: bool,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct GroupShout {
     pub body: String,
@@ -47,7 +48,7 @@ pub async fn group_by_id(jar: &RequestJar, group_id: u32) -> Result<Group, Box<E
     Ok(response)
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct GroupAuditLogEntry {
     pub actor: GroupAuditLogActor,
@@ -56,7 +57,7 @@ pub struct GroupAuditLogEntry {
     pub created: String,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct GroupAuditLogActor {
     pub user: MinimalGroupUser,
@@ -64,7 +65,7 @@ pub struct GroupAuditLogActor {
     pub updated: String,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Display, EnumString)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Display, EnumString, Type)]
 pub enum GroupAuditLogActionType {
     // This is imported from the docs's HTML
     DeletePost,
@@ -137,7 +138,7 @@ pub async fn audit_log(
     Ok(response)
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct GroupNameHistoryEntry {
     pub name: String,
@@ -166,7 +167,7 @@ pub async fn name_history(
     Ok(response)
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct GroupSettings {
     pub is_approval_required: bool,
@@ -188,7 +189,7 @@ pub async fn settings(jar: &RequestJar, group_id: u32) -> Result<GroupSettings, 
     Ok(response)
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct GroupSettingsUpdateRequest {
     pub is_approval_required: Option<bool>,
@@ -197,7 +198,7 @@ pub struct GroupSettingsUpdateRequest {
     pub are_group_games_visible: Option<bool>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct GroupSettingsUpdateResponse {}
 
@@ -221,20 +222,20 @@ pub async fn update_settings(
 
 // TODO: Figure out how to send the files to /v1/groups/create and implement it
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct GroupComplianceItem {
     pub can_view_group: bool,
     pub group_id: u32,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct GroupComplianceResponse {
     pub groups: Vec<GroupComplianceItem>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct GroupComplianceRequest {
     pub group_ids: Vec<u32>,
@@ -256,13 +257,13 @@ pub async fn compliance(
     Ok(response)
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct NewDescriptionRequest {
     pub description: String,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct NewDescriptionResponse {
     pub new_description: String,
@@ -290,13 +291,13 @@ pub async fn update_description(
     Ok(response)
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct NewNameRequest {
     pub name: String,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct NewNameResponse {
     pub new_name: String,
@@ -331,7 +332,7 @@ pub async fn update_name(
 
 // TODO: Implement /v1/groups/icon, i have no idea how to upload files
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct GroupMembership {
     pub group_id: u32,
@@ -345,7 +346,7 @@ pub struct GroupMembership {
     pub can_configure: bool,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct GroupMembershipUserRole {
     pub user: MinimalGroupUser,
@@ -400,7 +401,7 @@ pub async fn pending_requests(jar: &RequestJar) -> Result<Vec<Group>, Box<Error>
     Ok(response.data)
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct FriendGroupsGroupItem {
     pub group: Group,
@@ -408,7 +409,7 @@ pub struct FriendGroupsGroupItem {
     pub is_primary_group: Option<bool>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct FriendGroupsItem {
     pub user: MinimalGroupUser,
@@ -431,7 +432,7 @@ pub async fn friend_groups(jar: &RequestJar) -> Result<Vec<FriendGroupsItem>, Bo
     Ok(response.data)
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct UserMembershipsGroupItem {
     pub group: Group,
@@ -458,7 +459,7 @@ pub async fn user_memberships(
     Ok(response.data)
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct GroupOwnershipChangeRequest {
     pub user_id: u32,
