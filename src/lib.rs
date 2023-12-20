@@ -43,7 +43,7 @@ mod tests {
 
     #[tokio::test]
     async fn whoami() {
-        let mut jar = authenticated_jar().await;
+        let mut jar = unauthenticated_jar().await;
         let user = crate::users::whoami(&mut jar).await.unwrap();
         println!("{:#?}", user);
     }
@@ -91,7 +91,7 @@ mod tests {
 
     #[tokio::test]
     async fn validate_display_name_for_user() {
-        let mut jar = authenticated_jar().await;
+        let mut jar = unauthenticated_jar().await;
         let user_id = crate::users::whoami(&mut jar).await.unwrap().id;
 
         if user_id != 4205503041 {
@@ -132,21 +132,21 @@ mod tests {
 
     #[tokio::test]
     async fn get_age_bracket() {
-        let mut jar = authenticated_jar().await;
+        let mut jar = unauthenticated_jar().await;
         let age_bracket = crate::users::age_bracket(&mut jar).await.unwrap();
         assert_eq!(age_bracket.age_bracket, 0);
     }
 
     #[tokio::test]
     async fn get_country_code() {
-        let mut jar = authenticated_jar().await;
+        let mut jar = unauthenticated_jar().await;
         let country_code = crate::users::country_code(&mut jar).await.unwrap();
         assert_eq!(country_code.country_code, "NL");
     }
 
     #[tokio::test]
     async fn get_roles() {
-        let mut jar = authenticated_jar().await;
+        let mut jar = unauthenticated_jar().await;
         let roles = crate::users::roles(&mut jar).await.unwrap();
         let empty_vec: Vec<String> = Vec::new();
         assert_eq!(roles.roles, empty_vec);
@@ -169,7 +169,7 @@ mod tests {
 
     #[tokio::test]
     async fn bulk_users_by_id() {
-        let mut jar = authenticated_jar().await;
+        let mut jar = unauthenticated_jar().await;
         let users = crate::users::bulk_users_by_id(&mut jar, vec![375760054, 1444131924])
             .await
             .unwrap();
@@ -287,7 +287,7 @@ mod tests {
 
     #[tokio::test]
     async fn group_compliance() {
-        let mut jar = authenticated_jar().await;
+        let mut jar = unauthenticated_jar().await;
         let group_compliance = crate::groups::compliance(&mut jar, vec![7370273])
             .await
             .unwrap();
@@ -306,7 +306,7 @@ mod tests {
 
     #[tokio::test]
     async fn group_membership() {
-        let mut jar = authenticated_jar().await;
+        let mut jar = unauthenticated_jar().await;
         let group_membership = crate::groups::membership(&mut jar, 7370273).await.unwrap();
 
         println!("{:#?}", group_membership);
@@ -318,7 +318,7 @@ mod tests {
 
     #[tokio::test]
     async fn group_roles() {
-        let mut jar = authenticated_jar().await;
+        let mut jar = unauthenticated_jar().await;
         let group_roles = crate::groups::roles(&mut jar, 7370273).await.unwrap();
 
         println!("{:#?}", group_roles);
@@ -374,7 +374,7 @@ mod tests {
 
     #[tokio::test]
     async fn pending_requests() {
-        let mut jar = authenticated_jar().await;
+        let mut jar = unauthenticated_jar().await;
         let pending_requests = crate::groups::pending_requests(&mut jar).await.unwrap();
 
         println!("{:#?}", pending_requests);
@@ -384,7 +384,7 @@ mod tests {
 
     #[tokio::test]
     async fn friend_groups() {
-        let mut jar = authenticated_jar().await;
+        let mut jar = unauthenticated_jar().await;
 
         let friend_groups = crate::groups::friend_groups(&mut jar).await.unwrap();
 
@@ -395,7 +395,7 @@ mod tests {
 
     #[tokio::test]
     async fn user_group_memberships() {
-        let mut jar = authenticated_jar().await;
+        let mut jar = unauthenticated_jar().await;
         let user_group_memberships = crate::groups::user_memberships(&mut jar, 375760054)
             .await
             .unwrap();
@@ -410,8 +410,10 @@ mod tests {
 
         assert_eq!(clanny_group_membership.group.id, 7370273);
         assert_eq!(clanny_group_membership.role.rank, 254);
-        assert_eq!(clanny_group_membership.is_primary_group.is_some(), true);
-        assert_eq!(clanny_group_membership.is_primary_group.unwrap(), true);
+        // This is no longer provided with v2 of the group membership API ):
+        // v1 has been replaced with v2 in this package due to it sending malformed JSON
+        // assert_eq!(clanny_group_membership.is_primary_group.is_some(), true);
+        // assert_eq!(clanny_group_membership.is_primary_group.unwrap(), true);
     }
 
     // TODO: Add test for change_owner, but that requires a group (which requires robux)
@@ -424,9 +426,9 @@ mod tests {
 
     #[tokio::test]
     async fn user_role() {
-        let mut jar = authenticated_jar().await;
-        let group = crate::groups::group_by_id(&mut jar, 7370273).await.unwrap();
-        let user_role = crate::groups::user_role(&mut jar, 7370273, group.owner.user_id)
+        let mut jar = unauthenticated_jar().await;
+        //let group = crate::groups::group_by_id(&mut jar, 7370273).await.unwrap();
+        let user_role = crate::groups::user_role(&mut jar, 7370273, 1444131924)
             .await
             .unwrap();
 
@@ -508,7 +510,7 @@ mod tests {
 
     #[tokio::test]
     async fn social_links() {
-        let mut jar = authenticated_jar().await;
+        let mut jar = unauthenticated_jar().await;
         let social_links = crate::groups::social_links(&mut jar, 7370273)
             .await
             .unwrap();

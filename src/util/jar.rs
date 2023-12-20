@@ -91,6 +91,11 @@ impl RequestJar {
             return Err(Box::new(Error::RobloxError(json.errors[0].clone())));
         }
 
+        // Need to log raw responses? Uncomment this and comment the json and response stuff
+        // let raw = response.text().await.unwrap();
+        // println!("URL: {}\n\n{}", url, raw);
+        // Err(Box::new(Error::JSON))
+
         let json = response.json::<T>().await;
 
         match json {

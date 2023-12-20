@@ -31,6 +31,15 @@ pub struct Group {
 
 #[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
+pub struct MinimalGroup {
+    pub id: i64,
+    pub name: String,
+    pub member_count: i64,
+    pub has_verified_badge: bool,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone, Type)]
+#[serde(rename_all = "camelCase")]
 pub struct GroupShout {
     pub body: String,
     pub poster: MinimalGroupUser,
@@ -435,9 +444,8 @@ pub async fn friend_groups(jar: &RequestJar) -> Result<Vec<FriendGroupsItem>, Bo
 #[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct UserMembershipsGroupItem {
-    pub group: Group,
+    pub group: MinimalGroup,
     pub role: GroupRole,
-    pub is_primary_group: Option<bool>,
 }
 
 /// Gets all the groups the specified user is in.
@@ -450,7 +458,7 @@ pub async fn user_memberships(
     user_id: i64,
 ) -> Result<Vec<UserMembershipsGroupItem>, Box<Error>> {
     let url = format!(
-        "https://groups.roblox.com/v1/users/{}/groups/roles",
+        "https://groups.roblox.com/v2/users/{}/groups/roles",
         user_id
     );
     let response = jar
