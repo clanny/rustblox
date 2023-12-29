@@ -1,3 +1,4 @@
+use std::sync::{Arc, Mutex};
 use crate::util::Error;
 use async_recursion::async_recursion;
 
@@ -5,7 +6,7 @@ use super::responses::FailedRobloxResponse;
 
 pub struct RequestJar {
     pub roblosecurity: Option<String>,
-    pub xcsrf_token: Option<String>,
+    pub xcsrf_token: Arc<Mutex<Option<String>>>,
 
     pub proxy: Option<String>,
 }
@@ -14,7 +15,7 @@ impl RequestJar {
     pub async fn new() -> RequestJar {
         RequestJar {
             roblosecurity: None,
-            xcsrf_token: None,
+            xcsrf_token: Arc::new(Mutex::new(None)),
 
             proxy: None,
         }
@@ -110,6 +111,8 @@ impl RequestJar {
     pub async fn post(&self, url: &str, data: String) -> Result<reqwest::Response, Box<Error>> {
         let client = self.get_reqwest_client();
 
+        let xcsrf_token = self.get_xcsrf();
+
         let response = client
             .post(url)
             .body(data.clone())
@@ -123,10 +126,7 @@ impl RequestJar {
             )
             .header("Accept", "application/json")
             .header("Content-Type", "application/json")
-            .header(
-                "X-CSRF-TOKEN",
-                self.xcsrf_token.as_ref().unwrap_or(&"".to_string()),
-            )
+            .header("X-CSRF-TOKEN", xcsrf_token)
             .send()
             .await;
 
@@ -138,17 +138,18 @@ impl RequestJar {
             .contains_key("X-CSRF-TOKEN")
         {
             // TODO: Fix this
-            // self.xcsrf_token = Some(
-            //     response
-            //         .as_ref()
-            //         .unwrap()
-            //         .headers()
-            //         .get("X-CSRF-TOKEN")
-            //         .unwrap()
-            //         .to_str()
-            //         .unwrap()
-            //         .to_string(),
-            // );
+            let mut xcsrf_token = self.xcsrf_token.lock().unwrap();
+            *xcsrf_token = Some(
+                response
+                    .as_ref()
+                    .unwrap()
+                    .headers()
+                    .get("X-CSRF-TOKEN")
+                    .unwrap()
+                    .to_str()
+                    .unwrap()
+                    .to_string(),
+            );
         }
 
         match response {
@@ -207,6 +208,8 @@ impl RequestJar {
     pub async fn patch(&self, url: &str, data: String) -> Result<reqwest::Response, Box<Error>> {
         let client = self.get_reqwest_client();
 
+        let xcsrf_token = self.get_xcsrf();
+
         let response = client
             .patch(url)
             .body(data)
@@ -220,10 +223,7 @@ impl RequestJar {
             )
             .header("Accept", "application/json")
             .header("Content-Type", "application/json")
-            .header(
-                "X-CSRF-TOKEN",
-                self.xcsrf_token.as_ref().unwrap_or(&"".to_string()),
-            )
+            .header("X-CSRF-TOKEN", xcsrf_token)
             .send()
             .await;
 
@@ -234,18 +234,18 @@ impl RequestJar {
             .headers()
             .contains_key("X-CSRF-TOKEN")
         {
-            // TODO: Fix this
-            // self.xcsrf_token = Some(
-            //     response
-            //         .as_ref()
-            //         .unwrap()
-            //         .headers()
-            //         .get("X-CSRF-TOKEN")
-            //         .unwrap()
-            //         .to_str()
-            //         .unwrap()
-            //         .to_string(),
-            // );
+            let mut xcsrf_token = self.xcsrf_token.lock().unwrap();
+            *xcsrf_token = Some(
+                response
+                    .as_ref()
+                    .unwrap()
+                    .headers()
+                    .get("X-CSRF-TOKEN")
+                    .unwrap()
+                    .to_str()
+                    .unwrap()
+                    .to_string(),
+            );
         }
 
         match response {
@@ -304,6 +304,8 @@ impl RequestJar {
     pub async fn delete(&self, url: &str, data: String) -> Result<reqwest::Response, Box<Error>> {
         let client = self.get_reqwest_client();
 
+        let xcsrf_token = self.get_xcsrf();
+
         let response = client
             .delete(url)
             .body(data)
@@ -317,10 +319,7 @@ impl RequestJar {
             )
             .header("Accept", "application/json")
             .header("Content-Type", "application/json")
-            .header(
-                "X-CSRF-TOKEN",
-                self.xcsrf_token.as_ref().unwrap_or(&"".to_string()),
-            )
+            .header("X-CSRF-TOKEN", xcsrf_token)
             .send()
             .await;
 
@@ -332,17 +331,18 @@ impl RequestJar {
             .contains_key("X-CSRF-TOKEN")
         {
             // TODO: Fix this
-            // self.xcsrf_token = Some(
-            //     response
-            //         .as_ref()
-            //         .unwrap()
-            //         .headers()
-            //         .get("X-CSRF-TOKEN")
-            //         .unwrap()
-            //         .to_str()
-            //         .unwrap()
-            //         .to_string(),
-            // );
+            let mut xcsrf_token = self.xcsrf_token.lock().unwrap();
+            *xcsrf_token = Some(
+                response
+                    .as_ref()
+                    .unwrap()
+                    .headers()
+                    .get("X-CSRF-TOKEN")
+                    .unwrap()
+                    .to_str()
+                    .unwrap()
+                    .to_string(),
+            );
         }
 
         match response {
@@ -427,8 +427,8 @@ impl RequestJar {
 
         match token_header {
             Some(token) => {
-                // TODO: Fix this
-                // self.xcsrf_token = Some(token.to_str().unwrap().to_string());
+                let mut xcsrf_token = self.xcsrf_token.lock().unwrap();
+                *xcsrf_token = Some(token.to_str().unwrap().to_string());
                 return Ok(());
             }
             None => {
@@ -447,5 +447,11 @@ impl RequestJar {
         //let meta = doc.select(&selector).next().unwrap();
         //let token = meta.value().attr("content").unwrap();
         //self.xcsrf_token = Some(token.to_string());
+    }
+
+    pub fn get_xcsrf(&self) -> String {
+        let xcsrf = self.xcsrf_token.lock().unwrap();
+        let xcsrf_token = xcsrf.clone().unwrap_or("".to_string());
+        return xcsrf_token
     }
 }
