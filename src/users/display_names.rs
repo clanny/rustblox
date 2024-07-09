@@ -1,5 +1,5 @@
 use reqwest::StatusCode;
-use rspc::Type;
+use specta::Type;
 use serde::{Deserialize, Serialize};
 
 use crate::{

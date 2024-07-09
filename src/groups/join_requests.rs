@@ -1,5 +1,5 @@
 pub mod join_requests {
-    use rspc::Type;
+    use specta::Type;
     use serde::{Deserialize, Serialize};
 
     use crate::{
@@ -89,7 +89,7 @@ pub mod join_requests {
 }
 
 pub mod join_request {
-    use rspc::Type;
+    use specta::Type;
     use serde::{Deserialize, Serialize};
 
     use crate::{

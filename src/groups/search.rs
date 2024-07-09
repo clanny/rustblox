@@ -1,5 +1,5 @@
-use rspc::Type;
 use serde::{Deserialize, Serialize};
+use specta::Type;
 
 use crate::util::{jar::RequestJar, paging::PageLimit, responses::DataWrapper, Error};
 
