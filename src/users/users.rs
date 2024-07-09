@@ -4,7 +4,7 @@ use crate::{
     util::Error,
     util::{jar::RequestJar, responses::DataWrapper},
 };
-use rspc::Type;
+use specta::Type;
 
 #[derive(Debug, Serialize, Deserialize, Clone, Type)]
 #[serde(rename_all = "camelCase")]
